@@ -1,0 +1,23 @@
+# folder
+.idea/
+.git/
+inventory/cluster131
+inventory/cluster-hw
+
+# hidden file
+.ftpconfig
+.history
+.vscode
+.ftpignore
+.project
+
+# common file
+*.retry
+*.iml
+*.tar
+*.tgz
+*.tar.gz
+*.zip
+*.rar
+*.rpm
+*.war

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>yarn.resourcemanager.hostname</name>
+        <value>{{ yarn_host }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.scheduler.address</name>
+        <value>{{ yarn_host }}:{{ resourcemanager_scheduler_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.resource-tracker.address</name>
+        <value>{{ yarn_host }}:{{ resourcemanager_tracker_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.address</name>
+        <value>{{ yarn_host }}:{{ resourcemanager_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.admin.address</name>
+        <value>{{ yarn_host }}:{{ resourcemanager_admin_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address</name>
+        <value>{{ yarn_host }}:{{ resourcemanager_webapp_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.am.max-attempts</name>
+        <value>4</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.localizer.address</name>
+        <value>0.0.0.0:{{ nodemanager_port }}</value>
+    </property>
+
+    <!-- kerberos to resourcemanager -->
+    <property>
+        <name>yarn.resourcemanager.principal</name>
+        <value>{{ hadoop_kerberos_principal_rm }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.keytab</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.https.address</name>
+        <value>{{ yarn_host }}:{{ resourcemanager_webapp_https_port }}</value>
+    </property>
+
+    <!-- kerberos to nodemanager -->
+    <property>
+        <name>yarn.nodemanager.principal</name>
+        <value>{{ hadoop_kerberos_principal_nm }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.keytab</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.container-executor.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.group</name>
+        <value>{{ install_group }}</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.webapp.address</name>
+        <value>0.0.0.0:{{ nodemanager_webapp_port }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.webapp.https.address</name>
+        <value>0.0.0.0:{{ nodemanager_webapp_https_port }}</value>
+    </property>
+</configuration>

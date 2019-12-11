@@ -1,0 +1,19 @@
+- name: get elasticsearch pid
+  shell: ps -ef | grep java | grep {{ es_version }} | grep elasticsearch | grep -v grep | awk '{print $2}'
+  register: pid
+
+- name: kill elasticsearch
+  shell: kill -15 pid {{ pid.stdout }}
+  async: 30
+  poll: 2
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  when: pid.stdout != ""
+
+- name: "wait port {{ es_http_port }} stopped"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ es_http_port }}"
+    state: stopped
+    timeout: 20

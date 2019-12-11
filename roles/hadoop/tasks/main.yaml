@@ -1,0 +1,95 @@
+# 安装hadoop
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# ----------------------------------
+# 启动hdfs
+- import_tasks: start-dfs.yaml
+  tags: [ 'never', 'start-dfs' ]
+
+# 启动yarn
+- import_tasks: start-yarn.yaml
+  tags: [ 'never', 'start-yarn' ]
+
+# 启动job history
+- import_tasks: start-jh.yaml
+  tags: [ 'never', 'start-jh' ]
+
+# 启动hdfs, yarn
+- import_tasks: start-dfs.yaml
+  tags: [ 'never', 'start' ]
+- import_tasks: start-yarn.yaml
+  tags: [ 'never', 'start' ]
+
+# ----------------------------------
+# 停止hdfs
+- import_tasks: stop-dfs.yaml
+  tags: [ 'never', 'stop-dfs' ]
+
+# 停止yarn
+- import_tasks: stop-yarn.yaml
+  tags: [ 'never', 'stop-yarn' ]
+
+# 停止job history
+- import_tasks: stop-jh.yaml
+  tags: [ 'never', 'stop-jh' ]
+
+# 停止hdfs, yarn
+- import_tasks: stop-dfs.yaml
+  tags: [ 'never', 'stop' ]
+- import_tasks: stop-yarn.yaml
+  tags: [ 'never', 'stop' ]
+
+# ----------------------------------
+# 卸载hadoop
+- import_tasks: stop-dfs.yaml
+  tags: [ 'never', 'uninstall' ]
+- import_tasks: stop-yarn.yaml
+  tags: [ 'never', 'uninstall' ]
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]
+
+# ----------------------------------
+# 重启hadoop
+- import_tasks: stop-dfs.yaml
+  tags: [ 'never', 'restart' ]
+- import_tasks: stop-yarn.yaml
+  tags: [ 'never', 'restart' ]
+- import_tasks: clean.yaml
+  tags: [ 'never', 'restart' ]
+- import_tasks: start-dfs.yaml
+  tags: [ 'never', 'restart' ]
+- import_tasks: start-yarn.yaml
+  tags: [ 'never', 'restart' ]
+
+# ----------------------------------
+# 格式化hadoop namenode
+- import_tasks: format.yaml
+  tags: [ 'never', 'format' ]
+
+# ----------------------------------
+# hadoop namenode status
+- import_tasks: status.yaml
+  tags: [ 'never', 'status' ]
+
+# ----------------------------------
+# copy log jar
+- import_tasks: copyjar.yaml
+  tags: [ 'never', 'copyjar' ]
+# remove log jar
+- import_tasks: rmjar.yaml
+  tags: [ 'never', 'rmjar' ]
+
+# ----------------------------------
+# clean log
+- import_tasks: clean.yaml
+  tags: [ 'never', 'clean' ]
+
+# ----------------------------------
+# install by user root
+- import_tasks: install-root.yaml
+  tags: [ 'never', 'install-root' ]
+
+# uninstall by user root
+- import_tasks: uninstall-root.yaml
+  tags: [ 'never', 'uninstall-root' ]

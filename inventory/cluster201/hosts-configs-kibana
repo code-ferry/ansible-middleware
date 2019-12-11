@@ -1,0 +1,12 @@
+[kibana:vars]
+kibana_port = 5601
+
+[kibana:vars]
+kibana_version = 6.5.3
+kibana_file = kibana-{{ kibana_version }}-linux-x86_64.tar.gz
+kibana_folder = kibana-{{ kibana_version }}-linux-x86_64
+kibana_home = "{{ install_home }}/{{ kibana_folder }}"
+
+kibana_log_dir = "{{ kibana_home }}/logs"
+
+[kibana:vars]

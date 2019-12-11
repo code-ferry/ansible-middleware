@@ -1,0 +1,25 @@
+# 安装etcd
+- import_tasks: install.yaml
+  tags: ['never','install']
+
+# 启动etcd
+- import_tasks: start.yaml
+  tags: ['never','start']
+
+# 停止etcd
+- import_tasks: stop.yaml
+  tags: ['never','stop']
+
+# 卸载etcd
+- import_tasks: uninstall.yaml
+  tags: ['never','uninstall']
+
+# 重启etcd
+- import_tasks: stop.yaml
+  tags: ['never','restart']
+- import_tasks: start.yaml
+  tags: ['never','restart']
+
+# 压缩etcd
+- import_tasks: compact.yaml
+  tags: ['never','compact']

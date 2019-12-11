@@ -1,0 +1,13 @@
+- name: clean environment $ES_HOME等
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export ES_HOME={{ es_home }}'
+  - 'export PATH=$PATH:$ES_HOME/bin'
+
+- name: uninstall elasticsearch
+  file: name={{ item }} state=absent
+  with_items:
+  - "{{ es_home }}"

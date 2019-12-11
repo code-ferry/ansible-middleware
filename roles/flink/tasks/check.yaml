@@ -1,0 +1,27 @@
+- name: 检查flink_run_type的配置
+  when: not (flink_run_type|lower == "standalone" or flink_run_type|lower == "yarn")
+  fail:
+    msg: "flink_run_type的配置只能是'standalone'或者'yarn'"
+  run_once: true
+
+- name: 检查flink_ha的配置
+  when: not (flink_ha|lower == "zookeeper" or flink_ha|lower == "none")
+  fail:
+    msg: "flink_ha的配置只能是'zookeeper'或者'NONE'"
+  run_once: true
+
+- block:
+  - name: 检查主机配置中jobmanager的数量(NONE HA)
+    when: not (jobmanager_count|int == 1)
+    fail:
+      msg: "在非高可用情况下，需要配置一台jobmanager"
+    run_once: true
+  when: flink_ha|lower == "none"
+
+- block:
+  - name: 检查主机配置中jobmanager的数量(HA)
+    when: not (jobmanager_count|int > 1)
+    fail:
+      msg: "在高可用情况下，需要配置至少二台jobmanager"
+    run_once: true
+  when: flink_ha|lower == "zookeeper"

@@ -1,0 +1,23 @@
+# install kibana
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# install kibana
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]
+
+# start kibana
+- import_tasks: start.yaml
+  tags: [ 'never', 'start' ]
+
+# stop kibana
+- import_tasks: stop.yaml
+  tags: [ 'never', 'stop' ]
+
+# restart kibana
+- import_tasks: restart.yaml
+  tags: [ 'never', 'restart' ]
+
+# clean kibana log
+- import_tasks: clean.yaml
+  tags: [ 'never', 'clean' ]

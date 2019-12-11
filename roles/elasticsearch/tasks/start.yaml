@@ -1,0 +1,13 @@
+- name: Run elasticsearch
+  shell: '. ~/.bash_profile; elasticsearch -d'
+  async: 30
+  poll: 5
+  args:
+    executable: /bin/bash
+
+- name: "wait port {{ es_http_port }} opened"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ es_http_port }}"
+    state: started
+    timeout: 30

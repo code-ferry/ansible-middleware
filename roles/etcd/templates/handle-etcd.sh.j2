@@ -1,0 +1,127 @@
+#!/bin/bash
+
+status() {
+    {{ etcd_home }}/etcdctl endpoint status --write-out=table
+}
+
+list() {
+    {{ etcd_home }}/etcdctl member list --write-out=table
+}
+
+start() {
+    pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
+
+    if [ X"" = X"$pid" ]; then
+        echo "start etcd member, name={{ etcd_name }}"
+    else
+        echo "etcd member is running now, pid=${pid}, name={{ etcd_name }}"
+        return 0
+    fi
+
+    echo "etcd starting!"
+    {{ etcd_home }}/etcd --name={{ etcd_name }} --config-file={{ etcd_conf_dir }}/etcd.yaml
+    if [ $? -ne 0 ]; then
+        echo "etcd start fail!"
+        return 1
+    fi
+    return 0
+}
+
+stop() {
+    pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
+
+    echo "pid="${pid}
+    if [ X"" = X"$pid" ]; then
+        echo "etcd member not run, name={{ etcd_name }}"
+        return 1
+    fi
+
+    kill -9 $pid
+    if [ $? -ne 0 ] ;then
+        echo "kill etcd member fail, pid=$pid, name={{ etcd_name }}"
+        return
+    fi
+
+    return 0
+}
+
+compact() {
+    rev=$({{ etcd_home }}/etcdctl endpoint status --write-out="json" | egrep -o '"revision":[0-9]*' | egrep -o '[0-9].*')
+    etcdctl compact $rev
+    return 0
+}
+
+defrag() {
+    etcdctl defrag
+    etcdctl alarm disarm
+    return 0
+}
+
+snapshot() {
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    {{ etcd_home }}/etcdctl snapshot save {{ etcd_home }}/${ts}.db
+}
+
+restore() {
+    db=$1
+    if [ ! -f $db ]; then
+        echo "snapshot db file not exist"
+        return 1
+    fi
+
+    {{ etcd_home }}/etcdctl snapshot restore ${db} --config-file={{ etcd_conf_dir }}/etcd.yaml
+    if [ $? -ne 0 ]; then
+        echo "snapshot restore ${db} fail"
+        return 1
+    fi
+	return 0
+}
+
+########################################
+################执行命令################
+########################################
+result=0
+if [ "$1" == "start" ]; then
+    start
+    result=$?
+elif [ "$1" == "stop" ]; then
+    stop
+    result=$?
+elif [ "$1" == "status" ]; then
+    status
+elif [ "$1" == "list" ]; then
+    list
+elif [ "$1" == "snapshot" ]; then
+    snapshot
+    result=$?
+elif [ "$1" == "restore" ]; then
+    restore $2
+    result=$?
+elif [ "$1" == "restart" ]; then
+    stop
+    result=$?
+    if [ $result -ne 0 ]; then
+        exit 1
+    fi
+    start
+    result=$?
+elif [ "$1" == "compact" ]; then
+    compact
+    result=$?
+elif [ "$1" == "defrag" ]; then
+    defrag
+    result=$?
+elif [ X"$1" == X"" ]; then
+    echo "etcd command is empty!"
+    result=1
+else
+    result=1
+fi
+
+if [ $result -ne 0 ]; then
+    echo "$1 fail"
+else
+    echo "$1 success"
+fi
+
+exit $result

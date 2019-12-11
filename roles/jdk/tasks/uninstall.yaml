@@ -1,0 +1,15 @@
+- name: delete java install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ java_home }}"
+
+- name: write environment variable JAVA_HOME etc
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export JAVA_HOME={{ java_home }}'
+  - 'export PATH=$PATH:$JAVA_HOME/bin'

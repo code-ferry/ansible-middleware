@@ -1,0 +1,38 @@
+- block:
+  - name: Get kernel parameters
+    shell: /usr/sbin/sysctl -n vm.max_map_count
+    register: mapCount
+
+  - name: Print kernel parameters
+    debug: msg="{{ mapCount.stdout }}"
+
+  - name: Check kernel parameters
+    when: not (mapCount.stdout|int >= 262144)
+    fail:
+      msg: "vm.max_map_count should be bigger than 262144"
+
+- block:
+  - name: Get nofile number
+    shell: ulimit -n
+    register: number
+
+  - name: Print nofile number
+    debug: msg="{{ number.stdout }}"
+
+  - name: Check nofile number
+    when: not (number.stdout|int >= 65536)
+    fail:
+      msg: "nofile should be bigger than 65536"
+
+- block:
+  - name: Get noproc number
+    shell: ulimit -u
+    register: number
+
+  - name: Print noproc number
+    debug: msg="{{ number.stdout }}"
+
+  - name: Check noproc number
+    when: not (number.stdout|int >= 4096)
+    fail:
+      msg: "noproc should be bigger than 4096"

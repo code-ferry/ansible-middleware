@@ -1,0 +1,18 @@
+- name: Link /dev/random to /dev/urandom
+  file:
+    path: "/dev/random"
+    src: "/dev/urandom"
+    state: link
+    force: yes
+
+- name: Create the initial kerberos database
+  shell: echo -e "{{ kerberos_db_password }}\n{{ kerberos_db_password }}" | kdb5_util create -s; touch /var/kerberos/db_created
+  args:
+    executable: /bin/bash
+    creates: '/var/kerberos/db_created'
+
+- name: Create an admin for the administering the kerberos database
+  shell: echo -e "{{ kerberos_admin_password }}\n{{ kerberos_admin_password }}" | kadmin.local  -q "addprinc {{ kerberos_admin_username }}/admin"; touch /var/kerberos/admin_created
+  args:
+    executable: /bin/bash
+    creates: '/var/kerberos/admin_created'

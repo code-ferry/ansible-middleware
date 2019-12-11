@@ -1,0 +1,9 @@
+{# 计算中elasticsearch的服务地址 #}
+{% set sep = ',' %}
+{% for host in groups['elasticsearch'] %}
+{% if loop.last %}
+"{{ host }}:{{ es_tcp_port }}"
+{%- else %}
+"{{ host }}:{{ es_tcp_port }}",
+{%- endif %}
+{% endfor %}

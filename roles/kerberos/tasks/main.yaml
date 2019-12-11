@@ -1,0 +1,45 @@
+# 安装kerberos服务端
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# --------------------------------------------------
+# 卸载kerberos服务端
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]
+
+# --------------------------------------------------
+# 创建kerberos的数据库，以有管理员账号
+- import_tasks: createdb.yaml
+  tags: [ 'never', 'createdb' ]
+
+# 创建kerberos的数据库，以有管理员账号
+- import_tasks: destroydb.yaml
+  tags: [ 'never', 'destroydb' ]
+
+# --------------------------------------------------
+# 启动kerberos服务端
+- import_tasks: start.yaml
+  tags: [ 'never', 'start' ]
+
+# --------------------------------------------------
+# 停止kerberos服务端
+- import_tasks: stop.yaml
+  tags: [ 'never', 'stop' ]
+
+# --------------------------------------------------
+# 重启kerberos服务端
+- import_tasks: restart.yaml
+  tags: [ 'never', 'restart' ]
+
+# --------------------------------------------------
+# creat keytab
+- import_tasks: createkeytab.yaml
+  tags: [ 'never', 'createkeytab' ]
+
+# --------------------------------------------------
+# add and list principle
+- import_tasks: addprinc.yaml
+  tags: [ 'never', 'addprinc' ]
+
+- import_tasks: listprinc.yaml
+  tags: [ 'never', 'listprinc' ]

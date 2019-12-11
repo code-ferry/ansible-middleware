@@ -1,0 +1,1 @@
+"{% for host in groups['etcd'] -%}etcd0{{ loop.index }}=http://{{ host }}:{{ etcd_peer_port }}{%- if not loop.last -%},{%- endif -%}{% endfor %}"

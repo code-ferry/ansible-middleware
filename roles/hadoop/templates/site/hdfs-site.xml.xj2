@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <!-- hdfs -->
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:{{ hadoop_namenode_dir }}</value>
+        <description>namenode上存储hdfs名字空间元数据</description>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:{{ hadoop_datanode_dir }}</value>
+        <description>datanode上数据块的物理存储位置</description>
+    </property>
+    <property>
+        <name>dfs.replication</name>
+        <value>{{ dfs_replication }}</value>
+    </property>
+    <property>
+        <name>dfs.permissions</name>
+        <value>{{ dfs_permissions }}</value>
+    </property>
+    <property>
+        <name>dfs.blocksize</name>
+        <value>{{ dfs_blocksize }}</value>
+    </property>
+
+    <!-- kerberos to namenode -->
+    <property>
+        <name>dfs.block.access.token.enable</name>
+        <value>{{ dfs_block_access_token_enable }}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.kerberos.principal</name>
+        <value>{{ hadoop_kerberos_principal_nn }}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.keytab.file</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.kerberos.internal.spnego.principal</name>
+        <value>{{ hadoop_kerberos_principal_http }}</value>
+    </property>
+    <!--<property>-->
+    <!--<name>dfs.web.authentication.kerberos.keytab</name>-->
+    <!--<value>/etc/security/keytab/spnego.service.keytab</value>-->
+    <!--<description>SPNEGO keytab file for the NameNode. In HA clusters this setting is shared with the Journal Nodes</description>-->
+    <!--</property>-->
+
+    <!-- configuring ssl to the namenode web UI -->
+    <property>
+        <name>dfs.http.policy</name>
+        <value>{{ dfs_http_policy }}</value>
+        <description>dfs.https.enable is deprecated.</description>
+    </property>
+    <property>
+        <name>dfs.namenode.https-address</name>
+        <value>0.0.0.0:{{ namenode_https_port }}</value>
+        <description>This parameter is used in non-HA mode and without federation</description>
+    </property>
+
+    <!-- kerberos to secondary.namenode -->
+    <property>
+        <name>dfs.namenode.secondary.http-address</name>
+        <value>0.0.0.0:{{ namenode_second_http_port }}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.secondary.https-address</name>
+        <value>0.0.0.0:{{ namenode_second_https_port }}</value>
+    </property>
+    <property>
+        <name>dfs.secondary.namenode.keytab.file</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>dfs.secondary.namenode.kerberos.principal</name>
+        <value>{{ hadoop_kerberos_principal_sn }}</value>
+    </property>
+    <property>
+        <name>dfs.secondary.namenode.kerberos.internal.spnego.principal</name>
+        <value>{{ hadoop_kerberos_principal_http }}</value>
+    </property>
+
+    <!-- kerberos to datanode -->
+    <property>
+        <name>dfs.datanode.data.dir.perm</name>
+        <value>700</value>
+    </property>
+    <property>
+        <name>dfs.datanode.address</name>
+        <value>0.0.0.0:{{ datanode_port }}</value>
+    </property>
+    <property>
+        <name>dfs.datanode.ipc.address</name>
+        <value>0.0.0.0:{{ datanode_ipc_port }}</value>
+    </property>
+    <property>
+        <name>dfs.datanode.http.address</name>
+        <value>0.0.0.0:{{ datanode_http_port }}</value>
+    </property>
+    <property>
+        <name>dfs.datanode.https.address</name>
+        <value>0.0.0.0:{{ datanode_https_port }}</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.kerberos.principal</name>
+        <value>{{ hadoop_kerberos_principal_dn }}</value>
+    </property>
+    <property>
+        <name>dfs.datanode.keytab.file</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>dfs.encrypt.data.transfer</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>dfs.data.transfer.protection</name>
+        <value>integrity</value>
+    </property>
+
+    <!-- kerberos to WebHDFS -->
+    <property>
+        <name>dfs.web.authentication.kerberos.principal</name>
+        <value>{{ hadoop_kerberos_principal_http }}</value>
+    </property>
+    <property>
+        <name>dfs.web.authentication.kerberos.keytab</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <!--<property>-->
+    <!--<name>dfs.secondary.namenode.kerberos.https.principal</name>-->
+    <!--<value>{{ hadoop_kerberos_principal }}</value>-->
+    <!--</property>-->
+</configuration>

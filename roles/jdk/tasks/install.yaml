@@ -1,0 +1,43 @@
+- name: create install jdk directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ jdk_install_home }}"
+
+- name: unarchive jdk package
+  unarchive:
+    src: "{{ software_home }}/{{ jdk_file }}"
+    dest: "{{ jdk_install_home }}"
+    copy: yes
+    creates: "{{ java_home }}"
+
+- name: get home directory of install user
+  shell: ". ~/.bash_profile; cat /etc/passwd | grep {{ install_user }}"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+  register: result
+  failed_when: false
+  run_once: true
+
+- name: check home directory of install user
+  when: result.stdout == ""
+  fail:
+    msg: "can not get home directory"
+  run_once: true
+
+- name: print home directory of install user
+  debug:
+    msg: "{{ result.stdout.split(':')[5] }}"
+  run_once: true
+
+- name: write environment variable JAVA_HOME etc
+  lineinfile:
+    dest: "{{ result.stdout.split(':')[5] }}/.bash_profile"
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export JAVA_HOME={{ java_home }}'
+  - 'export PATH=$PATH:$JAVA_HOME/bin'

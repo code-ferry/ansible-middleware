@@ -1,0 +1,9 @@
+{# 计算中kafka的服务地址 #}
+{% set empty = "" %}
+{% for host in groups['kafka'] %}
+{% if loop.last -%}
+{{ host }}:{{ kafka_port -}}
+{% else %}
+{{ host }}:{{ kafka_port }},
+{%- endif %}
+{% endfor %}

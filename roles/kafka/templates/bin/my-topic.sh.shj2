@@ -1,0 +1,3 @@
+#!/bin/bash
+
+kafka-topics.sh --bootstrap-server {{ kafka_hosts }} $*

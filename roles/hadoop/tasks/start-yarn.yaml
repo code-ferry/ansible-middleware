@@ -1,0 +1,19 @@
+- name: 启动yarn
+  shell: ". ~/.bash_profile; start-yarn.sh"
+  async: 60         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+  register: result
+  run_once: true
+  delegate_to: "{{ yarn_host }}"
+
+- name: 再确认resource manager的端口
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ resourcemanager_port }}"
+    state: started
+    timeout: 30
+  run_once: true
+  delegate_to: "{{ yarn_host }}"

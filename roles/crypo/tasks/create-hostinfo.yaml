@@ -1,0 +1,25 @@
+- name: 删除部署服务器上的hosts.tmp
+  file:
+    path: "/tmp/hosts.tmp"
+    state: absent
+  run_once: true
+  delegate_to: localhost
+
+- name: 在部署机生成hosts.tmp
+  shell: "echo {{ vhostname }},{{ vhostip }} >> /tmp/hosts.tmp"
+  delegate_to: localhost
+
+- name: 在部署机生成known_hosts，包括所有应用服务器的主机信息
+  shell: "cat /tmp/hosts.tmp"
+  run_once: true
+  delegate_to: localhost
+  register: hostinfo
+
+- name: print host info
+  debug:
+    msg: "{{ hostinfo.stdout_lines }}"
+  delegate_to: localhost
+
+- name: 将known_hosts，并分发到所有应用服务器。
+  action: sshknownhosts host="{{ item }}" enctype=ecdsa dest="~/.ssh/known_hosts" state=present
+  with_items: "{{ hostinfo.stdout_lines|list }}"

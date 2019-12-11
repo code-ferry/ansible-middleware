@@ -1,0 +1,2 @@
+vhostip: "{{ hostvars[inventory_hostname].ansible_all_ipv4_addresses[0] }}"
+vhostname: "{{ hostvars[inventory_hostname].ansible_facts.hostname }}"

@@ -1,0 +1,35 @@
+---
+
+- name: Add the OS specific varibles
+  include_vars: "main.yaml"
+
+- name: Install the kerberos packages
+  yum:
+    name: ['krb5-libs', 'krb5-server', 'krb5-workstation']
+    state: present
+
+- name: Copy the kdc configuration file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: "kdc.conf.j2", dest: "/var/kerberos/krb5kdc/kdc.conf" }
+  - { src: "kadm5.acl.j2", dest: "/var/kerberos/krb5kdc/kadm5.acl" }
+  - { src: "krb5.conf.j2", dest: "/etc/krb5.conf" }
+#  notify:
+#  - restart kerberos
+#
+#- name: Start the kerberos services
+#  service:
+#    name: "{{ item }}"
+#    state: started
+#    enabled: yes
+#  with_items: "{{ kerberos_services }}"
+
+- name: fetch krb5.conf
+  fetch:
+    src: "/etc/krb5.conf"
+    dest: "{{ ansible_home }}/roles/kerberos_client/files/"
+    flat: true
+    fail_on_missing: true
+  run_once: true

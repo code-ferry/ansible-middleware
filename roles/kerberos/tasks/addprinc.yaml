@@ -1,0 +1,13 @@
+---
+
+- name: create principle
+  shell: 'kadmin.local -q "addprinc -randkey {{ item[0] }}/{{ item[1] }}@{{ kerberos_realm_name }}"'
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "/root"
+  run_once: true
+  with_nested:
+  - "{{ kerberos_service_name.split(',')|list }}"
+  - "{{ kerberos_instance_name.split(',')|list }}"

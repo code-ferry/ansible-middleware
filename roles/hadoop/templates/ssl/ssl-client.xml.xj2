@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>ssl.client.truststore.location</name>
+        <value>/var/opt/security/truststore</value>
+        <description>Truststore to be used by clients like distcp. Must be specified.</description>
+    </property>
+
+    <property>
+        <name>ssl.client.truststore.password</name>
+        <value>{{ hadoop_truststore_password }}</value>
+        <description>Optional. Default value is "".</description>
+    </property>
+
+    <property>
+        <name>ssl.client.truststore.type</name>
+        <value>jks</value>
+        <description>Optional. The keystore file format, default value is "jks".</description>
+    </property>
+
+    <property>
+        <name>ssl.client.truststore.reload.interval</name>
+        <value>10000</value>
+        <description>Truststore reload check interval, in milliseconds. Default value is 10000 (10 seconds).</description>
+    </property>
+
+    <property>
+        <name>ssl.client.keystore.location</name>
+        <value>/var/opt/security/keystore</value>
+        <description>Keystore to be used by clients like distcp. Must be specified.</description>
+    </property>
+
+    <property>
+        <name>ssl.client.keystore.password</name>
+        <value>{{ hadoop_keystore_password }}</value>
+        <description>Optional. Default value is "".</description>
+    </property>
+
+    <property>
+        <name>ssl.client.keystore.keypassword</name>
+        <value>{{ hadoop_keystore_keypassword }}</value>
+        <description>Optional. Default value is "".</description>
+    </property>
+
+    <property>
+        <name>ssl.client.keystore.type</name>
+        <value>jks</value>
+        <description>Optional. The keystore file format, default value is "jks".</description>
+    </property>
+</configuration>

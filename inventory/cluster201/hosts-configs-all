@@ -1,0 +1,44 @@
+[all:vars]
+# 应用软件安装的普通用户
+install_user=bduser
+install_group=bduser
+
+# 应用软件在部署服务器的目录
+software_home=/home/bduser/software
+
+# 应用软件在应用服务器的安装家目录
+install_home=/home/bduser/deploy
+
+# java家目录
+java_home=/usr/local/java/jdk1.8.0_201
+
+###############################
+##########平台开关##############
+###############################
+#下面是环境安装时的一些可选项
+#需要安装时, 将"no"改成"yes"
+
+#是否关闭操作系统selinux
+handle_selinux="yes"
+
+#是否关闭防火墙
+handle_firewall="no"
+
+#是否修改操作系统最大进程数和最大文件打开数限制
+handle_ulimit="yes"
+
+#是否修改内核参数
+handle_linux_core="yes"
+
+#是否进行时钟同步
+#如果有内网服务器则配置ntp_server变量, 不配置则使用外网的'1.cn.pool.ntp.org'
+handle_ntp="no"
+#ntp_server="10.1.4.38"
+
+###############################
+########中间件公共变量###########
+###############################
+# kerberos与hadoop一些共用的变量
+kerberos_realm_name = NEWLAND.COM
+kerberos_keytab_name = hadoop.keytab
+

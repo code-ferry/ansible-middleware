@@ -1,0 +1,26 @@
+- name: 分发密钥。1.删除部署服务器上的公钥临时文件夹
+  file:
+    path: "/tmp/publickey"
+    state: absent
+  run_once: true
+  delegate_to: localhost
+- name: 分发密钥。2.获取应用服务器上的公钥到部署服务器
+  fetch:
+    src: "~/.ssh/id_rsa.pub"
+    dest: "/tmp/publickey"
+    fail_on_missing: true
+- name: 分发密钥。3.查找临时目录下的公钥文件
+  find:
+    paths: "/tmp/publickey"
+    patterns: "id_rsa.pub"
+    hidden: yes
+    recurse: yes
+  register: result
+  run_once: true
+  delegate_to: localhost
+- name: 分发密钥。4.生成authorized_key文件，分发到各应用服务器
+  authorized_key:
+    user: "{{ install_user }}"
+    key: "{{ lookup('file', item.path) }}"
+    state: present
+  with_items: "{{ result.files|list }}"

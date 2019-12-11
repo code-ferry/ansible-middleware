@@ -1,0 +1,3 @@
+#!/bin/bash
+
+kafka-console-consumer.sh --bootstrap-server {{ kafka_hosts }} --group mygroup $*

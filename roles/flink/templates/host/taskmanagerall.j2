@@ -1,0 +1,7 @@
+{% set taskmanager = [] %}
+{% for host in groups['flink'] %}
+{% if hostvars[host].taskmanager is defined and hostvars[host].taskmanager == "yes" %}
+{{ jobmanagers.append(host) -}}
+{% endif %}
+{% endfor %}
+{{ taskmanager }}

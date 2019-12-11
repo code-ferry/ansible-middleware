@@ -1,0 +1,1 @@
+es_hosts: "{{ lookup('template', 'host/elasticsearch.j2') }}"

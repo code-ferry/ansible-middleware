@@ -1,0 +1,12 @@
+- name: 复制因为冲突而删除掉的slf4j的日志包
+  copy:
+    src: "{{ software_home }}/{{ item.srclog }}"
+    dest: "{{ hadoop_home }}/share/hadoop/{{ item.destpath }}"
+    force: yes
+  with_items:
+  - { srclog: "slf4j-log4j12-1.7.10.jar", destpath: "kms/tomcat/webapps/kms/WEB-INF/lib/" }
+  - { srclog: "slf4j-log4j12-1.7.10.jar", destpath: "common/lib/" }
+  - { srclog: "slf4j-log4j12-1.7.10.jar", destpath: "httpfs/tomcat/webapps/webhdfs/WEB-INF/lib/" }
+  - { srclog: "slf4j-api-1.7.10.jar", destpath: "kms/tomcat/webapps/kms/WEB-INF/lib/" }
+  - { srclog: "slf4j-api-1.7.10.jar", destpath: "common/lib/" }
+  - { srclog: "slf4j-api-1.7.10.jar", destpath: "httpfs/tomcat/webapps/webhdfs/WEB-INF/lib/" }

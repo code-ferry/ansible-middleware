@@ -1,0 +1,24 @@
+# ---------------------------------------------
+- import_tasks: install.yaml
+  tags: ['never','install']
+
+# ---------------------------------------------
+- import_tasks: start.yaml
+  tags: ['never','start']
+
+# ---------------------------------------------
+- import_tasks: stop.yaml
+  tags: ['never','stop']
+
+# ---------------------------------------------
+- import_tasks: stop.yaml
+  tags: ['never','uninstall']
+- import_tasks: uninstall.yaml
+  tags: ['never','uninstall']
+
+# ---------------------------------------------
+- import_tasks: createtopic.yaml
+  tags: ['never','createtopic']
+
+- import_tasks: deletetopic.yaml
+  tags: ['never','deletetopic']

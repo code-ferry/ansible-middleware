@@ -1,0 +1,20 @@
+[elasticsearch:vars]
+es_http_port = 9200
+es_tcp_port = 9300
+
+[elasticsearch:vars]
+es_version = 6.5.3
+es_file = elasticsearch-{{ es_version }}.tar.gz
+es_folder = elasticsearch-{{ es_version }}
+es_home = "{{ install_home }}/{{ es_folder }}"
+
+es_conf_dir = "{{ es_home }}/config"
+es_data_dir = "{{ es_home }}/data"
+es_logs_dir = "{{ es_home }}/logs"
+
+[elasticsearch:vars]
+es_cluster_name = my_es_cluster
+
+es_momory_lock = false
+es_momory_xms = 512m
+es_momory_xmx = 512m

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+
+    <property>
+        <name>mapreduce.jobhistory.address</name>
+        <value>{{ yarn_host }}:{{ mapreduce_port }}</value>
+        <description>MapReduce JobHistory Server host:port</description>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.webapp.address</name>
+        <value>{{ yarn_host }}:{{ mapreduce_webapp_port }}</value>
+    </property>
+    <property>
+        <name>mapreduce.application.classpath</name>
+        <value>
+            {{ hadoop_home }}/etc/hadoop,
+            {{ hadoop_home }}/share/hadoop/common/*,
+            {{ hadoop_home }}/share/hadoop/common/lib/*,
+            {{ hadoop_home }}/share/hadoop/hdfs/*,
+            {{ hadoop_home }}/share/hadoop/hdfs/lib/*,
+            {{ hadoop_home }}/share/hadoop/mapreduce/*,
+            {{ hadoop_home }}/share/hadoop/mapreduce/lib/*,
+            {{ hadoop_home }}/share/hadoop/yarn/*,
+            {{ hadoop_home }}/share/hadoop/yarn/lib/*
+        </value>
+    </property>
+
+    <property>
+        <name>mapreduce.jobhistory.keytab</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.principal</name>
+        <value>{{ hadoop_kerberos_principal }}</value>
+    </property>
+
+    <!-- conflict port -->
+    <property>
+        <name>mapreduce.shuffle.port</name>
+        <value>50061</value>
+        <description>default port 13562</description>
+    </property>
+</configuration>

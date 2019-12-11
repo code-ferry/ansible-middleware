@@ -1,0 +1,5 @@
+{% for host in groups['flink'] %}
+{% if hostvars[host].taskmanager is defined and hostvars[host].taskmanager == "yes" %}
+{{ host }}
+{% endif %}
+{% endfor %}

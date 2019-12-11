@@ -1,0 +1,11 @@
+#!/bin/bash
+for logFile in $(ls {{ flink_log_dir }})
+do
+  fullLogFile={{ flink_log_dir }}/${logFile}
+  lineCount=$(/usr/sbin/lsof ${fullLogFile} | grep ${logFile} | wc -l)
+  if (( ${lineCount}>0 )); then
+    cat /dev/null > ${fullLogFile}
+  else
+    rm -f ${fullLogFile}
+  fi
+done

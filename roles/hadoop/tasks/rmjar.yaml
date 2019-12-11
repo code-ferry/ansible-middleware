@@ -1,0 +1,11 @@
+- name: 删除冲突的slf4j的日志包
+  file:
+    name: "{{ hadoop_home }}/share/hadoop/{{ item }}"
+    state: absent
+  with_items:
+  - "kms/tomcat/webapps/kms/WEB-INF/lib/slf4j-log4j12-1.7.10.jar"
+  - "kms/tomcat/webapps/kms/WEB-INF/lib/slf4j-api-1.7.10.jar"
+  - "common/lib/slf4j-log4j12-1.7.10.jar"
+  - "common/lib/slf4j-api-1.7.10.jar"
+  - "httpfs/tomcat/webapps/webhdfs/WEB-INF/lib/slf4j-log4j12-1.7.10.jar"
+  - "httpfs/tomcat/webapps/webhdfs/WEB-INF/lib/slf4j-api-1.7.10.jar"

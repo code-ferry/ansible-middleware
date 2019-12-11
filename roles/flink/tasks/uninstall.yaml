@@ -1,0 +1,13 @@
+- name: 擦除环境变量$FLINK_HOME等
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export FLINK_HOME={{ flink_home }}'
+  - 'export PATH=$FLINK_HOME/bin:$PATH'
+
+- name: 卸载flink
+  file: name={{ item }} state=absent
+  with_items:
+  - "{{ flink_home }}"

@@ -1,0 +1,8 @@
+{# 计算中zookeeper的服务地址 #}
+{% for host in groups['zookeeper'] -%}
+{% if loop.last -%}
+{{ host }}:{{ zk_port -}}{{ kafka_zk_root -}}
+{% else %}
+{{ host }}:{{ zk_port }},
+{% endif %}
+{% endfor %}
