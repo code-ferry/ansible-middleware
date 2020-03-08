@@ -1,0 +1,46 @@
+---
+
+- name: delete keytab
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "/tmp/{{ kerberos_keytab_name }}"
+
+- name: create keytab
+  shell: 'kadmin.local -q "xst -k {{ kerberos_keytab_name }} {{ item[0] }}/{{ item[1] }}@{{ kerberos_realm_name }}"'
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "/tmp"
+  run_once: true
+  with_nested:
+  - "{{ kerberos_service_name.split(',')|list }}"
+  - "{{ kerberos_instance_name.split(',')|list }}"
+
+- name: list keytab
+  shell: 'klist -e -k -t {{ kerberos_keytab_name }}'
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "/tmp"
+  run_once: true
+  register: result
+
+- name: list keytab info
+  debug:
+    msg: "{{ result.stdout_lines }}"
+
+- name: delete keytab on deployment server
+  file:
+    name: "{{ ansible_home }}/roles/kerberos_client/files/{{ kerberos_keytab_name }}"
+    state: absent
+
+- name: fetch keytab
+  fetch:
+    src: "/tmp/{{ kerberos_keytab_name }}"
+    dest: "{{ ansible_home }}/roles/kerberos_client/files/"
+    flat: true
+    fail_on_missing: true

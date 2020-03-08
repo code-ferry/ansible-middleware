@@ -1,0 +1,91 @@
+- name: 创建安装的目录
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: 解压hadoop压缩包
+  unarchive:
+    src: "{{ software_home }}/{{ hadoop_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ hadoop_home }}"
+
+- name: 复制64位的jsvc
+  copy:
+    src: jsvc
+    dest: "{{ hadoop_home }}/libexec"
+    force: yes
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+    mode: 0755
+
+# 复制commons-daemon-xxx.jar文件
+- block:
+  - name: 查找要删除的commons-daemon-xxx.jar
+    find:
+      paths: "{{ hadoop_home }}/share/hadoop/hdfs/lib"
+      patterns: "commons-daemon-*.jar"
+    register: files_to_delete
+  - name: 删除commons-daemon-xxx.jar
+    file:
+      path: "{{ item.path }}"
+      state: absent
+    with_items: "{{ files_to_delete.files }}"
+  - name: 复制commons-daemon-xxx.jar
+    copy:
+      src: commons-daemon-1.0.15.jar
+      dest: "{{ hadoop_home }}/share/hadoop/hdfs/lib"
+      force: yes
+      owner: "{{ install_user }}"
+      group: "{{ install_group }}"
+      mode: 644
+
+- name: 创建hadoop配置文件
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'site/core-site.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/core-site.xml' }
+  - { src: 'site/hdfs-site.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/hdfs-site.xml' }
+  - { src: 'site/mapred-site.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/mapred-site.xml' }
+  - { src: 'site/yarn-site.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/yarn-site.xml' }
+  - { src: 'host/datanodes.j2', dest: '{{ hadoop_home }}/etc/hadoop/slaves' }
+  - { src: 'host/namenodes.j2', dest: '{{ hadoop_home }}/etc/hadoop/namenodes.tmp' }
+  - { src: 'host/yarns.j2', dest: '{{ hadoop_home }}/etc/hadoop/yarns.tmp' }
+  - { src: 'bin/hadoop-env-{{ hadoop_version }}.sh.shj2', dest: '{{ hadoop_home }}/etc/hadoop/hadoop-env.sh' }
+
+- name: 创建hadoop配置文件(ssl相关)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'ssl/ssl-client.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/ssl-client.xml' }
+  - { src: 'ssl/ssl-server.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/ssl-server.xml' }
+
+- name: 生成清理日志的脚本
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0744"
+  with_items:
+  - { src: 'script/clean.sh.shj2', dest: '{{ hadoop_home }}/bin/clean.sh' }
+
+- name: 写入环境变量$HADOOP_HOME等
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export HADOOP_HOME={{ hadoop_home }}'
+  - 'export PATH=$PATH:$HADOOP_HOME/bin'
+  - 'export PATH=$PATH:$HADOOP_HOME/sbin'
+  - 'export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop'
+  - 'export HADOOP_MAPRED_HOME=$HADOOP_HOME'
+  - 'export HADOOP_COMMON_HOME=$HADOOP_HOME'
+  - 'export HADOOP_HDFS_HOME=$HADOOP_HOME'
+  - 'export YARN_HOME=$HADOOP_HOME'
+  - 'export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native'
+  - 'export HADOOP_OPTS="-Djava.library.path=$HADOOP_COMMON_LIB_NATIVE_DIR -Djava.net.preferIPv4Stack=true"'
+  - 'export LD_LIBRARY_PATH=$HADOOP_COMMON_LIB_NATIVE_DIR:$LD_LIBRARY_PATH'
+  - 'export HADOOP_CLASSPATH=`$HADOOP_HOME/bin/hadoop classpath`'
+  - 'export JSVC_HOME=$HADOOP_HOME/libexec'

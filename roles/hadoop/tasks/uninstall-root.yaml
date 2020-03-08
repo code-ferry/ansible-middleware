@@ -1,0 +1,13 @@
+#  ansible-playbook 02.hadoop.yaml -t uninstall-root -e "ansible_become=true"
+
+- name: 删除安全等相关的文件
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "/etc/hadoop"
+  - "/var/opt/security"
+  - "/var/opt/ssl"
+  - "/tmp/keystore"
+  - "/tmp/truststore"
+  ignore_errors: true

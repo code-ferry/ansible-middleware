@@ -1,0 +1,14 @@
+- name: Run kibana
+  shell: '. ~/.bash_profile; nohup kibana > kibana.log &'
+  async: 30
+  poll: 5
+  args:
+    executable: /bin/bash
+    chdir: "{{ kibana_home }}/bin"
+
+- name: "wait port {{ kibana_port }} opened"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ kibana_port }}"
+    state: started
+    timeout: 60

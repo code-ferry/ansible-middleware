@@ -1,0 +1,15 @@
+- name: clean environment $KIBANA_HOME等
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export KIBANA_HOME={{ kibana_home }}'
+  - 'export PATH=$PATH:$KIBANA_HOME/bin'
+
+- name: uninstall kibana
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ kibana_home }}"

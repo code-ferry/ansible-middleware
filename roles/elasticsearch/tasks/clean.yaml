@@ -1,0 +1,10 @@
+- name: find log file
+  find:
+    paths: "{{ es_home }}/logs"
+    patterns: "*.log"
+  register: files_to_delete
+- name: delete log file
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ files_to_delete.files }}"

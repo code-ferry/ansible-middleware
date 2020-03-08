@@ -1,0 +1,40 @@
+- name: 创建安装的目录
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: 解压zookeeper压缩包
+  unarchive:
+    src: "{{ software_home }}/{{ zk_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ zk_home }}"
+
+- name: 创建zookeeper的data, datalogs, logs目录
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ zk_data_dir }}"
+  - "{{ zk_log_dir }}"
+  - "{{ zk_datalogs_dir }}"
+
+- name: 创建zookeeper配置文件zoo.cfg，log4j.properties，myid
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'myid.j2', dest: '{{ zk_home }}/data/myid' }
+  - { src: 'zoo.cfg.j2', dest: '{{ zk_home }}/conf/zoo.cfg' }
+  - { src: 'log4j.properties.j2', dest: '{{ zk_home }}/conf/log4j.properties' }
+
+- name: 写入环境变量$ZK_HOME等
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - "export ZK_HOME={{ zk_home }}"
+  - "export PATH=$ZK_HOME/bin:$PATH"

@@ -1,0 +1,38 @@
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: unarchive kibana package
+  unarchive:
+    src: "{{ software_home }}/{{ kibana_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ kibana_home }}"
+
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ kibana_log_dir }}"
+
+#- import_tasks: check.yaml
+
+- name: create kibana configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'conf/kibana.yml.yj2', dest: '{{ kibana_home }}/config/kibana.yml' }
+
+- name: Write the environment variable $KIBANA_HOME, and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export KIBANA_HOME={{ kibana_home }}'
+  - 'export PATH=$PATH:$KIBANA_HOME/bin'

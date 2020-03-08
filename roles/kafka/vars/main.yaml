@@ -1,0 +1,2 @@
+zookeeper_hosts: "{{ lookup('template', 'host/zookeeper.j2') }}"
+kafka_hosts: "{{ lookup('template', 'host/kafka.j2') }}"

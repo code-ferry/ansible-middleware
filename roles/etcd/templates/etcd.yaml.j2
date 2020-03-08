@@ -1,0 +1,37 @@
+# 名称与路径
+name: {{ etcd_name }}
+data-dir: {{ etcd_data_dir }}
+wal-dir: {{ etcd_wal_dir }}
+
+# 存储
+snapshot-count: 100000
+max-snapshots: 5
+max-wals: 5
+quota-backend-bytes: {{ etcd_quota_backend_bytes }}
+auto-compaction-retention: "1"
+
+# 时长
+heartbeat-interval: 200
+election-timeout: 2000
+
+# 网络连接
+cors:
+listen-peer-urls: http://{{ inventory_hostname }}:{{ etcd_peer_port }}
+advertise-client-urls: http://{{ inventory_hostname }}:{{ etcd_port }}
+listen-client-urls: http://{{ inventory_hostname }}:{{ etcd_port }},http://127.0.0.1:{{ etcd_port }}
+initial-advertise-peer-urls: http://{{ inventory_hostname }}:{{ etcd_peer_port }}
+initial-cluster: {{ etcd_initial_cluster }}
+initial-cluster-token: {{ etcd_initial_cluster_token }}
+initial-cluster-state: new
+max-request-bytes: {{ etcd_max_request_bytes }}
+
+# 安全
+client-transport-security:
+peer-transport-security:
+strict-reconfig-check: false
+
+# 其他
+enable-v2: true
+debug: {{ etcd_debug }}
+log-package-levels:
+force-new-cluster: {{ etcd_force_new_cluster }}

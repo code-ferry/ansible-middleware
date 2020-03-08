@@ -1,0 +1,6 @@
+{# 计算中elasticsearch服务的其中一个地址 #}
+{% for host in groups['elasticsearch'] %}
+{% if loop.first %}
+{{ host -}}
+{% endif %}
+{% endfor %}

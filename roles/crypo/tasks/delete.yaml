@@ -1,0 +1,6 @@
+- name: 删除公钥, authorized_key等文件
+  shell: ". ~/.bash_profile; rm -fr ~/.ssh"
+  args:
+    executable: /bin/bash
+    chdir: "~/"
+    removes: "~/.ssh"

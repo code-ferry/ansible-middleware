@@ -1,0 +1,51 @@
+- name: 创建安装的目录
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: 解压flink压缩包
+  unarchive:
+    src: "{{ software_home }}/{{ flink_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ flink_home }}"
+
+- import_tasks: check.yaml
+
+- name: 创建flink配置文件
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'conf/flink-conf-{{ flink_short_version }}.yaml.yj2', dest: '{{ flink_home }}/conf/flink-conf.yaml' }
+  - { src: 'conf/slaves.j2', dest: '{{ flink_home }}/conf/slaves' }
+  - { src: 'conf/masters.j2', dest: '{{ flink_home }}/conf/masters' }
+
+- name: 生成清理日志的脚本
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0744"
+  with_items:
+  - { src: 'script/clean.sh.j2', dest: '{{ flink_home }}/bin/clean.sh' }
+
+- name: 写入环境变量$FLINK_HOME等
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export FLINK_HOME={{ flink_home }}'
+  - 'export PATH=$FLINK_HOME/bin:$PATH'
+
+- name: 安装flink-shaded-hadoop-2-uber-x.x.x-x.x.jar
+  copy:
+    src: "{{ software_home }}/uber/{{ item }}"
+    dest: "{{ flink_home }}/lib"
+    force: yes
+  with_items:
+  - "{{ flink_shaded_hadoop_jar }}"
+
+

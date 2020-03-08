@@ -1,0 +1,50 @@
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: unarchive hive package
+  unarchive:
+    src: "{{ software_home }}/{{ es_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ es_home }}"
+
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ es_logs_dir }}"
+  - "{{ es_data_dir }}"
+  - "{{ es_conf_dir }}"
+
+- import_tasks: check.yaml
+
+#- name: Run mysql script
+#  shell: '. ~/.bash_profile; schematool -initSchema -dbType mysql'
+#  async: 20
+#  poll: 2
+#  args:
+#    executable: /bin/bash
+#  run_once: true
+#  ignore_errors: true
+
+- name: create elasticsearch configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'conf/elasticsearch.yml.yj2', dest: '{{ es_home }}/config/elasticsearch.yml' }
+  - { src: 'conf/jvm.options.j2', dest: '{{ es_home }}/config/jvm.options' }
+
+- name: Write the environment variable $ES_HOME, and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export ES_HOME={{ es_home }}'
+  - 'export PATH=$PATH:$ES_HOME/bin'

@@ -1,0 +1,6 @@
+- name: 生成公钥
+  shell: ". ~/.bash_profile; ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa"
+  args:
+    executable: /bin/bash
+    chdir: "~/"
+    creates: "~/.ssh/id_rsa.pub"

@@ -1,0 +1,45 @@
+- name: 创建安装的目录
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: 创建etcd目录
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ etcd_home }}"
+  - "{{ etcd_data_dir }}"
+  - "{{ etcd_conf_dir }}"
+  - "{{ etcd_wal_dir }}"
+
+- name: 解压etcd_folder压缩包
+  unarchive:
+    src: "{{ item }}"
+    dest: "{{ etcd_home }}"
+    copy: yes
+    creates: "{{ etcd_home }}/etcd"
+  with_fileglob:
+  - "{{ software_home }}/{{ etcd_file }}"
+
+- name: 写入环境变量$ETCDCTL_API
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - "export ETCDCTL_API=3"
+  - "export ETCD_HOME={{ etcd_home }}"
+  - "export PATH=$ETCD_HOME:$PATH"
+
+- name: 配置与安装文件etcd.yaml
+  template:
+    dest: "{{ etcd_conf_dir }}/etcd.yaml"
+    mode: 0644
+    src: etcd.yaml.j2
+
+- name: 配置与安装文件handle-etcd.sh
+  template:
+    dest: "{{ etcd_home }}/handle-etcd.sh"
+    mode: 0744
+    src: handle-etcd.sh.j2

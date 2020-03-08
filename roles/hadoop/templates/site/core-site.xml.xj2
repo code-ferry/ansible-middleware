@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://{{ namenode_host }}:{{ namenode_port }}</value>
+    </property>
+    <!--
+        dfs.namenode.name.dir	        file://${hadoop.tmp.dir}/dfs/name
+        dfs.datanode.data.dir           file://${hadoop.tmp.dir}/dfs/data
+        dfs.namenode.checkpoint.dir     file://${hadoop.tmp.dir}/dfs/namesecondary
+    -->
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>file:{{ hadoop_tmp_dir }}</value>
+        <description>hadoop temporary directories</description>
+    </property>
+    <property>
+        <name>io.file.buffer.size</name>
+        <value>131072</value>
+    </property>
+
+    <property>
+        <name>hadoop.security.authentication</name>
+        <value>{{ hadoop_security_authentication }}</value>
+    </property>
+    <property>
+        <name>hadoop.security.authorization</name>
+        <value>{{ hadoop_security_authorization }}</value>
+    </property>
+    <property>
+        <name>hadoop.rpc.protection</name>
+        <value>authentication</value>
+    </property>
+    <property>
+        <name>hadoop.security.auth_to_local</name>
+        <value>
+          RULE:[2:$1@$0](nn/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
+          RULE:[2:$1@$0](sn/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
+          RULE:[2:$1@$0](jn/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
+          RULE:[2:$1@$0](dn/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
+          RULE:[2:$1@$0](nm/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
+          RULE:[2:$1@$0](rm/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
+          RULE:[2:$1@$0](jhs/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
+          DEFAULT
+        </value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.{{ install_user }}.hosts</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.{{ install_user }}.groups</name>
+        <value>*</value>
+    </property>
+</configuration>

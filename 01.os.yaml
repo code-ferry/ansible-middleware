@@ -1,0 +1,7 @@
+- hosts: application
+  remote_user: "{{ install_user }}"
+  become: true
+  become_user: root
+  roles:
+  - os
+

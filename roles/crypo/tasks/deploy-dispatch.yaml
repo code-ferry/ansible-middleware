@@ -1,0 +1,5 @@
+- name: 部署服务器的公钥，生成authorized_key文件，分发到各应用服务器
+  authorized_key:
+    user: "{{ install_user }}"
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    state: present

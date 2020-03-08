@@ -1,0 +1,12 @@
+{# 计算中yarn的服务地址，只接受第一个地址 #}
+{% set yarns = [] %}
+{% for host in groups['hadoop'] %}
+{% if hostvars[host].yarn is defined and hostvars[host].yarn == "yes" %}
+{{ yarns.append(host) -}}
+{% endif %}
+{% endfor %}
+{% for i in yarns %}
+{% if loop.first %}
+{{ i -}}
+{% endif %}
+{% endfor %}

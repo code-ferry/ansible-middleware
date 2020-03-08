@@ -1,0 +1,5 @@
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]

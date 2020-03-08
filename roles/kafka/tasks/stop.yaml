@@ -1,0 +1,24 @@
+- name: get kafka pid
+  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ kafka_folder }} | grep -v grep | awk '{print $2}'"
+  args:
+    executable: /bin/bash
+  register: v_pid
+  ignore_errors: true
+
+- name: print kafka pid
+  debug:
+    msg: "kafka pid: '{{ v_pid.stdout }}'"
+
+- name: stop kafka
+  shell: ". ~/.bash_profile; kill -s TERM {{ v_pid.stdout }}"
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  when: v_pid.stdout != ""
+
+- name: check kafka port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ kafka_port }}"
+    state: stopped
+    timeout: 20

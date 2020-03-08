@@ -1,0 +1,17 @@
+- import_tasks: stop.yaml
+
+- name: 删除zookeeper安装目录与安装软件压缩包
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ zk_home }}"
+
+- name: 删除环境变量$ZK_HOME等
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - "export ZK_HOME={{ zk_home }}"
+  - "export PATH=$ZK_HOME/bin:$PATH"

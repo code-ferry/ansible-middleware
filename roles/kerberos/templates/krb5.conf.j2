@@ -1,0 +1,27 @@
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ dns_lookup_realm = false
+ dns_lookup_kdc = false
+ ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+ rdns = false
+ pkinit_anchors = /etc/pki/tls/certs/ca-bundle.crt
+ default_realm = {{ kerberos_realm_name|upper() }}
+ # default_ccache_name = KEYRING:persistent:%{uid}
+ default_ccache_name = /tmp/krb5cc_%{uid}
+ udp_preference_limit = 1
+
+[realms]
+ {{ kerberos_realm_name|upper() }} = {
+  kdc = {{ ansible_hostname }}
+  admin_server = {{ ansible_hostname }}
+ }
+
+[domain_realm]
+ .{{ kerberos_realm_name|lower() }} = {{ kerberos_realm_name|upper() }}
+ {{ kerberos_realm_name|lower() }} = {{ kerberos_realm_name|upper() }}

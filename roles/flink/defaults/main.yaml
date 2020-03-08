@@ -1,0 +1,6 @@
+jobmanager_hosts: "{{ lookup('template', 'host/jobmanagerall.j2') }}"
+taskmanager_hosts: "{{ lookup('template', 'host/jobmanagerall.j2') }}"
+jobmanager_count: "{{ jobmanager_hosts|count }}"
+taskmanager_count: "{{ taskmanager_hosts|count }}"
+
+flink_short_version: "{{ flink_version.split('.')[0] + '.' + flink_version.split('.')[1] }}"

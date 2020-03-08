@@ -1,0 +1,5 @@
+- hosts: application
+  remote_user: "{{ install_user }}"
+  become_user: "{{ install_user }}"
+  roles:
+  - crypo

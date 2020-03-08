@@ -1,0 +1,6 @@
+- name: Install the kerberos client packages
+  yum:
+    name: "{{ kerberos_client_redhat_package }}"
+    state: present
+  async: 5000
+  poll: 2
