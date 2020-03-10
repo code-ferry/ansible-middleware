@@ -4,4 +4,4 @@
   service:
     name: "{{ item }}"
     state: stopped
-  with_items: kerberos_service
+  with_items: "{{ kerberos_services }}"

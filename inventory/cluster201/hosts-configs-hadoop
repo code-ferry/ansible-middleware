@@ -54,6 +54,11 @@ dfs_permissions = false
 dfs_blocksize = 16m
 
 [hadoop:vars]
+# yarn
+yarn_lce_group = "{{ install_group }}"
+yarn_lce_user = "{{ install_user }}"
+yarn_lce_limit_users = false
+
 # kerberos
 hadoop_security_authentication = simple
 hadoop_security_authorization = false

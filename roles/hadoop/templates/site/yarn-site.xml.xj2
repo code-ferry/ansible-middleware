@@ -67,20 +67,28 @@
         <value>{{ hadoop_keytab_file }}</value>
     </property>
     <property>
-        <name>yarn.nodemanager.container-executor.class</name>
-        <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.linux-container-executor.group</name>
-        <value>{{ install_group }}</value>
-    </property>
-
-    <property>
         <name>yarn.nodemanager.webapp.address</name>
         <value>0.0.0.0:{{ nodemanager_webapp_port }}</value>
     </property>
     <property>
         <name>yarn.nodemanager.webapp.https.address</name>
         <value>0.0.0.0:{{ nodemanager_webapp_https_port }}</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.container-executor.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.group</name>
+        <value>{{ yarn_lce_group }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user</name>
+        <value>{{ yarn_lce_user }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
+        <value>{{ yarn_lce_limit_users }}</value>
     </property>
 </configuration>

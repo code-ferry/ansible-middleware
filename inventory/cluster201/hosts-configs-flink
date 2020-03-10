@@ -22,7 +22,7 @@ taskmanager_timeout = 60000
 flink_parallelism = 1
 
 ## flink_run_type配置成standalone，yarn。
-flink_run_type = standalone
+flink_run_type = yarn
 ## flink_ha高可用(HA)的变量，使用时配置zookeeper，不需要时配置NONE
 flink_ha = NONE
 
