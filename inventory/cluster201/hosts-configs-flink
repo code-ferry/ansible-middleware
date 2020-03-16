@@ -4,7 +4,7 @@ jobmanager_port = 8081
 
 [flink:vars]
 ## 通常不需要变更的变量
-flink_version = 1.9.2
+flink_version = 1.8.1
 flink_scala_version = 2.11
 flink_file = "flink-{{ flink_version }}-bin-scala_{{ flink_scala_version }}.tgz"
 flink_folder = "flink-{{ flink_version }}"
@@ -14,7 +14,7 @@ flink_home = "{{ install_home }}/{{ flink_folder }}"
 flink_log_dir = "{{ flink_home }}/log"
 
 [flink:vars]
-flink_shaded_hadoop_jar = "flink-shaded-hadoop-2-uber-2.8.3-9.0.jar"
+flink_shaded_hadoop_jar = "flink-shaded-hadoop-2-uber-2.8.3-8.0.jar"
 jobmanager_heap_size = 512m
 taskmanager_heap_size = 512m
 taskmanager_task_slots = 1

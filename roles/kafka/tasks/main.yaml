@@ -13,6 +13,8 @@
 # ---------------------------------------------
 - import_tasks: stop.yaml
   tags: ['never','uninstall']
+- import_tasks: deletetopic.yaml
+  tags: ['never','uninstall']
 - import_tasks: uninstall.yaml
   tags: ['never','uninstall']
 

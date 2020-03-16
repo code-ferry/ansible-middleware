@@ -74,10 +74,35 @@ ansible-playbook 01.kerberos-client.yaml -t install
 # 应用安装
 
 ## flink安装
+### 安装步骤
 本脚本支持HA
 ```
 ansible-playbook 02.hadoop.yaml -t install 
 ```
+### 启动
+```
+ansible-playbook 02.hadoop.yaml -t install 
+```
+### 说明事项
+#### 1. 版本调整
+修改invertory目录下hosts-configs-flink文件中的配置项
+* flink_version
+* flink_shaded_hadoop_jar 
+如果两个kafka同时使用一个zookeeper的情况，还要修改如下zk根路径配置，让两个kafka集群的配置不会相互干扰：
+* kafka_zk_root
+
+##### 比如1.8配置如下
+```
+flink_version = 1.8.1
+flink_shaded_hadoop_jar = "flink-shaded-hadoop-2-uber-2.8.3-8.0.jar"
+```
+##### 比如1.9配置如下
+```
+flink_version = 1.9.2
+flink_shaded_hadoop_jar = "flink-shaded-hadoop-2-uber-2.8.3-9.0.jar"
+```
+#### 2. HA配置说明
+
 
 ## hadoop安装
 本脚本支持kb的安装
@@ -103,10 +128,45 @@ ansible-playbook 02.hive.yaml -t start
 ```
 
 ## kafka安装
+### 安装步骤
 ```
 ansible-playbook 02.kafka.yaml -t install
-ansible-playbook 02.kafka.yaml -t start
 ```
+### 启动
+```
+ansible-playbook 02.kafka.yaml -t start 
+```
+### 创建与删除主题
+修改invertory目录下hosts-configs-kafka文件中的配置项
+* kafka_topic表示主题名
+* kafka_replication表示复本数
+* kafka_partition表示分区数  
+以上三个配置项是都是列表的结构（用中括号表示），配置项的相同索引位置的配置组合表示一个主题的相关信息。  
+如下所示：bigdata主题，有一个复本数，三个分区。  
+```
+kafka_topic = ['bigdata','test','mytest']
+kafka_replication = [1,1,1]
+kafka_partition = [3,2,1]
+```
+运行命令创建
+```
+# 新建主题
+ansible-playbook 02.kafka.yaml -t createtopic
+# 删除主题 
+ansible-playbook 02.kafka.yaml -t deletetopic 
+```
+### 其他命令
+```
+# 停止kafka
+ansible-playbook 02.kafka.yaml -t stop 
+# 卸载kafka
+ansible-playbook 02.kafka.yaml -t uninstall 
+```
+### 说明事项
+#### 1. 版本调整
+修改invertory目录下hosts-configs-kafka文件中的配置项，已验证版本1.1.1，2.3.0：
+* kafka_version
+* kafka_scala_version   
 
 ## etcd安装
 ```

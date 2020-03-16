@@ -4,7 +4,7 @@ zk_port = 2181
 
 [kafka:vars]
 ## 通常不需要变更的变量
-kafka_version = 2.3.0
+kafka_version = 0.10.2.2
 kafka_scala_version = 2.12
 kafka_file = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}.tgz"
 kafka_folder = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}"
