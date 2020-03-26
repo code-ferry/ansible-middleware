@@ -2,8 +2,8 @@
 - name: 创建安装的目录
   file: path={{ item }} state=directory owner={{ install_user }} group={{ install_group }}
   with_items:
-    - "{{ install_home }}"
-    - "{{ install_home }}/rpm"
+  - "{{ install_home }}"
+  - "{{ install_home }}/rpm"
 
 # 关闭selinux
 - block:
@@ -16,8 +16,8 @@
       regexp: "^SELINUX="
       line: "SELINUX=disabled"
   when:
-    - ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
-    - handle_selinux == "yes"
+  - ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+  - handle_selinux == "yes"
 
 # 关闭服务防火墙
 - block:
