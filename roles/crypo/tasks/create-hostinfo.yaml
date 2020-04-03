@@ -6,7 +6,7 @@
   delegate_to: localhost
 
 - name: 在部署机生成hosts.tmp
-  shell: "echo {{ vhostname }},{{ vhostip }} >> /tmp/hosts.tmp"
+  shell: "echo {{ vhostname }},{{ vhostipv4 }} >> /tmp/hosts.tmp"
   delegate_to: localhost
 
 - name: 在部署机生成known_hosts，包括所有应用服务器的主机信息

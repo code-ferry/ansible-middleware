@@ -52,8 +52,6 @@ host203.com
 
 [zookeeper]
 host201.com
-;192.168.128.202
-;192.168.128.203
 
 [kafka]
 host201.com

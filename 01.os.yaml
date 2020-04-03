@@ -4,4 +4,3 @@
   become_user: root
   roles:
   - os
-

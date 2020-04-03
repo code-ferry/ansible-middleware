@@ -21,3 +21,7 @@ inventory/cluster-hw
 *.rar
 *.rpm
 *.war
+
+# ignore test file
+roles/test
+00.test.yaml
