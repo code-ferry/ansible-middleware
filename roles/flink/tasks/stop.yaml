@@ -8,3 +8,4 @@
   register: result
   run_once: true
   delegate_to: "{{ jobmanager_host }}"
+  ignore_errors: true

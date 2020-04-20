@@ -88,9 +88,6 @@ ansible-playbook 02.hadoop.yaml -t install
 修改invertory目录下hosts-configs-flink文件中的配置项
 * flink_version
 * flink_shaded_hadoop_jar 
-如果两个kafka同时使用一个zookeeper的情况，还要修改如下zk根路径配置，让两个kafka集群的配置不会相互干扰：
-* kafka_zk_root
-
 ##### 比如1.8配置如下
 ```
 flink_version = 1.8.1
@@ -101,8 +98,30 @@ flink_shaded_hadoop_jar = "flink-shaded-hadoop-2-uber-2.8.3-8.0.jar"
 flink_version = 1.9.2
 flink_shaded_hadoop_jar = "flink-shaded-hadoop-2-uber-2.8.3-9.0.jar"
 ```
+##### 比如1.10配置如下
+```
+flink_version = 1.10.0
+flink_shaded_hadoop_jar = "flink-shaded-hadoop-2-uber-2.8.3-10.0.jar"
+```
 #### 2. HA配置说明
-
+flink_ha高可用(HA)的变量，使用时配置zookeeper，不需要时配置NONE，如下
+```
+# 不采用'高可用'
+flink_ha = NONE
+# 或者，采用'高可用'
+flink_ha = zookeeper
+```
+flink_ha选择zookeeper，不仅需要配置zk的地址，还需要配置hadoop集群的resource manager（HA的信息存储在hdfs）
+```
+# hadoop集群的resource manager（HA的信息存储在hdfs）
+flink_resource_manager = 192.168.128.201:9000
+# 
+flink_ha_zookeeper_quorum = 192.168.128.201:2181
+```
+如果zk不是独立使用的，在zk路径上加上一个数据说明，如
+```
+flink_ha_zookeeper_quorum = 192.168.128.201:2181/xxxxx
+```
 
 ## hadoop安装
 本脚本支持kb的安装
@@ -166,7 +185,10 @@ ansible-playbook 02.kafka.yaml -t uninstall
 #### 1. 版本调整
 修改invertory目录下hosts-configs-kafka文件中的配置项，已验证版本1.1.1，2.3.0：
 * kafka_version
-* kafka_scala_version   
+* kafka_scala_version
+#### 2. 部署多个kafka注意事项  
+如果两个kafka同时使用一个zookeeper的情况，还要修改如下zk根路径配置，让两个kafka集群的配置不会相互干扰：
+* kafka_zk_root
 
 ## etcd安装
 ```
