@@ -245,21 +245,22 @@ jobmanager.execution.failover-strategy: region
 #==============================================================================
 # HistoryServer
 #==============================================================================
-
 # The HistoryServer is started and stopped via bin/historyserver.sh (start|stop)
 
+{% if flink_run_historyserver|lower == "true" %}
 # Directory to upload completed jobs to. Add this directory to the list of
 # monitored directories of the HistoryServer as well (see below).
-#jobmanager.archive.fs.dir: hdfs:///completed-jobs/
+jobmanager.archive.fs.dir: {{ jobmanager_archive_fs_dir }}
 
 # The address under which the web-based HistoryServer listens.
-#historyserver.web.address: 0.0.0.0
+historyserver.web.address: {{ historyserver_web_address }}
 
 # The port under which the web-based HistoryServer listens.
-#historyserver.web.port: 8082
+historyserver.web.port: {{ historyserver_web_port }}
 
 # Comma separated list of directories to monitor for completed jobs.
-#historyserver.archive.fs.dir: hdfs:///completed-jobs/
+historyserver.archive.fs.dir: {{ historyserver_archive_fs_dir }}
 
 # Interval in milliseconds for refreshing the monitored directories.
-#historyserver.archive.fs.refresh-interval: 10000
+historyserver.archive.fs.refresh-interval: 10000
+{% endif %}

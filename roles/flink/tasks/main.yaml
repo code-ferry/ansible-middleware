@@ -6,9 +6,15 @@
 - import_tasks: start.yaml
   tags: [ 'never', 'start' ]
 
+- import_tasks: start-jh.yaml
+  tags: [ 'never', 'start-jh' ]
+
 # 停止flink
 - import_tasks: stop.yaml
   tags: [ 'never', 'stop' ]
+
+- import_tasks: stop-jh.yaml
+  tags: [ 'never', 'stop-jh' ]
 
 # 卸载flink
 - import_tasks: stop.yaml

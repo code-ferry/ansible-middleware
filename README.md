@@ -122,7 +122,11 @@ flink_ha_zookeeper_quorum = 192.168.128.201:2181
 ```
 flink_ha_zookeeper_quorum = 192.168.128.201:2181/xxxxx
 ```
-
+#### 3. 开启historyserver
+需要开启historyserver时，需要设置flink_run_historyserver为true。  
+```
+flink_run_historyserver = true
+```
 ## hadoop安装
 本脚本支持kb的安装
 ```
