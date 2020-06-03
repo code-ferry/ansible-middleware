@@ -83,3 +83,7 @@ hadoop_ssl_password = newland
 hadoop_truststore_password = newland
 hadoop_keystore_password = newland
 hadoop_keystore_keypassword = newland
+
+# node lable
+yarn_label_enabled = true
+yarn_label_dir = /user/bduser/node-labels

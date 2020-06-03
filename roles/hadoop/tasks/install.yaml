@@ -53,6 +53,7 @@
   - { src: 'host/namenodes.j2', dest: '{{ hadoop_home }}/etc/hadoop/namenodes.tmp' }
   - { src: 'host/yarns.j2', dest: '{{ hadoop_home }}/etc/hadoop/yarns.tmp' }
   - { src: 'bin/hadoop-env-{{ hadoop_version }}.sh.shj2', dest: '{{ hadoop_home }}/etc/hadoop/hadoop-env.sh' }
+  - { src: 'site/capacity-scheduler.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/capacity-scheduler.xml' }
 
 - name: 创建hadoop配置文件(ssl相关)
   template:

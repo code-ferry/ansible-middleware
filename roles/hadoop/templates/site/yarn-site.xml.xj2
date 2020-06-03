@@ -91,4 +91,14 @@
         <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
         <value>{{ yarn_lce_limit_users }}</value>
     </property>
+
+    <!-- node lables -->
+    <property>
+        <name>yarn.node-labels.enabled</name>
+        <value>{{ yarn_label_enabled }}</value>
+    </property>
+    <property>
+        <name>yarn.node-labels.fs-store.root-dir</name>
+        <value>{{ yarn_label_dir }}</value>
+    </property>
 </configuration>

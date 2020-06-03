@@ -207,4 +207,4 @@ ansible-playbook 03.elasticsearch.yaml -t start
 ```
 
 # 说明
-文档不是很严谨，只是列出了关键步骤，后续有时间逐步完善。
+文档不是很严谨，只是列出了关键步骤，后续有时间逐步完善。  
