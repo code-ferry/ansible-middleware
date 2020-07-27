@@ -39,3 +39,9 @@ jobmanager_archive_fs_dir = "hdfs://{{ flink_resource_manager }}/jobs"
 historyserver_archive_fs_dir = "hdfs://{{ flink_resource_manager }}/jobs"
 historyserver_web_address = 0.0.0.0
 historyserver_web_port = 8082
+
+## flink kerberos
+flink_kerberos_use = true
+flink_kerberos_keytab = /usr/lib/hadoopclient/hadoop-2.8.5/hadoop.keytab
+flink_kerberos_principal_user = udapdev
+flink_kerberos_principal_domain = NEWLAND.COM

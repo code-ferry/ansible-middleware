@@ -222,12 +222,11 @@ jobmanager.execution.failover-strategy: region
 # The below configure how Kerberos credentials are provided. A keytab will be used instead of
 # a ticket cache if the keytab path and principal are set.
 
-# security.kerberos.login.use-ticket-cache: true
-# security.kerberos.login.keytab: /path/to/kerberos/keytab
-# security.kerberos.login.principal: flink-user
+security.kerberos.login.use-ticket-cache: {{ flink_kerberos_use }}
+security.kerberos.login.keytab: {{ flink_kerberos_keytab }}
+security.kerberos.login.principal: {% for host in groups['flink'] %}{% if host == inventory_hostname %}{{ flink_kerberos_principal_user }}/{{ hostvars[inventory_hostname].ansible_fqdn }}@{{ flink_kerberos_principal_domain }}{% endif %}{% endfor %}
 
 # The configuration below defines which JAAS login contexts
-
 # security.kerberos.login.contexts: Client,KafkaClient
 
 #==============================================================================
