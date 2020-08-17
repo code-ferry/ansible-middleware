@@ -1,0 +1,16 @@
+- name: 获取要复制的自定义lib列表
+  shell: ls
+  args:
+    chdir: "{{ software_home }}/clib"
+  register: list_files
+  run_once: true
+  delegate_to: localhost
+
+- name: print lib
+  debug: msg="{{ list_files.stdout_lines }}"
+
+- name: 删除的自定义lib
+  file:
+    path: "{{ flink_home }}/lib/{{ item }}"
+    state: absent
+  with_items: "{{ list_files.stdout_lines|list }}"

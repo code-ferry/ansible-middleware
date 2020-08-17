@@ -92,13 +92,42 @@
         <value>{{ yarn_lce_limit_users }}</value>
     </property>
 
-    <!-- node lables -->
+    <!-- node labels -->
+<!--    <property>-->
+<!--        <name>yarn.node-labels.enabled</name>-->
+<!--        <value>{{ yarn_label_enabled }}</value>-->
+<!--    </property>-->
+<!--    <property>-->
+<!--        <name>yarn.node-labels.fs-store.root-dir</name>-->
+<!--        <value>{{ yarn_label_dir }}</value>-->
+<!--    </property>-->
+<!--    <property>-->
+<!--        <name>yarn.node-labels.configuration-type</name>-->
+<!--        <value>distributed</value>-->
+<!--    </property>-->
+
     <property>
-        <name>yarn.node-labels.enabled</name>
-        <value>{{ yarn_label_enabled }}</value>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>30720</value>
     </property>
     <property>
-        <name>yarn.node-labels.fs-store.root-dir</name>
-        <value>{{ yarn_label_dir }}</value>
+        <name>yarn.nodemanager.resource.cpu-vcores</name>
+        <value>26</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>512</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>30720</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-vcores</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-vcores</name>
+        <value>10</value>
     </property>
 </configuration>

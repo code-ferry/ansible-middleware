@@ -7,7 +7,7 @@
 
     <property>
         <name>yarn.scheduler.capacity.maximum-am-resource-percent</name>
-        <value>0.1</value>
+        <value>0.3</value>
         <description>
             Maximum percent of resources in the cluster which can be used to run
             application masters i.e. controls number of concurrent running
@@ -36,12 +36,12 @@
     <!-- capacity -->
     <property>
         <name>yarn.scheduler.capacity.root.default.capacity</name>
-        <value>70</value>
+        <value>90</value>
         <description>Default queue target capacity.</description>
     </property>
     <property>
         <name>yarn.scheduler.capacity.root.prod.capacity</name>
-        <value>30</value>
+        <value>10</value>
         <description>prod queue target capacity.</description>
     </property>
 
@@ -59,7 +59,7 @@
     </property>
     <property>
         <name>yarn.scheduler.capacity.root.prod.maximum-capacity</name>
-        <value>50</value>
+        <value>10</value>
         <description>The maximum capacity of the prod queue.</description>
     </property>
 
@@ -126,4 +126,28 @@
             Legal values are 1-MAX_INT. This config is refreshable.
         </description>
     </property>
+
+    <!-- node label -->
+<!--    <property>-->
+<!--        <name>yarn.scheduler.capacity.prod.accessible-node-labels</name>-->
+<!--        <value>lab1</value>-->
+<!--        <description>指定每一个队列可以访问的标签集，多个标签用逗号分隔</description>-->
+<!--    </property>-->
+
+<!--    <property>-->
+<!--        <name>yarn.scheduler.capacity.prod.accessible-node-labels.lab1.capacity</name>-->
+<!--        <value>80</value>-->
+<!--        <description>设置队列可以访问属于某个标签的节点资源的百分比。每一个父属性的所有直接子属性的容量总和必须等于100。</description>-->
+<!--    </property>-->
+<!--    <property>-->
+<!--        <name>yarn.scheduler.capacity.prod.accessible-node-labels.lab1.maximum-capacity</name>-->
+<!--        <value>100</value>-->
+<!--        <description>每一个队列所占标签的最大容量。默认是100。</description>-->
+<!--    </property>-->
+
+<!--    <property>-->
+<!--        <name>yarn.scheduler.capacity.prod.default-node-label-expression</name>-->
+<!--        <value>lab1</value>-->
+<!--        <description>如果应用在提交给队列时在资源请求中没有指定节点标签，它会使用"xxxx"作为默认节点标签表达式。</description>-->
+<!--    </property>-->
 </configuration>

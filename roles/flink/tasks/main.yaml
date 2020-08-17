@@ -33,3 +33,10 @@
 # 删除flink日志文件
 - import_tasks: clean.yaml
   tags: [ 'never', 'clean' ]
+
+# 复制与删除自定义的lib
+- import_tasks: copy-clib.yaml
+  tags: [ 'never', 'copy-clib' ]
+
+- import_tasks: rm-clib.yaml
+  tags: [ 'never', 'rm-clib' ]
