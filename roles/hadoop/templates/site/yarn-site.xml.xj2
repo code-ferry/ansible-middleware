@@ -108,26 +108,26 @@
 
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>30720</value>
+        <value>{{ yarn_nm_memory }}</value>
     </property>
     <property>
         <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>26</value>
+        <value>{{ yarn_nm_vcore }}</value>
     </property>
     <property>
         <name>yarn.scheduler.minimum-allocation-mb</name>
-        <value>512</value>
+        <value>{{ yarn_sc_min_memory }}</value>
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>30720</value>
+        <value>{{ yarn_sc_max_memory }}</value>
     </property>
     <property>
         <name>yarn.scheduler.minimum-allocation-vcores</name>
-        <value>1</value>
+        <value>{{ yarn_sc_min_vcore }}</value>
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>10</value>
+        <value>{{ yarn_sc_max_vcore }}</value>
     </property>
 </configuration>

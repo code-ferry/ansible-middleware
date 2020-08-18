@@ -38,3 +38,4 @@
   - { src: 'site/container-executor.cfg.j2', dest: '/etc/hadoop/container-executor.cfg' }
 
 - import_tasks: install-ssl.yaml
+  when: hadoop_security_authorization == "true"

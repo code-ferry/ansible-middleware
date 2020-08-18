@@ -87,3 +87,12 @@ hadoop_keystore_keypassword = newland
 # node label
 yarn_label_enabled = true
 yarn_label_dir = /user/bduser/node-labels
+
+# yarn
+yarn_nm_memory = 2048
+yarn_sc_min_memory = 512
+yarn_sc_max_memory = 2048
+
+yarn_nm_vcore = 4
+yarn_sc_min_vcore = 1
+yarn_sc_max_vcore = 4
