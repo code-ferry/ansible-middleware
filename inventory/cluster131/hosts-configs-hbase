@@ -1,0 +1,31 @@
+[hbase:vars]
+hbase_version = 1.2.6
+hbase_file = "hbase-{{ hbase_version }}-bin.tar.gz"
+hbase_folder = "hbase-{{ hbase_version }}"
+hbase_home = "{{ install_home }}/{{ hbase_folder }}"
+hbase_conf_dir = "{{ hbase_home }}/conf"
+
+hbase_offheapsize = "4G"
+hbase_manages_zk = false
+hbase_log_dir = "{{ hbase_home }}/logs"
+
+
+[hbase:vars]
+hbase_rootdir = hdfs://{{ namenode_host }}:{{ namenode_port }}/hbase
+hbase_zookeeper_quorum = {{ zk_client_port }}
+hbase_zookeeper_clientPort = {{ zk_client_port }}
+hbase_zookeeper_dataDir = {{ hbase_home }}/zkdata
+hbase_zookeeper_znode_parent = /hbase126
+
+hbase_security_authentication = KERBEROS
+hbase_security_authorization = true
+
+hbase_regionserver_kerberos_principal = {{ install_user }}/_HOST@{{ kerberos_realm_name }}
+hbase_regionserver_keytab_file = {{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}
+
+hbase_master_kerberos_principal = {{ install_user }}/_HOST@{{ kerberos_realm_name }}
+hbase_master_keytab_file = {{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}
+
+hbase_thrift_kerberos_principal = {{ install_user }}/_HOST@{{ kerberos_realm_name }}
+hbase_thrift_keytab_file = {{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}
+

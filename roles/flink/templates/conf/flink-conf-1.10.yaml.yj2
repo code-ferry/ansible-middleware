@@ -263,3 +263,6 @@ historyserver.archive.fs.dir: {{ historyserver_archive_fs_dir }}
 # Interval in milliseconds for refreshing the monitored directories.
 historyserver.archive.fs.refresh-interval: 10000
 {% endif %}
+
+
+state.backend.rocksdb.predefined-options: SPINNING_DISK_OPTIMIZED_HIGH_MEM
