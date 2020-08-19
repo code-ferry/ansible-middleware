@@ -1,0 +1,58 @@
+# 示例: 属于'webservers'组的主机集合描述
+# [webservers]
+# alpha.example.org
+# www[001:006].example.com
+# www[a-f].example.com
+# 192.168.1.100 ansible_ssh_user=test ansible_ssh_pass=123456 ansible_become_user=root ansible_become_pass=1q2w3e ansible_become_method=sudo
+# 192.168.1:[1:10]
+
+###############################
+##########部署服务器############
+###############################
+# 部署服务器: 运行这份ansible脚本的节点
+[deploy]
+hw-bd-01 ansible_ssh_pass='bduser_NL@2019'
+
+###############################
+##########应用服务器############
+###############################
+# 应用服务器: 所有安装中间件的服务器
+[application]
+hw-bd-01 ansible_ssh_pass='bduser_NL@2019' ansible_become_method='sudo' ansible_become_pass='bduser_NL@2019'
+hw-bd-02 ansible_ssh_pass='bduser_NL@2019' ansible_become_method='sudo' ansible_become_pass='bduser_NL@2019'
+hw-bd-03 ansible_ssh_pass='bduser_NL@2019' ansible_become_method='sudo' ansible_become_pass='bduser_NL@2019'
+hw-bd-04 ansible_ssh_pass='bduser_NL@2019' ansible_become_method='sudo' ansible_become_pass='bduser_NL@2019'
+hw-bd-05 ansible_ssh_pass='bduser_NL@2019' ansible_become_method='sudo' ansible_become_pass='bduser_NL@2019'
+hw-bd-06 ansible_ssh_pass='bduser_NL@2019' ansible_become_method='sudo' ansible_become_pass='bduser_NL@2019'
+hw-bd-07 ansible_ssh_pass='bduser_NL@2019' ansible_become_method='sudo' ansible_become_pass='bduser_NL@2019'
+
+[flink]
+hw-bd-01 jobmanager="yes"
+hw-bd-02 jobmanager="yes"
+hw-bd-02 taskmanager="yes"
+hw-bd-03 taskmanager="yes"
+hw-bd-04 taskmanager="yes"
+hw-bd-05 taskmanager="yes"
+hw-bd-06 taskmanager="yes"
+hw-bd-07 taskmanager="yes"
+
+[hadoop]
+hw-bd-01 namenode="yes" yarn="yes"
+hw-bd-02 datanode="yes"
+hw-bd-03 datanode="yes"
+hw-bd-04 datanode="yes"
+hw-bd-05 datanode="yes"
+hw-bd-06 datanode="yes"
+hw-bd-07 datanode="yes"
+
+[zookeeper]
+hw-bd-02
+;hw-bd-03
+;hw-bd-04
+
+[kafka]
+hw-bd-02
+;hw-bd-03
+;hw-bd-04
+
+

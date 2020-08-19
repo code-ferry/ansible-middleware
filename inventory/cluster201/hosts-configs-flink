@@ -45,3 +45,6 @@ flink_kerberos_use = true
 flink_kerberos_keytab = /usr/lib/hadoopclient/hadoop-2.8.5/hadoop.keytab
 flink_kerberos_principal_user = udapdev
 flink_kerberos_principal_domain = NEWLAND.COM
+
+## 单主机启动多少个TM
+flink_multi_taskmanager_num = 1
