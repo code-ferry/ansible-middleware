@@ -31,6 +31,19 @@
   with_items:
   - { src: 'script/clean.sh.j2', dest: '{{ flink_home }}/bin/clean.sh' }
 
+
+- name: 生成支持启停多个TM的脚本
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ flink_home }}/bin/"
+    mode: "0744"
+    force: yes
+  with_items:
+    - { src: 'start-cluster-tm.sh'}
+    - { src: 'stop-cluster-tm.sh'}
+    - { src: 'start-cluster-nl.sh'}
+    - { src: 'stop-cluster-nl.sh'}
+
 - name: 写入环境变量$FLINK_HOME等
   lineinfile:
     dest: ~/.bash_profile
