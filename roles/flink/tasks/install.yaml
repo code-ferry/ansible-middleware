@@ -39,10 +39,11 @@
     mode: "0744"
     force: yes
   with_items:
-    - { src: 'start-cluster-tm.sh'}
-    - { src: 'stop-cluster-tm.sh'}
+    - { src: 'config-nl.sh'}
+    - { src: 'jobmanager-proxy.sh'}
     - { src: 'start-cluster-nl.sh'}
     - { src: 'stop-cluster-nl.sh'}
+    - { src: 'taskmanager-proxy.sh'}
 
 - name: 写入环境变量$FLINK_HOME等
   lineinfile:

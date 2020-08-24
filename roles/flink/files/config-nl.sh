@@ -17,23 +17,30 @@
 # limitations under the License.
 ################################################################################
 
-bin=`dirname "$0"`
-bin=`cd "$bin"; pwd`
+NLTMSlaves() {
+    CMD=$1
+    count=$2
+    echo "${count}"
 
-. "$bin"/config.sh
+    readSlaves
 
-
-# Start TaskManager instance(s)
-count=0
-
-if [ -n "$1" ];
- then
-  count=`expr $1 - 1`
-fi;
-
-echo "再次启动TM数($count)"
-for((i=0;i<${count};i++))
-do
-TMSlaves start
-done
+    if [ ${SLAVES_ALL_LOCALHOST} = true ] ; then
+        # all-local setup
+        for slave in ${SLAVES[@]}; do
+            "${FLINK_BIN_DIR}"/taskmanager.sh "${CMD}" "${count}"
+        done
+    else
+        # non-local setup
+        # Stop TaskManager instance(s) using pdsh (Parallel Distributed Shell) when available
+        command -v pdsh >/dev/null 2>&1
+        if [[ $? -ne 0 ]]; then
+            for slave in ${SLAVES[@]}; do
+                ssh -n $FLINK_SSH_OPTS $slave -- "nohup /bin/bash -l \"${FLINK_BIN_DIR}/taskmanager-proxy.sh\" \"${CMD}\"  \"${count}\" &"
+            done
+        else
+            PDSH_SSH_ARGS="" PDSH_SSH_ARGS_APPEND=$FLINK_SSH_OPTS pdsh -w $(IFS=, ; echo "${SLAVES[*]}") \
+                "nohup /bin/bash -l \"${FLINK_BIN_DIR}/taskmanager-proxy.sh\" \"${CMD}\"  \"{count}\" "
+        fi
+    fi
+}
 

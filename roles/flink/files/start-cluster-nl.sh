@@ -21,6 +21,7 @@ bin=`dirname "$0"`
 bin=`cd "$bin"; pwd`
 
 . "$bin"/config.sh
+. "$bin"/config-nl.sh
 
 # Start the JobManager instance(s)
 shopt -s nocasematch
@@ -35,9 +36,9 @@ if [[ $HIGH_AVAILABILITY == "zookeeper" ]]; then
         webuiport=${WEBUIPORTS[i]}
 
         if [ ${MASTERS_ALL_LOCALHOST} = true ] ; then
-            "${FLINK_BIN_DIR}"/jobmanager.sh start "${master}" "${webuiport}"
+            "${FLINK_BIN_DIR}"/jobmanager-proxy.sh start "${master}" "${webuiport}"
         else
-            ssh -n $FLINK_SSH_OPTS $master -- "nohup /bin/bash -l \"${FLINK_BIN_DIR}/jobmanager.sh\" start ${master} ${webuiport} &"
+            ssh -n $FLINK_SSH_OPTS $master -- "nohup /bin/bash -l \"${FLINK_BIN_DIR}/jobmanager-proxy.sh\" start ${master} ${webuiport} &"
         fi
     done
 
@@ -45,22 +46,11 @@ else
     echo "Starting cluster."
 
     # Start single JobManager on this machine
-    "$FLINK_BIN_DIR"/jobmanager.sh start
+    "$FLINK_BIN_DIR"/jobmanager-proxy.sh start
 fi
 shopt -u nocasematch
 
 # Start TaskManager instance(s)
 
-count=1
-
-if [ -n "$1" ];
- then
-  count=$1
-fi;
-
-echo "启动TM数($count)"
-for((i=0;i<${count};i++))
-do
-TMSlaves start
-done
+NLTMSlaves start "$1"
 
