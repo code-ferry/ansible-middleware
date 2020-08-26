@@ -1,0 +1,24 @@
+- name: 检查JM运行情况
+  shell: ". ~/.bash_profile; ./status.sh jm"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ flink_home }}/bin"
+  register: result
+  failed_when: result.rc == 1
+- debug:
+    msg: "{{ result }}"
+
+
+- name: 检查TM运行情况
+  shell: ". ~/.bash_profile; ./status.sh tm {{ flink_multi_taskmanager_num }}"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ flink_home }}/bin"
+  register: result
+  failed_when: result.rc == 1
+- debug:
+    msg: "{{ result }}"

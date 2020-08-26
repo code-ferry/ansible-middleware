@@ -1,0 +1,46 @@
+#!/bin/bash
+
+bin=`dirname "$0"`
+bin=`cd "$bin"; pwd`
+
+. "$bin"/config.sh
+
+{% for host in groups['flink'] %}
+{% if hostvars[host].jobmanager is defined and hostvars[host].jobmanager == "yes" and host == inventory_hostname %}
+    isJobManager=true
+{% endif %}
+{% endfor %}
+
+{% for host in groups['flink'] %}
+{% if hostvars[host].taskmanager is defined and hostvars[host].taskmanager == "yes" and host == inventory_hostname %}
+    isTaskManager=true
+{% endif %}
+{% endfor %}
+
+
+
+role=$1
+
+count=1
+if [ -n "$2" ];
+ then
+  count=$2
+fi;
+
+if [ ${role} = "jm" -a -n "${isJobManager}" ] ; then
+
+    jmInstance=$(ps -ef|grep StandaloneSessionClusterEntrypoint|grep "${FLINK_HOME}"|grep -v grep|wc -l)
+    if [ ${jmInstance} -lt 1 ] ; then
+        echo "JobManager进程不存在"
+        exit 1
+    fi
+    exit 0
+
+elif [ ${role} = "tm" -a -n "${isTaskManager}" ] ; then
+    tmInstance=$(ps -ef|grep TaskManagerRunner|grep "${FLINK_HOME}"|grep -v grep|wc -l)
+    if [ ${tmInstance} -lt ${count} ] ; then
+        echo "当前TaskManager个数${tmInstance} 小于目标实例数 ${count}"
+        exit 1
+    fi
+    exit 0
+fi

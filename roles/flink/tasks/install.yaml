@@ -32,6 +32,15 @@
   - { src: 'script/clean.sh.j2', dest: '{{ flink_home }}/bin/clean.sh' }
 
 
+- name: 生成检查集群的状态脚本
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0744"
+  with_items:
+  - { src: 'script/status.sh.j2', dest: '{{ flink_home }}/bin/status.sh' }
+
+
 - name: 生成支持启停多个TM的脚本
   copy:
     src: "{{ item.src }}"

@@ -34,6 +34,10 @@
 - import_tasks: clean.yaml
   tags: [ 'never', 'clean' ]
 
+# 检查集群的状态
+- import_tasks: status.yaml
+  tags: [ 'never', 'status' ]
+
 # 复制与删除自定义的lib
 - import_tasks: copy-clib.yaml
   tags: [ 'never', 'copy-clib' ]
