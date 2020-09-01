@@ -93,3 +93,7 @@
 # uninstall by user root
 - import_tasks: uninstall-root.yaml
   tags: [ 'never', 'uninstall-root' ]
+
+# create yarn cgroup
+- import_tasks: install-cgroup.yaml
+  tags: [ 'never', 'install-cgroup' ]

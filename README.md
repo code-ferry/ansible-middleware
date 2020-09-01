@@ -135,6 +135,9 @@ ansible-playbook 02.hadoop.yaml -t install
 ansible-playbook 02.hadoop.yaml -t install-root -e "ansible_become=true"
 # 格式化datanode
 ansible-playbook 02.hadoop.yaml -t format
+# 生成yarn的cgroup，用于资源控制
+ansible-playbook 02.hadoop.yaml -t install-cgroup -e "ansible_become=true"
+# 启动hadoop
 ansible-playbook 02.hadoop.yaml -t start
 ```
 

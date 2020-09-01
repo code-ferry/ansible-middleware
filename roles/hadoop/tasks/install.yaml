@@ -62,6 +62,7 @@
   with_items:
   - { src: 'ssl/ssl-client.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/ssl-client.xml' }
   - { src: 'ssl/ssl-server.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/ssl-server.xml' }
+  when: hadoop_security_authorization == "true"
 
 - name: 生成清理日志的脚本
   template:

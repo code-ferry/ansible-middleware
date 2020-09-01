@@ -43,6 +43,34 @@
         <value>0.0.0.0:{{ nodemanager_port }}</value>
     </property>
 
+    <!-- yarn resource config -->
+    <property>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>{{ yarn_nm_memory }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>{{ yarn_sc_min_memory }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>{{ yarn_sc_max_memory }}</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.resource.cpu-vcores</name>
+        <value>{{ yarn_nm_vcore }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-vcores</name>
+        <value>{{ yarn_sc_min_vcore }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-vcores</name>
+        <value>{{ yarn_sc_max_vcore }}</value>
+    </property>
+
+    {% if hadoop_security_authentication == "kerberos" %}
     <!-- kerberos to resourcemanager -->
     <property>
         <name>yarn.resourcemanager.principal</name>
@@ -74,20 +102,54 @@
         <name>yarn.nodemanager.webapp.https.address</name>
         <value>0.0.0.0:{{ nodemanager_webapp_https_port }}</value>
     </property>
+    {% endif %}
 
+    <!-- yarn and control group -->
     <property>
         <name>yarn.nodemanager.container-executor.class</name>
         <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+    </property>
+    <property>
+        <description>启用LinuxContainerExecutor并不强制使用CGroups。如果你想使用，resource-handler-class必须设置为CGroupsLCEResourceHandler</description>
+        <name>yarn.nodemanager.linux-container-executor.resources-handler.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler</value>
+    </property>
+    <property>
+        <description>yarn使用的cgroup组,默认为/hadoop-yarn</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.hierarchy</name>
+        <value>{{ yarn_cgroup_hierarchy }}</value>
+    </property>
+    <property>
+        <description>是否自动挂载cgroup</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.mount</name>
+        <value>{{ yarn_cgroup_mount }}</value>
+    </property>
+    <property>
+        <description>cgroup挂载目录, /sys/fs/cgroup或者是/cgroup目录和系统有关</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.mount-path</name>
+        <value>{{ yarn_cgroup_mount_path }}</value>
+    </property>
+    <property>
+        <description>配置nodemanager使用多少物理cpu资源,比如24核服务器配置90的话,最近使用21.6核</description>
+        <name>yarn.nodemanager.resource.percentage-physical-cpu-limit</name>
+        <value>{{ yarn_cgroup_cpu_limit }}</value>
+    </property>
+    <property>
+        <description>是控制是否严格限制cpu,即按任务申请的core限制,还是非严格限制,即按core的比率限制</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.strict-resource-usage</name>
+        <value>{{ yarn_cgroup_strict_resource }}</value>
     </property>
     <property>
         <name>yarn.nodemanager.linux-container-executor.group</name>
         <value>{{ yarn_lce_group }}</value>
     </property>
     <property>
+        <description>非安全模式将会以这里设置的用户运行container,比如配置hadoop用户则以hadoop运行container</description>
         <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user</name>
         <value>{{ yarn_lce_user }}</value>
     </property>
     <property>
+        <description>实际提交作业的用户跑作业,否则会使用上面local-user的固定用户来运行作业</description>
         <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
         <value>{{ yarn_lce_limit_users }}</value>
     </property>
@@ -105,29 +167,4 @@
 <!--        <name>yarn.node-labels.configuration-type</name>-->
 <!--        <value>distributed</value>-->
 <!--    </property>-->
-
-    <property>
-        <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>{{ yarn_nm_memory }}</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>{{ yarn_nm_vcore }}</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.minimum-allocation-mb</name>
-        <value>{{ yarn_sc_min_memory }}</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>{{ yarn_sc_max_memory }}</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.minimum-allocation-vcores</name>
-        <value>{{ yarn_sc_min_vcore }}</value>
-    </property>
-    <property>
-        <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>{{ yarn_sc_max_vcore }}</value>
-    </property>
 </configuration>

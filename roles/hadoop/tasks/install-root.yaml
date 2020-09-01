@@ -1,4 +1,4 @@
-#  ansible-playbook 02.hadoop.yaml -t install-root -e "ansible_become=true"
+# ansible-playbook 02.hadoop.yaml -t install-root -e "ansible_become=true"
 
 - name: 复制container-executor等
   copy:
@@ -37,5 +37,6 @@
   with_items:
   - { src: 'site/container-executor.cfg.j2', dest: '/etc/hadoop/container-executor.cfg' }
 
+# 当需要鉴权时，需要安装ssl。
 - import_tasks: install-ssl.yaml
   when: hadoop_security_authorization == "true"

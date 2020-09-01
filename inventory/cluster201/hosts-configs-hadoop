@@ -93,6 +93,13 @@ yarn_nm_memory = 2048
 yarn_sc_min_memory = 512
 yarn_sc_max_memory = 2048
 
-yarn_nm_vcore = 4
+yarn_nm_vcore = 8
 yarn_sc_min_vcore = 1
 yarn_sc_max_vcore = 4
+
+# yarn cgroup
+yarn_cgroup_hierarchy = /hadoop-yarn
+yarn_cgroup_mount = false
+yarn_cgroup_mount_path = /sys/fs/cgroup
+yarn_cgroup_cpu_limit = 95
+yarn_cgroup_strict_resource = true
