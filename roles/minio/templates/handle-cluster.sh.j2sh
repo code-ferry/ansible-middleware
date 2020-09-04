@@ -1,0 +1,82 @@
+#!/bin/bash
+
+export MINIO_ACCESS_KEY={{ minio_access_key }}
+export MINIO_SECRET_KEY={{ minio_secret_key }}
+
+start() {
+    OSUSER=$(id -nu)
+    pid=`ps -ef | grep "minio server" | grep $OSUSER | grep -v "grep" | awk '{print $2}'`
+
+    if [ X"" = X"$pid" ]; then
+        echo "start minio member"
+    else
+        echo "minio member is running now, pid=${pid}"
+        return 0
+    fi
+
+    echo "minio starting!"
+    {{ minio_home }}/minio server {{ minio_remote_data_dirs }}
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+    return 0
+}
+
+stop() {
+    echo "minio stopping!"
+    OSUSER=$(id -nu)
+    pid=`ps -ef | grep "minio server" | grep $OSUSER | grep -v "grep" | awk '{print $2}'`
+
+    if [ X"" = X"$pid" ]; then
+        echo "minio member not run."
+        return 1
+    fi
+
+    echo "minio stop pid="${pid}
+    kill -9 $pid
+    if [ $? -ne 0 ] ;then
+        echo "kill minio member fail, pid=$pid"
+        return 1
+    fi
+
+    return 0
+}
+
+clean() {
+    echo "minio cleaning!"
+
+    cat /dev/null > run.log
+    if [ $? -ne 0 ] ;then
+        echo "clean run.log."
+        return 1
+    fi
+
+    return 0
+}
+
+########################################
+################执行命令################
+########################################
+result=0
+if [ "$1" == "start" ]; then
+    echo -e "\nmethod start ------------------------------"
+    start
+    result=$?
+elif [ "$1" == "stop" ]; then
+    echo -e "\nmethod stop -------------------------------"
+    stop
+    result=$?
+elif [ "$1" == "clean" ]; then
+    echo -e "\nmethod clean ------------------------------"
+    clean
+else
+    result=1
+fi
+
+if [ $result -ne 0 ]; then
+    echo "minio $1 fail."
+else
+    echo "minio $1 success."
+fi
+
+exit $result

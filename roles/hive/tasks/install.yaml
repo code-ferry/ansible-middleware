@@ -14,6 +14,7 @@
   file: path={{ item }} state=directory
   with_items:
   - "{{ hive_local_scratchdir }}"
+  - "{{ hive_local_tmp_dir }}"
   - "{{ hive_home }}/logs"
   - "{{ hive_home }}/exec"
   - "{{ hive_home }}/downloadedresources"
@@ -24,15 +25,6 @@
     dest: "{{ hive_home }}/lib/mysql-connector-java.jar"
     force: yes
 
-#- name: Run mysql script
-#  shell: '. ~/.bash_profile; schematool -initSchema -dbType mysql'
-#  async: 20
-#  poll: 2
-#  args:
-#    executable: /bin/bash
-#  run_once: true
-#  ignore_errors: true
-
 - name: create hive configuration
   template:
     src: "{{ item.src }}"
@@ -41,6 +33,7 @@
   - { src: 'hive-env-{{ hive_version }}.sh.shj2', dest: '{{ hive_conf_dir }}/hive-env.sh' }
   - { src: 'hive-site-{{ hive_version }}.xml.xj2', dest: '{{ hive_conf_dir }}/hive-site.xml' }
   - { src: 'hive-log4j.properties.j2', dest: '{{ hive_conf_dir }}/hive-log4j.properties' }
+  - { src: 'hive-log4j2.properties.j2', dest: '{{ hive_conf_dir }}/hive-log4j2.properties' }
 
 - name: Write the environment variable $HADOOP_HOME, and so on
   lineinfile:
@@ -50,3 +43,4 @@
   with_items:
   - 'export HIVE_HOME={{ hive_home }}'
   - 'export PATH=$PATH:$HIVE_HOME/bin'
+

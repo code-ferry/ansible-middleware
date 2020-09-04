@@ -21,6 +21,15 @@
     <!-- WARNING!!! You must make your changes in hive-site.xml instead.         -->
     <!-- Hive Execution Parameters -->
     <property>
+        <name>system:java.io.tmpdir</name>
+        <value>{{ hive_local_tmp_dir }}</value>
+    </property>
+    <property>
+        <name>system:user.name</name>
+        <value>hive</value>
+    </property>
+
+    <property>
         <name>hive.exec.script.wrapper</name>
         <value/>
         <description/>
@@ -481,7 +490,7 @@
     </property>
     <property>
         <name>hive.metastore.sasl.enabled</name>
-        <value>true</value>
+        <value>{{ hive_metastore_sasl_enabled }}</value>
         <description>If true, the metastore Thrift interface will be secured with SASL. Clients must authenticate with Kerberos.</description>
     </property>
     <property>

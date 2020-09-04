@@ -25,9 +25,6 @@
 export JAVA_HOME={{ java_home }}
 
 export JSVC_HOME={{ hadoop_home }}/libexec
-#export HADOOP_SECURE_DN_USER={{ install_user }}
-#export HADOOP_SECURE_DN_PID_DIR=$HADOOP_HOME
-#export HADOOP_SECURE_DN_LOG_DIR=$HADOOP_HOME/logs
 
 # The jsvc implementation to use. Jsvc is required to run secure datanodes
 # that bind to privileged ports to provide authentication of data transfer
@@ -106,8 +103,10 @@ export HADOOP_SECURE_DN_USER=${HADOOP_SECURE_DN_USER}
 # NOTE: this should be set to a directory that can only be written to by 
 #       the user that will run the hadoop daemons.  Otherwise there is the
 #       potential for a symlink attack.
-export HADOOP_PID_DIR=${HADOOP_PID_DIR}
-export HADOOP_SECURE_DN_PID_DIR=${HADOOP_PID_DIR}
+# export HADOOP_PID_DIR=${HADOOP_PID_DIR}
+# export HADOOP_SECURE_DN_PID_DIR=${HADOOP_PID_DIR}
+export HADOOP_PID_DIR={{ hadoop_home }}/pids
+export HADOOP_SECURE_DN_PID_DIR={{ hadoop_home }}/pids
 
 # A string representing this instance of hadoop. $USER by default.
 export HADOOP_IDENT_STRING=$USER

@@ -9,3 +9,7 @@
 # stop hive
 - import_tasks: stop.yaml
   tags: [ 'never', 'stop' ]
+
+# init hive
+- import_tasks: init.yaml
+  tags: [ 'never', 'init' ]

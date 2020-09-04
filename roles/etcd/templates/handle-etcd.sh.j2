@@ -9,6 +9,9 @@ list() {
 }
 
 start() {
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- start ----------- ${ts}"
+
     pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
 
     if [ X"" = X"$pid" ]; then
@@ -21,15 +24,16 @@ start() {
     echo "etcd starting!"
     {{ etcd_home }}/etcd --name={{ etcd_name }} --config-file={{ etcd_conf_dir }}/etcd.yaml
     if [ $? -ne 0 ]; then
-        echo "etcd start fail!"
         return 1
     fi
     return 0
 }
 
 stop() {
-    pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- stop ----------- ${ts}"
 
+    pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
     echo "pid="${pid}
     if [ X"" = X"$pid" ]; then
         echo "etcd member not run, name={{ etcd_name }}"
@@ -37,7 +41,7 @@ stop() {
     fi
 
     kill -9 $pid
-    if [ $? -ne 0 ] ;then
+    if [ $? -ne 0 ]; then
         echo "kill etcd member fail, pid=$pid, name={{ etcd_name }}"
         return
     fi
@@ -46,15 +50,77 @@ stop() {
 }
 
 compact() {
-    rev=$({{ etcd_home }}/etcdctl endpoint status --write-out="json" | egrep -o '"revision":[0-9]*' | egrep -o '[0-9].*')
-    etcdctl compact $rev
-    return 0
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- compact ----------- ${ts}"
+
+    etcdctl alarm list
+    count=1
+    while [ $count -lt 10 ]
+    do
+       echo -e "\ncompact db count: $count"
+       count=`expr $count + 1`
+
+       # 先分析能不能获取状态结果(成功:0; 失败:1)，就没有必要进行压缩等动作。示例：如果通信失败时可能得不到状态。
+       statusInfo=$(etcdctl endpoint status 2>&1)
+       statusResult=$?
+       echo "Execute 'etcdctl endpoint status' result: ${statusResult}"
+       echo "Execute 'etcdctl endpoint info' result: '${statusInfo}'"
+
+       if [ $statusResult -eq 0 ]; then
+           rev=$({{ etcd_home }}/etcdctl endpoint status --write-out="json" | egrep -o '"revision":[0-9]*' | egrep -o '[0-9].*')
+
+           if [ X"$rev" == X"" ]; then
+             echo "Can't get etcd revision."
+             break
+           fi
+
+           echo "etcd compact, rev=${rev}"
+           compactInfo=$(etcdctl compact ${rev} 2>&1)
+           compactResult=$?
+           # 打印压缩的情况
+           echo "Execute 'etcdctl compact rev' result: ${compactResult}"
+           echo "Execute 'etcdctl compact rev' info: '${compactInfo}'"
+
+           # 经常会出现，已经压缩过了（该修订版已经压缩）的报错，这对运行效果没有影响。也可以退出了。
+           compactInfoContainError=$(echo ${compactInfo} | grep 'required revision has been compacted' | grep -v grep)
+           if [ -n "$compactInfoContainError" ]; then
+             return 1
+           fi
+
+           # 压缩执行结果没有问题就直接退出了。
+           if [ $compactResult -eq 0 ]; then
+             return 0
+           fi
+       fi
+
+       sleep 3
+    done
+
+    return 1
 }
 
 defrag() {
-    etcdctl defrag
-    etcdctl alarm disarm
-    return 0
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- defrag ----------- ${ts}"
+
+    count=1
+    while [ $count -lt 10 ]
+    do
+       echo -e "\ndefrag db count: ${count}"
+       count=`expr $count + 1`
+
+       etcdctl defrag
+       defragResult=$?
+       # 打印碎片整理的情况
+       echo "Execute 'etcdctl defrag' result: ${defragResult}"
+
+       if [ $defragResult -eq 0 ]; then
+           etcdctl alarm disarm
+           return 0
+       fi
+    done
+
+    return 1
 }
 
 snapshot() {

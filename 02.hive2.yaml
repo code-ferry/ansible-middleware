@@ -1,0 +1,10 @@
+# 对hive 2的版本，主机以及相关变是基于hive2的。通过这种方式满足同时部署hive1，hive2的要求。
+- hosts: hive2
+  remote_user: "{{ install_user }}"
+  become_user: "{{ install_user }}"
+  gather_facts: yes
+  vars:
+    ansible_home: "{{ lookup('env', 'PWD') }}"
+    hive_version_1: "{{ hive_version.split('.')|first }}"
+  roles:
+  - hive

@@ -1,6 +1,8 @@
 [hive:vars]
-hive_server2_port = 10000
-# hive.metastore.uris  thrift://192.168.6.77:9083
+# default 10000
+hive_server2_port = 10001
+# default 9083
+hive_metastore_port = 9084
 
 [hive:vars]
 hive_version = 1.2.2
@@ -9,12 +11,12 @@ hive_folder = "apache-hive-{{ hive_version }}-bin"
 hive_home = "{{ install_home }}/{{ hive_folder }}"
 
 hive_conf_dir = "{{ hive_home }}/conf"
+hive_local_scratchdir = "{{ hive_home }}/scratchdir"
+hive_local_tmp_dir = "{{ hive_home }}/tmp"
 
 hive_warehouse_dir = "/user/hive/warehouse"
 hive_scratchdir = "/user/hive/scratchdir"
 hive_log_dir = "/user/hive/logs"
-
-hive_local_scratchdir = "{{ hive_home }}/scratchdir"
 
 [hive:vars]
 hive_mysql_addr = 192.168.128.1

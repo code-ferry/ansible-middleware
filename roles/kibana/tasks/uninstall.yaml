@@ -1,4 +1,4 @@
-- name: clean environment $KIBANA_HOME等
+- name: clean environment $KIBANA_HOME and so on
   lineinfile:
     dest: ~/.bash_profile
     state: absent

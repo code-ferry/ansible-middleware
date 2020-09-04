@@ -1,6 +1,6 @@
-- hosts: etcd
+- hosts: minio
   remote_user: "{{ install_user }}"
   become_user: "{{ install_user }}"
   gather_facts: no
   roles:
-  - etcd
+  - minio

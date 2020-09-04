@@ -1,5 +1,5 @@
 - name: kill metastore and hiveserver2 server
-  shell: '. ~/.bash_profile; {{ item }}'
+  shell: '. ~/.bash_profile; export HIVE_HOME={{ hive_home }}; {{ item }}'
   async: 20
   poll: 2
   args:

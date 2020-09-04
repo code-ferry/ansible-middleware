@@ -64,7 +64,7 @@ hadoop_security_authentication = simple
 hadoop_security_authorization = false
 
 dfs_block_access_token_enable = true
-dfs_http_policy = HTTPS_ONLY
+dfs_http_policy = HTTP_ONLY
 
 hadoop_keytab_path = /home/bduser
 hadoop_keytab_file = "{{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}"

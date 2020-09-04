@@ -20,6 +20,10 @@
 - import_tasks: start.yaml
   tags: ['never','restart']
 
-# 压缩etcd
+# 压缩与碎片整理etcd
 - import_tasks: compact.yaml
   tags: ['never','compact']
+
+# 获取etcd状态
+- import_tasks: status.yaml
+  tags: ['never','status']

@@ -30,11 +30,15 @@ host202.com taskmanager="yes"
 host203.com taskmanager="yes"
 
 [hadoop]
-host201.com namenode="yes" yarn="yes"
-host202.com datanode="yes"
-host203.com datanode="yes"
+# host201.com namenode="yes" yarn="yes"
+# host202.com datanode="yes"
+# host203.com datanode="yes"
+host201.com namenode="yes" yarn="yes" datanode="yes"
 
 [hive]
+host201.com
+
+[hive2]
 host201.com
 
 [elasticsearch]
@@ -46,9 +50,12 @@ host203.com
 host201.com
 
 [etcd]
-host201.com
-host202.com
-host203.com
+192.168.128.201
+192.168.128.202
+192.168.128.203
+# host201.com
+# host202.com
+# host203.com
 
 [zookeeper]
 host201.com
@@ -58,6 +65,9 @@ host201.com
 host202.com
 host203.com
 
+[pulsar]
+host201.com
+
 [kerberos]
 host201.com
 
@@ -65,3 +75,7 @@ host201.com
 host201.com
 host202.com
 host203.com
+
+[minio]
+host201.com
+host202.com

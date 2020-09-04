@@ -1,0 +1,16 @@
+[minio:vars]
+minio_port = 9000
+
+[minio:vars]
+# 用户名，长度最小是5个字符
+minio_access_key = minio
+# 密码，长度最小是8个字符
+minio_secret_key = minio123!
+
+[minio:vars]
+minio_home = "{{ install_home }}/minio"
+minio_name = "{% for host in groups['minio'] -%}{% if host == inventory_hostname %}etcd0{{ loop.index }}{% endif %}{% endfor %}"
+
+# minio的路径参数
+minio_data_dirs = {{ minio_home }}/data1,{{ minio_home }}/data2,{{ minio_home }}/data3,{{ minio_home }}/data4
+minio_remote_data_dirs = "{{ lookup('template', 'miniodir.j2') -}}"
