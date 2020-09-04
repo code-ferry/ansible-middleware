@@ -6,7 +6,8 @@ bin=`cd "$bin"; pwd`
 . "$bin"/config.sh
 
 CMD=$1
-
+host=$2
+webport=$3
 
 
 if [ "$1" ==  "start" ]
@@ -15,7 +16,7 @@ if [ "$1" ==  "start" ]
     echo "当前JM个数${currentInstance} 目标示例数 1"
     for((i=${currentInstance};i<1;i++))
     do
-      "$FLINK_BIN_DIR"/jobmanager.sh "${CMD}"  
+      "$FLINK_BIN_DIR"/jobmanager.sh "${CMD}" "${host}" "${webport}" 
     done
 else
   echo "执行${CMD}"
