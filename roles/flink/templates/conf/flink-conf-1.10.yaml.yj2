@@ -266,3 +266,6 @@ historyserver.archive.fs.refresh-interval: 10000
 
 
 state.backend.rocksdb.predefined-options: SPINNING_DISK_OPTIMIZED_HIGH_MEM
+env.java.opts.taskmanager: -XX:+UseG1GC
+env.java.opts.jobmanager: -XX:+UseG1GC
+
