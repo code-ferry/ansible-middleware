@@ -1,0 +1,9 @@
+# 创建存放ssl文件的目录(按实现情况，可以决定是root用户，还是普通用户)
+- name: Create a directory if it does not exist.
+  file:
+    path: "{{ ssl_path }}"
+    state: directory
+    mode: 0755
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    recurse: yes

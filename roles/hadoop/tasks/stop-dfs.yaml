@@ -7,14 +7,14 @@
     chdir: "{{ hadoop_home }}/sbin"
   register: result
   run_once: true
-  delegate_to: "{{ namenode_host }}"
+  delegate_to: "{{ namenode_hosts[0] }}"
 
 - name: 再确认namenode的端口
   wait_for:
     port: "{{ namenode_port }}"
     state: stopped
     timeout: 30
-  delegate_to: "{{ namenode_host }}"
+  delegate_to: "{{ namenode_hosts[0] }}"
 
 #- name: 停止datanode
 #  shell: ". ~/.bash_profile; HADOOP_DATANODE_USER=bduser sudo -E {{ hadoop_home }}/sbin/stop-secure-dns.sh"

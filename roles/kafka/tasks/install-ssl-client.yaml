@@ -1,0 +1,6 @@
+- name: create property file 'client.properties'
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'conf/client.properties.j2', dest: '{{ kafka_home }}/config/client.properties'}

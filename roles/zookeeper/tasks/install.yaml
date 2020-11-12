@@ -30,6 +30,24 @@
   - { src: 'zoo.cfg.j2', dest: '{{ zk_home }}/conf/zoo.cfg' }
   - { src: 'log4j.properties.j2', dest: '{{ zk_home }}/conf/log4j.properties' }
 
+- name: 删除jaas.conf, java.env文件
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'jaas.conf.j2', dest: '{{ zk_home }}/conf/jaas.conf' }
+  - { src: 'java.env.j2', dest: '{{ zk_home }}/conf/java.env' }
+  when: zk_kerberos_enable|lower() == "true"
+
+- name: 创建jaas.conf文件
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - '{{ zk_home }}/conf/jaas.conf'
+  - '{{ zk_home }}/conf/java.env'
+  when: zk_kerberos_enable|lower() != "true"
+
 - name: 写入环境变量$ZK_HOME等
   lineinfile:
     dest: ~/.bash_profile

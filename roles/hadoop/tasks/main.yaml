@@ -15,6 +15,10 @@
 - import_tasks: start-jh.yaml
   tags: [ 'never', 'start-jh' ]
 
+# 启动job journal
+- import_tasks: start-jn.yaml
+  tags: [ 'never', 'start-jn' ]
+
 # 启动hdfs, yarn
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'start' ]
@@ -33,6 +37,10 @@
 # 停止job history
 - import_tasks: stop-jh.yaml
   tags: [ 'never', 'stop-jh' ]
+
+# 停止job journal
+- import_tasks: stop-jn.yaml
+  tags: [ 'never', 'stop-jn' ]
 
 # 停止hdfs, yarn
 - import_tasks: stop-dfs.yaml

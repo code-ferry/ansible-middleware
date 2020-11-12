@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
+    <!-- see http://hadoop.apache.org/docs/r2.8.5/hadoop-project-dist/hadoop-common/SecureMode.html -->
+
+    {% if namenode_ha_enable|lower == "true" %}
+    <property>
+        <name>dfs.nameservices</name>
+        <value>ns</value>
+    </property>
+    <property>
+        <name>dfs.ha.namenodes.ns</name>
+        <value>nn1,nn2</value>
+    </property>
+    <!-- nn1的rpc, http, https -->
+    <property>
+        <name>dfs.namenode.rpc-address.ns.nn1</name>
+        <value>{{ namenode_hosts[0] }}:{{ namenode_port }}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.http-address.ns.nn1</name>
+        <value>{{ namenode_hosts[0] }}:{{ namenode_http_port }}</value>
+    </property>
+<!--    <property>-->
+<!--        <name>dfs.namenode.https-address.ns.nn1</name>-->
+<!--        <value>{{ namenode_hosts[0] }}:{{ namenode_https_port }}</value>-->
+<!--    </property>-->
+    <!-- nn2的rpc, http, https -->
+    <property>
+        <name>dfs.namenode.rpc-address.ns.nn2</name>
+        <value>{{ namenode_hosts[1] }}:{{ namenode_port }}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.http-address.ns.nn2</name>
+        <value>{{ namenode_hosts[1] }}:{{ namenode_http_port }}</value>
+    </property>
+<!--    <property>-->
+<!--        <name>dfs.namenode.https-address.ns.nn2</name>-->
+<!--        <value>{{ namenode_hosts[1] }}:{{ namenode_https_port }}</value>-->
+<!--    </property>-->
+    {% endif %}
+
     <!-- hdfs -->
     <property>
         <name>dfs.namenode.name.dir</name>
@@ -24,6 +63,10 @@
         <name>dfs.blocksize</name>
         <value>{{ dfs_blocksize }}</value>
     </property>
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>false</value>
+    </property>
 
     <!-- kerberos to namenode -->
     <property>
@@ -42,11 +85,6 @@
         <name>dfs.namenode.kerberos.internal.spnego.principal</name>
         <value>{{ hadoop_kerberos_principal_http }}</value>
     </property>
-    <!--<property>-->
-    <!--<name>dfs.web.authentication.kerberos.keytab</name>-->
-    <!--<value>/etc/security/keytab/spnego.service.keytab</value>-->
-    <!--<description>SPNEGO keytab file for the NameNode. In HA clusters this setting is shared with the Journal Nodes</description>-->
-    <!--</property>-->
 
     <!-- configuring ssl to the namenode web UI -->
     <property>
@@ -54,11 +92,13 @@
         <value>{{ dfs_http_policy }}</value>
         <description>dfs.https.enable is deprecated.</description>
     </property>
+    {% if namenode_ha_enable|lower != "true" %}
     <property>
         <name>dfs.namenode.https-address</name>
         <value>0.0.0.0:{{ namenode_https_port }}</value>
         <description>This parameter is used in non-HA mode and without federation</description>
     </property>
+    {% endif %}
 
     <!-- kerberos to secondary.namenode -->
     <property>
@@ -130,8 +170,62 @@
         <name>dfs.web.authentication.kerberos.keytab</name>
         <value>{{ hadoop_keytab_file }}</value>
     </property>
-    <!--<property>-->
-    <!--<name>dfs.secondary.namenode.kerberos.https.principal</name>-->
-    <!--<value>{{ hadoop_kerberos_principal }}</value>-->
-    <!--</property>-->
+
+    <!-- kerberos to JournalNode -->
+    {% if namenode_ha_enable|lower == "true" %}
+    <property>
+        <name>dfs.journalnode.kerberos.principal</name>
+        <value>{{ hadoop_kerberos_principal_jn }}</value>
+    </property>
+    <property>
+        <name>dfs.journalnode.keytab.file</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>dfs.journalnode.kerberos.internal.spnego.principal</name>
+        <value>{{ hadoop_kerberos_principal_http }}</value>
+    </property>
+    <property>
+        <name>dfs.web.authentication.kerberos.keytab</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>dfs.journalnode.https-address</name>
+        <value>0.0.0.0:8481</value>
+    </property>
+    {% endif %}
+
+    <!-- ha -->
+    {% if namenode_ha_enable|lower == "true" %}
+    <!-- 指定NameNode的元数据在JournalNode上的存放位置 -->
+    <property>
+        <name>dfs.namenode.shared.edits.dir</name>
+        <value>qjournal://host201.com:8485;host202.com:8485;host203.com:8485/ns</value>
+    </property>
+    <!-- 指定JournalNode在本地磁盘存放数据的位置 -->
+    <property>
+        <name>dfs.journalnode.edits.dir</name>
+        <value>{{ hadoop_home }}/journal</value>
+    </property>
+    <!-- 开启NameNode失败自动切换 -->
+    <property>
+        <name>dfs.ha.automatic-failover.enabled</name>
+        <value>true</value>
+    </property>
+    <!-- 配置失败自动切换实现方式 -->
+    <property>
+        <name>dfs.client.failover.proxy.provider.ns1</name>
+        <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+    </property>
+    <!-- 配置隔离机制, 非默认22端口时可写成sshfence(hadoop:22022) -->
+    <property>
+        <name>dfs.ha.fencing.methods</name>
+        <value>sshfence</value>
+    </property>
+    <!-- 使用隔离机制时需要ssh免登陆 -->
+    <property>
+        <name>dfs.ha.fencing.ssh.private-key-files</name>
+        <value>~/.ssh/id_dsa</value>
+    </property>
+    {% endif %}
 </configuration>

@@ -1,0 +1,55 @@
+#- name: kill metastore and hiveserver2 server
+#  shell: '. ~/.bash_profile; export HIVE_HOME={{ hive_home }}; {{ item }}'
+#  async: 20
+#  poll: 2
+#  args:
+#    executable: /bin/bash
+#  run_once: true
+#  with_items:
+#  - ps -ef | grep java | grep {{ hive_version }} | grep HiveServer | awk '{print $2}' | xargs kill 2>/dev/null
+#  - ps -ef | grep java | grep {{ hive_version }} | grep HiveMetaStore | awk '{print $2}' | xargs kill 2>/dev/null
+#  ignore_errors: true
+
+- name: get hive metastore pid
+  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ hive2_version }} | grep HiveMetaStore | grep -v grep | awk '{print $2}'"
+  environment:
+    HIVE_HOME: "{{ hive2_home }}"
+  register: pid
+
+- name: kill hive metastore
+  shell: kill -9 {{ pid.stdout }}
+  async: 30
+  poll: 2
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  when: pid.stdout != ""
+
+- name: get hiveserver2 pid
+  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ hive2_version }} | grep HiveServer | grep -v grep | awk '{print $2}'"
+  environment:
+    HIVE_HOME: "{{ hive2_home }}"
+  register: pid
+
+- name: kill hiveserver2
+  shell: kill -9 {{ pid.stdout }}
+  async: 30
+  poll: 2
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  when: pid.stdout != ""
+
+- name: check hive metastore port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ hive2_metastore_port }}"
+    state: stopped
+    timeout: 10
+
+- name: check hiveserver2 port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ hive2_server2_port }}"
+    state: stopped
+    timeout: 10

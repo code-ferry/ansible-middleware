@@ -1,11 +1,20 @@
 - import_tasks: install.yaml
   tags: ['never','install']
 
+- import_tasks: uninstall.yaml
+  tags: ['never','uninstall']
+
 - import_tasks: start.yaml
   tags: ['never','start']
 
 - import_tasks: stop.yaml
   tags: ['never','stop']
 
-- import_tasks: uninstall.yaml
-  tags: ['never','uninstall']
+# restart
+- import_tasks: stop.yaml
+  tags: ['never','restart']
+- import_tasks: start.yaml
+  tags: ['never','restart']
+
+- import_tasks: status.yaml
+  tags: ['never','status']

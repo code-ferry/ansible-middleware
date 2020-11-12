@@ -1,0 +1,44 @@
+# 安装前的检查
+- import_tasks: install-check.yaml
+
+- name: Create directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ ssl_local_path }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Check that the ca.crt exists
+  stat:
+    path: "{{ ssl_local_path }}/{{ ssl_ca_cert }}"
+  register: stat_result
+  delegate_to: localhost
+  run_once: true
+
+- name: Create private key and certificate file
+  shell: 'openssl req -x509 \
+          -days {{ ssl_ca_cert_day }} \
+          -newkey {{ ssl_ca_key_alg }}:{{ ssl_ca_key_size }} \
+          -passout pass:{{ ssl_ca_key_password }} \
+          -keyout {{ ssl_local_path }}/{{ ssl_ca_key }} \
+          -out {{ ssl_local_path }}/{{ ssl_ca_cert }} \
+          -subj {{ ssl_ca_cert_subj }}'
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+  when: not stat_result.stat.exists
+  delegate_to: localhost
+  run_once: true
+
+- name: Copy CA certificate and private key to application server
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ssl_path }}"
+    mode: "0644"
+    force: yes
+  with_items:
+    - "{{ ssl_local_path }}/{{ ssl_ca_cert }}"
+    - "{{ ssl_local_path }}/{{ ssl_ca_key }}"

@@ -7,7 +7,7 @@
     chdir: "{{ hadoop_home }}/sbin"
   register: result
   run_once: true
-  delegate_to: "{{ yarn_host }}"
+  delegate_to: "{{ yarn_hosts[0] }}"
 
 - name: 再确认resource manager的端口
   wait_for:
@@ -16,4 +16,4 @@
     state: started
     timeout: 30
   run_once: true
-  delegate_to: "{{ yarn_host }}"
+  delegate_to: "{{ yarn_hosts[0] }}"

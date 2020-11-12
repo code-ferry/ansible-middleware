@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
+    {% if yarn_ha_enable|lower == "true" %}
+    <property>
+        <name>yarn.resourcemanager.ha.enabled</name>
+        <value>true</value>
+    </property>
+    <!-- 指定RM的cluster id -->
+    <property>
+        <name>yarn.resourcemanager.cluster-id</name>
+        <value>yrc</value>
+    </property>
+    <!-- 指定RM的名字 -->
+    <property>
+        <name>yarn.resourcemanager.ha.rm-ids</name>
+        <value>rm1,rm2</value>
+    </property>
+    <!-- 分别指定RM的地址 -->
+    <property>
+        <name>yarn.resourcemanager.hostname.rm1</name>
+        <value>yarn_hosts[0]</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.hostname.rm2</name>
+        <value>yarn_hosts[1]</value>
+    </property>
+    <!-- 指定zk集群地址 -->
+    <property>
+        <name>yarn.resourcemanager.zk-address</name>
+        <value>{{ yarn_zk_quorum }}</value>
+    </property>
+
+    {% else %}
     <property>
         <name>yarn.resourcemanager.hostname</name>
-        <value>{{ yarn_host }}</value>
+        <value>{{ yarn_hosts[0] }}</value>
     </property>
+    {% endif %}
+
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
@@ -16,23 +49,23 @@
 
     <property>
         <name>yarn.resourcemanager.scheduler.address</name>
-        <value>{{ yarn_host }}:{{ resourcemanager_scheduler_port }}</value>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_scheduler_port }}</value>
     </property>
     <property>
         <name>yarn.resourcemanager.resource-tracker.address</name>
-        <value>{{ yarn_host }}:{{ resourcemanager_tracker_port }}</value>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_tracker_port }}</value>
     </property>
     <property>
         <name>yarn.resourcemanager.address</name>
-        <value>{{ yarn_host }}:{{ resourcemanager_port }}</value>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_port }}</value>
     </property>
     <property>
         <name>yarn.resourcemanager.admin.address</name>
-        <value>{{ yarn_host }}:{{ resourcemanager_admin_port }}</value>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_admin_port }}</value>
     </property>
     <property>
         <name>yarn.resourcemanager.webapp.address</name>
-        <value>{{ yarn_host }}:{{ resourcemanager_webapp_port }}</value>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_webapp_port }}</value>
     </property>
     <property>
         <name>yarn.resourcemanager.am.max-attempts</name>
@@ -82,7 +115,7 @@
     </property>
     <property>
         <name>yarn.resourcemanager.webapp.https.address</name>
-        <value>{{ yarn_host }}:{{ resourcemanager_webapp_https_port }}</value>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_webapp_https_port }}</value>
     </property>
 
     <!-- kerberos to nodemanager -->
@@ -104,6 +137,7 @@
     </property>
     {% endif %}
 
+    {% if yarn_cgroup_enable == "true" %}
     <!-- yarn and control group -->
     <property>
         <name>yarn.nodemanager.container-executor.class</name>
@@ -153,6 +187,7 @@
         <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
         <value>{{ yarn_lce_limit_users }}</value>
     </property>
+    {% endif %}
 
     <!-- node labels -->
 <!--    <property>-->

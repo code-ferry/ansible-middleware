@@ -1,0 +1,10 @@
+# 删除server truststore, client truststore
+- name: Delete server truststore, client truststore
+  file:
+    path: "{{ ssl_local_path }}/{{ item }}"
+    state: absent
+  with_items:
+  - "{{ ssl_server_ts }}"
+  - "{{ ssl_client_ts }}"
+  delegate_to: localhost
+  run_once: true

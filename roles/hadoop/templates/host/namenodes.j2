@@ -6,7 +6,9 @@
 {% endif %}
 {% endfor %}
 {% for i in namenodes %}
-{% if loop.first %}
+{% if loop.last %}
 {{ i -}}
-{% endif %}
+{% else %}
+{{ i -}},
+{%- endif %}
 {% endfor %}

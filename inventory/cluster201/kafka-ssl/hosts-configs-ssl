@@ -1,0 +1,67 @@
+[deploy]
+host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[ssl]
+host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# host202.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# host203.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[all:vars]
+# 应用软件在部署服务器的目录
+software_home=/home/bduser/software
+
+# 应用软件在应用服务器的安装家目录
+install_home=/home/bduser/deploy
+
+# java家目录
+java_home=/usr/local/java/jdk1.8.0_201
+
+[ssl:vars]
+# ssl中ca产生文件存放的目录(在部署机上运行)
+ssl_local_path = /home/bduser/ansible-ssl
+# ssl相关keystore,truststore文件存放的目录(在应用服务器上运行)
+ssl_path = /etc/myssl/kafka2
+
+[ssl:vars]
+ssl_ca_key = kafka-ca.key
+ssl_ca_key_alg = rsa
+ssl_ca_key_size = 1024
+ssl_ca_key_password = newland
+ssl_ca_cert = kafka-ca.crt
+ssl_ca_cert_day = 3650
+ssl_ca_cert_subj = "/CN=newland.com/OU=Bigdata/O=Newland/L=FuZhou/ST=FuJian/C=CN"
+
+[ssl:vars]
+# keytool中truststore相关的变量(在部署机上运行)
+ssl_server_ts = kafka-server.jts
+ssl_client_ts = kafka-client.jts
+ssl_server_ts_password = newland
+ssl_client_ts_password = newland
+
+[ssl:vars]
+# keytool中server keystore相关的变量
+ssl_server_ks = kafka-server.jks
+ssl_server_ks_password = newland
+ssl_server_key_password = newland
+ssl_server_ks_day = 3650
+ssl_server_ks_dname = "C=CN,ST=FuJian,L=FuZhou,O=Newland,OU=Bigdata,CN={{ vhostfqdn }}"
+ssl_server_ks_csr = kafka-server.csr
+
+# keytool中导出的server certificate的变量
+ssl_server_csr = kafka-server.csr
+ssl_server_cert = kafka-server.pem
+ssl_server_cert_day = 3650
+
+[ssl:vars]
+# keytool中client keystore相关的变量
+ssl_client_ks = kafka-client.jks
+ssl_client_ks_password = newland
+ssl_client_key_password = newland
+ssl_client_ks_day = 3650
+ssl_client_ks_dname = "C=CN,ST=FuJian,L=FuZhou,O=Newland,OU=Bigdata,CN=localhost"
+ssl_client_ks_csr = kafka-client.csr
+
+# keytool中导出的client certificate的变量
+ssl_client_csr = kafka-client.csr
+ssl_client_cert = kafka-client.pem
+ssl_client_cert_day = 3650

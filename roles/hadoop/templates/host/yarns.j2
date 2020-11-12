@@ -6,7 +6,9 @@
 {% endif %}
 {% endfor %}
 {% for i in yarns %}
-{% if loop.first %}
+{% if loop.last %}
 {{ i -}}
-{% endif %}
+{% else %}
+{{ i -}},
+{%- endif %}
 {% endfor %}

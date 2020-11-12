@@ -1,6 +1,8 @@
 - name: 停止zookeeper
   shell: ". ~/.bash_profile; ./zkServer.sh stop"
-  async: 10         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  environment:
+    ZK_HOME: "{{ zk_home }}"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
   poll: 2           # 设置为0时, 任务会立即返回
   args:
     executable: /bin/bash

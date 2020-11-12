@@ -23,6 +23,7 @@
   file:
     path: "{{ item }}"
     state: directory
+    mode: 0755
   with_items:
   - "/etc/hadoop"
 
@@ -37,6 +38,7 @@
   with_items:
   - { src: 'site/container-executor.cfg.j2', dest: '/etc/hadoop/container-executor.cfg' }
 
+# FIXME ssl相关调整后，没有install-ssl-client这个文件了
 # 当需要鉴权时，需要安装ssl。
-- import_tasks: install-ssl.yaml
-  when: hadoop_security_authorization == "true"
+#- import_tasks: install-ssl-client.yaml
+#  when: hadoop_security_authorization == "true"

@@ -1,0 +1,67 @@
+[deploy]
+host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser'
+
+[kafka]
+host202.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host203.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[zookeeper]
+host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[all:vars]
+# 应用软件安装的普通用户
+install_user=bduser
+install_group=bduser
+
+# 应用软件在部署服务器的目录
+software_home=/home/bduser/software
+
+# 应用软件在应用服务器的安装家目录
+install_home=/home/bduser/deploy
+
+# java家目录
+java_home=/usr/local/java/jdk1.8.0_201
+
+[kafka:vars]
+kafka_port = 9092
+kafka_ssl_port = 9093
+zk_port = 2181
+
+[kafka:vars]
+## 通常不需要变更的变量
+kafka_version = 2.3.0
+kafka_scala_version = 2.12
+kafka_file = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}.tgz"
+kafka_folder = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}"
+kafka_home = "{{ install_home }}/{{ kafka_folder }}"
+kafka_log_dir = "{{ kafka_home }}/logs"
+
+[kafka:vars]
+kafka_zk_root = /kafka2
+# kafka topics, replications, partitions separated by ','. Each size should be equal.
+kafka_topic = ['bigdata','test','mytest']
+kafka_replication = [1,1,1]
+kafka_partition = [2,2,1]
+
+[kafka:vars]
+kafka_log_retention_check_ms = 300000
+kafka_log_retention_hours = 16800
+kafka_log_segment_bytes = 1073741824
+
+[kafka:vars]
+# kafka是否开启ssl的开关
+kafka_ssl_enable = true
+ssl_path = /etc/myssl/kafka2
+
+ssl_server_ts = kafka-server.jts
+ssl_server_ts_password = newland
+ssl_client_ts = kafka-client.jts
+ssl_client_ts_password = newland
+
+ssl_server_ks = kafka-server.jks
+ssl_server_ks_password = newland
+ssl_server_key_password = newland
+
+ssl_client_ks = kafka-client.jks
+ssl_client_ks_password = newland
+ssl_client_key_password = newland

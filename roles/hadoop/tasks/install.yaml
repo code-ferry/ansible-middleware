@@ -10,10 +10,12 @@
     copy: yes
     creates: "{{ hadoop_home }}"
 
-- name: 创建hadoop下的进程目录
+- name: 创建hadoop下的进程目录, 以及journal等目录
   file: path={{ item }} state=directory
   with_items:
+  - "{{ hadoop_home }}/logs"
   - "{{ hadoop_home }}/pids"
+  - "{{ hadoop_home }}/journal"
 
 - name: 复制64位的jsvc
   copy:
@@ -44,6 +46,11 @@
       owner: "{{ install_user }}"
       group: "{{ install_group }}"
       mode: 644
+
+- name: Check Namenode should be 2 size when HA is used
+  when: not ((namenode_hosts.count|int != 2) and (namenode_ha_enable|lower == "true"))
+  fail:
+    msg: "Namenode should be 2 size when HA is used."
 
 - name: 创建hadoop配置文件
   template:

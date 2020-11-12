@@ -41,4 +41,8 @@
     line: "{{ item }}"
   with_items:
   - 'export KAFKA_HOME={{ kafka_home }}'
-  - 'export PATH=$PATH:$KAFKA_HOME/bin'
+  - 'export PATH=$KAFKA_HOME/bin:$PATH'
+
+# 当需要鉴权时，需要安装ssl客户端的配置文件
+- import_tasks: install-ssl-client.yaml
+  when: kafka_ssl_enable == "true"

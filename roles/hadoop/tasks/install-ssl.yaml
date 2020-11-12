@@ -1,6 +1,7 @@
 
 - name: Create ca key and cert file
-  shell: 'echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}" | openssl req -new -x509 -keyout /tmp/hadoop_ca_key -out /tmp/hadoop_ca_cert -days 9999 -subj "/C=CN/ST=fujian/L=fuzhou/O=newland/OU=bigdata/CN=NEWLAND.COM"'
+  # shell: 'echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}" | openssl req -new -x509 -keyout /tmp/hadoop_ca_key -out /tmp/hadoop_ca_cert -days 9999 -subj "/C=CN/ST=fujian/L=fuzhou/O=newland/OU=bigdata/CN=NEWLAND.COM"'
+  shell: 'echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}" | openssl req -new -x509 -keyout /tmp/hadoop_ca_key -out /tmp/hadoop_ca_cert -days 9999 -subj "/C=CN/ST=fujian/L=fuzhou/O=newland/OU=bigdata/CN=com"'
   async: 20
   poll: 2
   args:
@@ -44,7 +45,7 @@
   # 添加CA到truststore
   - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}\nyes" | {{ java_home }}/bin/keytool -keystore truststore -alias CARoot -import -file /var/opt/ssl/hadoop_ca_cert
   # 生成keystore
-  - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}" | {{ java_home }}/bin/keytool -keystore keystore -alias localhost -validity 9999 -genkey -keyalg RSA -keysize 2048 -dname "CN={{ ansible_hostname }}, OU=bigdata, O=newland, L=fuzhou, ST=fujian, C=CN"
+  - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}" | {{ java_home }}/bin/keytool -keystore keystore -alias localhost -validity 9999 -genkey -keyalg RSA -keysize 2048 -dname "CN={{ vhostfqdn }}, OU=bigdata, O=newland, L=fuzhou, ST=fujian, C=CN"
   # 从keystore中导出cert
   - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}" | {{ java_home }}/bin/keytool -certreq -alias localhost -keystore keystore -file cert
   # 用CA对cert签名

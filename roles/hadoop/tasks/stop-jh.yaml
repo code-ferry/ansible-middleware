@@ -7,4 +7,4 @@
     chdir: "{{ hadoop_home }}/sbin"
   register: result
   run_once: true
-  delegate_to: "{{ yarn_host }}"
+  delegate_to: "{{ yarn_hosts[0] }}"

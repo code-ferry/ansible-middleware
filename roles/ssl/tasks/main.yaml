@@ -1,0 +1,48 @@
+# prepare ssl
+- import_tasks: prepare.yaml
+  tags: [ 'never', 'prepare' ]
+
+# install
+- import_tasks: install-ca.yaml
+  tags: [ 'never', 'install' ]
+- import_tasks: install-truststore.yaml
+  tags: [ 'never', 'install' ]
+- import_tasks: install-server-keystore.yaml
+  tags: [ 'never', 'install' ]
+- import_tasks: install-client-keystore.yaml
+  tags: [ 'never', 'install' ]
+
+# install ca
+- import_tasks: install-ca.yaml
+  tags: [ 'never', 'ca' ]
+
+# install truststore
+- import_tasks: install-truststore.yaml
+  tags: [ 'never', 'ts' ]
+
+# install keystore
+- import_tasks: install-server-keystore.yaml
+  tags: [ 'never', 'ks' ]
+- import_tasks: install-client-keystore.yaml
+  tags: [ 'never', 'ks' ]
+
+# ---------------------------------------------
+# delete
+- import_tasks: delete-ca.yaml
+  tags: [ 'never', 'delete' ]
+- import_tasks: delete-truststore.yaml
+  tags: [ 'never', 'delete' ]
+- import_tasks: delete-keystore.yaml
+  tags: [ 'never', 'delete' ]
+
+# delete-ca
+- import_tasks: delete-ca.yaml
+  tags: [ 'never', 'delete-ca' ]
+
+# delete-ts
+- import_tasks: delete-truststore.yaml
+  tags: [ 'never', 'delete-ts' ]
+
+# delete-ks
+- import_tasks: delete-keystore.yaml
+  tags: [ 'never', 'delete-ks' ]

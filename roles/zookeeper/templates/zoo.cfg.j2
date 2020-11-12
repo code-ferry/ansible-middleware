@@ -30,3 +30,10 @@ maxClientCnxns = {{ zk_max_client_cnxns }}
 {% for host in groups['zookeeper'] -%}
     server.{{ loop.index }}={{ host }}:2988:3988
 {% endfor %}
+
+{% if zk_kerberos_enable|lower() == "true" %}
+authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+jaasLoginRenew=3600000
+kerberos.removeHostFromPrincipal=true
+kerberos.removeRealmFromPrincipal=true
+{% endif %}

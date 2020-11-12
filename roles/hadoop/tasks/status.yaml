@@ -7,7 +7,7 @@
     chdir: "{{ hadoop_home }}/bin"
   register: result
   run_once: true
-  delegate_to: "{{ namenode_host }}"
+  delegate_to: "{{ namenode_hosts[0] }}"
 
 - debug:
     msg: "{{ result.stdout }}"

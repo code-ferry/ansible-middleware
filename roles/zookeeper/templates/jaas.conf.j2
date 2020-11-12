@@ -1,0 +1,17 @@
+Server {
+  com.sun.security.auth.module.Krb5LoginModule required
+  useKeyTab=true
+  keyTab="{{ zk_keytab_file }}"
+  storeKey=true
+  useTicketCache=false
+  principal="{{ zk_kerberos_principal }}";
+};
+
+Client {
+  com.sun.security.auth.module.Krb5LoginModule required
+  useKeyTab=true
+  keyTab="{{ zk_keytab_file }}"
+  storeKey=true
+  useTicketCache=false
+  principal="{{ zk_kerberos_principal }}";
+};

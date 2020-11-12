@@ -1,6 +1,7 @@
 # folder
 .idea/
 .git/
+inventory/cluster100
 inventory/cluster131
 inventory/cluster-hw
 
@@ -25,3 +26,4 @@ inventory/cluster-hw
 # ignore test file
 roles/test
 00.test.yaml
+

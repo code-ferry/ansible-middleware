@@ -1,0 +1,8 @@
+- hosts: ssl
+  become_user: root
+  gather_facts: yes
+  vars:
+    ansible_home: "{{ lookup('env', 'PWD') }}"
+    vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+  roles:
+  - ssl

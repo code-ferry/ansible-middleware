@@ -1,8 +1,0 @@
-- name: Run mysql script
-  shell: '. ~/.bash_profile; export HIVE_HOME={{ hive_home }}; {{ hive_home }}/bin/schematool -initSchema -dbType mysql'
-  async: 20
-  poll: 2
-  args:
-    executable: /bin/bash
-  run_once: true
-#  ignore_errors: true
