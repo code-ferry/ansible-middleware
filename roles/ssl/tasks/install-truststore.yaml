@@ -1,0 +1,67 @@
+# 安装前的检查
+- import_tasks: install-check.yaml
+
+- name: Create directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ssl_local_path }}"
+  delegate_to: localhost
+  run_once: true
+
+# Check server truststore file exists
+- name: Check server truststore file exists
+  stat:
+    path: "{{ ssl_local_path }}/{{ ssl_server_ts }}"
+  register: stat_result
+  delegate_to: localhost
+  run_once: true
+
+- name: Import ca certificate file into server truststore file
+  shell: 'keytool -import \
+          -keystore {{ ssl_local_path }}/{{ ssl_server_ts }} \
+          -alias CARoot \
+          -file {{ ssl_local_path }}/{{ ssl_ca_cert }} \
+          -storepass {{ ssl_server_ts_password }} \
+          -noprompt'
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+  when: not stat_result.stat.exists
+  delegate_to: localhost
+  run_once: true
+
+# Check client truststore file exists
+- name: Check client truststore file exists
+  stat:
+    path: "{{ ssl_local_path }}/{{ ssl_client_ts }}"
+  register: stat_result
+  delegate_to: localhost
+  run_once: true
+
+- name: Import ca certificate file into client truststore file
+  shell: 'keytool -import \
+          -keystore {{ ssl_local_path }}/{{ ssl_client_ts }} \
+          -alias CARoot \
+          -file {{ ssl_local_path }}/{{ ssl_ca_cert }} \
+          -storepass {{ ssl_client_ts_password }} \
+          -noprompt'
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+  when: not stat_result.stat.exists
+  delegate_to: localhost
+  run_once: true
+
+- name: Copy server truststore to application server
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ssl_path }}"
+    mode: "0644"
+    force: yes
+  with_items:
+  - "{{ ssl_local_path }}/{{ ssl_server_ts }}"
+  - "{{ ssl_local_path }}/{{ ssl_client_ts }}"

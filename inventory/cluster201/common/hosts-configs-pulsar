@@ -1,0 +1,24 @@
+[pulsar:vars]
+kafka_port = 9092
+zk_port = 2181
+
+[pulsar:vars]
+## 通常不需要变更的变量
+pulsar_version = 2.6.1
+pulsar_file = "apache-pulsar-{{ pulsar_version }}-bin.tar.gz"
+pulsar_folder = "apache-pulsar-{{ pulsar_version }}"
+pulsar_home = "{{ install_home }}/{{ pulsar_folder }}"
+pulsar_log_dir = "{{ pulsar_home }}/logs"
+
+[pulsar:vars]
+kafka_zk_root = /kafka
+# kafka topics, replications, partitions separated by ','. Each size should be equal.
+pulsar_topic = ['bigdata','test','mytest']
+pulsar_replication = [1,1,1]
+pulsar_partition = [3,2,1]
+
+[pulsar:vars]
+pulsar_log_retention_check_ms = 300000
+pulsar_log_retention_hours = 16800
+pulsar_log_segment_bytes = 1073741824
+pulsar_log_segment_bytes = 1073741824

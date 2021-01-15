@@ -1,0 +1,43 @@
+- name: get hive metastore pid
+  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ hive1_version }} | grep HiveMetaStore | grep -v grep | awk '{print $2}'"
+  environment:
+    HIVE_HOME: "{{ hive1_home }}"
+  register: pid
+
+- name: kill hive metastore
+  shell: kill -9 {{ pid.stdout }}
+  async: 30
+  poll: 2
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  when: pid.stdout != ""
+
+- name: get hiveserver2 pid
+  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ hive1_version }} | grep HiveServer | grep -v grep | awk '{print $2}'"
+  environment:
+    HIVE_HOME: "{{ hive1_home }}"
+  register: pid
+
+- name: kill hiveserver2
+  shell: kill -9 {{ pid.stdout }}
+  async: 30
+  poll: 2
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  when: pid.stdout != ""
+
+- name: check hive metastore port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ hive1_metastore_port }}"
+    state: stopped
+    timeout: 10
+
+- name: check hiveserver2 port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ hive1_server2_port }}"
+    state: stopped
+    timeout: 10

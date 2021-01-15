@@ -1,0 +1,15 @@
+- name: delete pulsar install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ pulsar_home }}"
+
+- name: clean environment variable PULSAR_HOME etc
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export PULSAR_HOME={{ pulsar_home }}'
+  - 'export PATH=$PATH:$PULSAR_HOME/bin'

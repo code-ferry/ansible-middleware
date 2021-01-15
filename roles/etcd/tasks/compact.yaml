@@ -1,15 +1,16 @@
 - name: 压缩etcd
-  shell: ". ~/.bash_profile; ./handle-etcd.sh compact >> run.log 2>&1 &"
-  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  shell: ". ~/.bash_profile; ./handle-etcd.sh compact >> run.log 2>&1"
+  async: 40         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
   args:
     executable: /bin/bash
     chdir: "{{ etcd_home }}"
-#  run_once: true
+  run_once: true
+  ignore_errors: yes
 
 - name: 碎片整理etcd
-  shell: ". ~/.bash_profile; ./handle-etcd.sh defrag >> run.log 2>&1 &"
-  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  shell: ". ~/.bash_profile; ./handle-etcd.sh defrag >> run.log 2>&1"
+  async: 40         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
   args:
     executable: /bin/bash

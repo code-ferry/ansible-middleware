@@ -12,7 +12,7 @@
     creates: '/var/kerberos/db_created'
 
 - name: Create an admin for the administering the kerberos database
-  shell: echo -e "{{ kerberos_admin_password }}\n{{ kerberos_admin_password }}" | kadmin.local  -q "addprinc {{ kerberos_admin_username }}/admin"; touch /var/kerberos/admin_created
+  shell: echo -e "{{ kerberos_admin_password }}\n{{ kerberos_admin_password }}" | kadmin.local -q "addprinc {{ kerberos_admin_username }}/admin"; touch /var/kerberos/admin_created
   args:
     executable: /bin/bash
     creates: '/var/kerberos/admin_created'

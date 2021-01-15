@@ -1,0 +1,24 @@
+- name: stop journalnode
+  shell: ". ~/.bash_profile; hadoop-daemon.sh stop journalnode"
+  environment:
+    HADOOP_HOME: "{{ hadoop_home }}"
+  async: 60         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+
+# HTTP, 与 HTTPS要分开判断
+- name: Check journalnode rpc port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: 8481
+    state: stopped
+    timeout: 25
+
+- name: Check journalnode http port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: 8485
+    state: stopped
+    timeout: 25

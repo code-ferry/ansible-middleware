@@ -8,12 +8,12 @@
 
     <property>
         <name>mapreduce.jobhistory.address</name>
-        <value>{{ yarn_host }}:{{ mapreduce_port }}</value>
+        <value>{{ yarn_hosts[0] }}:{{ mapreduce_port }}</value>
         <description>MapReduce JobHistory Server host:port</description>
     </property>
     <property>
         <name>mapreduce.jobhistory.webapp.address</name>
-        <value>{{ yarn_host }}:{{ mapreduce_webapp_port }}</value>
+        <value>{{ yarn_hosts[0] }}:{{ mapreduce_webapp_port }}</value>
     </property>
     <property>
         <name>mapreduce.application.classpath</name>

@@ -1,4 +1,4 @@
-- hosts: flink
+- hosts: etcd
   remote_user: "{{ install_user }}"
   become_user: "{{ install_user }}"
   gather_facts: no

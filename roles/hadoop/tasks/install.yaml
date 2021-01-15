@@ -10,6 +10,13 @@
     copy: yes
     creates: "{{ hadoop_home }}"
 
+- name: 创建hadoop下的进程目录, 以及journal等目录
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ hadoop_home }}/logs"
+  - "{{ hadoop_home }}/pids"
+  - "{{ hadoop_home }}/journal"
+
 - name: 复制64位的jsvc
   copy:
     src: jsvc
@@ -40,6 +47,11 @@
       group: "{{ install_group }}"
       mode: 644
 
+- name: Check Namenode should be 2 size when HA is used
+  when: not ((namenode_hosts.count|int != 2) and (namenode_ha_enable|lower == "true"))
+  fail:
+    msg: "Namenode should be 2 size when HA is used."
+
 - name: 创建hadoop配置文件
   template:
     src: "{{ item.src }}"
@@ -53,6 +65,7 @@
   - { src: 'host/namenodes.j2', dest: '{{ hadoop_home }}/etc/hadoop/namenodes.tmp' }
   - { src: 'host/yarns.j2', dest: '{{ hadoop_home }}/etc/hadoop/yarns.tmp' }
   - { src: 'bin/hadoop-env-{{ hadoop_version }}.sh.shj2', dest: '{{ hadoop_home }}/etc/hadoop/hadoop-env.sh' }
+  - { src: 'bin/yarn-env-{{ hadoop_version }}.sh.shj2', dest: '{{ hadoop_home }}/etc/hadoop/yarn-env.sh' }
   - { src: 'site/capacity-scheduler.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/capacity-scheduler.xml' }
 
 - name: 创建hadoop配置文件(ssl相关)
@@ -62,6 +75,7 @@
   with_items:
   - { src: 'ssl/ssl-client.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/ssl-client.xml' }
   - { src: 'ssl/ssl-server.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/ssl-server.xml' }
+  when: hadoop_security_authorization == "true"
 
 - name: 生成清理日志的脚本
   template:

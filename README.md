@@ -63,12 +63,50 @@ ansible-playbook 01.crypo.yaml -t dispatch
 
 ## kerberos的安装
 ```
+# 安装kerberos KDC
 ansible-playbook 01.kerberos.yaml -t install
+# 创建与初始化kerberos数据库
 ansible-playbook 01.kerberos.yaml -t createdb
+# 创建与初始化kerberos数据库
 ansible-playbook 01.kerberos.yaml -t createkeytab
 ansible-playbook 01.kerberos.yaml -t start
 
+# 安装kerberos客户端
 ansible-playbook 01.kerberos-client.yaml -t install
+```
+
+## ssl的安装
+ssl的生成，根据不同的应用对应到不同的inventory目录。比如kafka中ssl的安装对应的就是kafka-ssl目录。
+### SSL生成的准备工作
+```
+# 生成ssl文件存放的目录(-i的参数根据不同的应用进行调整)；如果生成的目录要求root权限，则需要通过参数-b进行提权。
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t prepare
+# 或者可以用bin目录下简化shell脚本：
+./bin/kafka2-ssl.sh -t prepare
+# 需要提权时，命令如下
+./bin/kafka2-ssl.sh -t prepare -b
+```
+### 生成SSL相关文件的操作
+```
+# 生成CA的私钥、证书（直接在部署机生成，再分发到应用服务器）
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t ca
+# 生成服务端、客户端的truststore（直接在部署机生成，再分发到应用服务器）
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t ts
+# 生成服务端、客户端的keystore（客户端的keystore直接在部署机生成，再分发到应用服务器；服务端的keystore分别在对应的应用服务器上生成）
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t ks
+# 也可以一次性生成CA的私钥、证书；生成服务端、客户端的truststore；生成服务端、客户端的keystore
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t install
+```
+### 删除SSL相关文件的操作
+```
+# 删除CA的私钥、证书
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t delete-ca
+# 删除服务端、客户端的truststore
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t delete-ts
+# 删除服务端、客户端的keystore
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t delete-ks
+# 也可以一次性删除CA的私钥、证书；生成服务端、客户端的truststore；生成服务端、客户端的keystore
+ansible-playbook 01.ssl.yaml -i ./inventory/cluster201/kafka-ssl -t delete
 ```
 
 # 应用安装
@@ -135,6 +173,9 @@ ansible-playbook 02.hadoop.yaml -t install
 ansible-playbook 02.hadoop.yaml -t install-root -e "ansible_become=true"
 # 格式化datanode
 ansible-playbook 02.hadoop.yaml -t format
+# 生成yarn的cgroup，用于资源控制
+ansible-playbook 02.hadoop.yaml -t install-cgroup -e "ansible_become=true"
+# 启动hadoop
 ansible-playbook 02.hadoop.yaml -t start
 ```
 

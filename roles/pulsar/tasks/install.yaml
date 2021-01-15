@@ -1,0 +1,44 @@
+- name: create install directory
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: unarchive pulsar package
+  unarchive:
+    src: "{{ software_home }}/{{ pulsar_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ pulsar_home }}"
+
+- name: create logs directory
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ pulsar_log_dir }}"
+
+#- name: create property file 'server.properties'
+#  template:
+#    src: "{{ item.src }}"
+#    dest: "{{ item.dest }}"
+#  with_items:
+#  - { src: 'conf/server.properties-{{ kafka_major_version }}.x.j2', dest: '{{ kafka_home }}/config/server.properties'}
+
+#- name: create customer shell
+#  template:
+#    src: "{{ item.src }}"
+#    dest: "{{ item.dest }}"
+#    mode: 0755
+#  with_items:
+#  - { src: 'bin/my-producer.sh.shj2', dest: '{{ kafka_home }}/bin/my-producer.sh'}
+#  - { src: 'bin/my-consumer.sh.shj2', dest: '{{ kafka_home }}/bin/my-consumer.sh'}
+#  - { src: 'bin/my-topic.sh.shj2', dest: '{{ kafka_home }}/bin/my-topic.sh'}
+
+- name: write environment variable PULSAR_HOME etc
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export PULSAR_HOME={{ pulsar_home }}'
+  - 'export PATH=$PATH:$PULSAR_HOME/bin'

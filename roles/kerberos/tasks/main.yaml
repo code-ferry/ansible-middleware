@@ -12,7 +12,7 @@
 - import_tasks: createdb.yaml
   tags: [ 'never', 'createdb' ]
 
-# 创建kerberos的数据库，以有管理员账号
+# 删除kerberos的数据库，以有管理员账号
 - import_tasks: destroydb.yaml
   tags: [ 'never', 'destroydb' ]
 
@@ -32,7 +32,7 @@
   tags: [ 'never', 'restart' ]
 
 # --------------------------------------------------
-# creat keytab
+# create keytab
 - import_tasks: createkeytab.yaml
   tags: [ 'never', 'createkeytab' ]
 

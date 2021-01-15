@@ -1,0 +1,10 @@
+# Check that ssl path
+- name: Check that ssl path
+  stat:
+    path: "{{ ssl_path }}"
+  register: path_result
+
+- name: Check that ssl path
+  fail:
+    msg: "ssl_path should make first. You can execute 'ansible-playbook 01.ssl.yaml -i xxx -t prepare' or 'ansible-playbook 01.ssl.yaml -i xxx -t prepare -b'"
+  when: not path_result.stat.exists

@@ -1,0 +1,23 @@
+# install minio
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# install minio
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]
+
+# start minio
+- import_tasks: start.yaml
+  tags: [ 'never', 'start' ]
+
+# stop minio
+- import_tasks: stop.yaml
+  tags: [ 'never', 'stop' ]
+
+# stop minio
+- import_tasks: clean.yaml
+  tags: [ 'never', 'clean' ]
+
+# test minio
+- import_tasks: test.yaml
+  tags: [ 'never', 'test' ]

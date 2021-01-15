@@ -1,0 +1,10 @@
+- name: Get hive2 port
+  shell: "netstat -nat | grep LISTEN | egrep '{{ hive1_metastore_port }}|{{ hive1_server2_port }}'"
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+  register: result
+
+- debug:
+    msg: "{{ result.stdout_lines }}"

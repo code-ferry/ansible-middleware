@@ -1,14 +1,14 @@
-- name: copy krb5.conf
-  copy:
-    src: "krb5.conf"
-    dest: "/etc"
-    force: yes
+#- name: copy krb5.conf
+#  copy:
+#    src: "krb5.conf"
+#    dest: "/etc"
+#    force: yes
 
 - name: copy xxxx.keytab
   copy:
     src: "{{ kerberos_keytab_name }}"
     dest: "{{ hadoop_keytab_path }}"
     force: yes
-    mode: 0400
-    owner: "{{ install_user }}"
-    group: "{{ install_group }}"
+    mode: 0444
+#    owner: "{{ install_user }}"
+#    group: "{{ install_group }}"

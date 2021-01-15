@@ -1,0 +1,45 @@
+- name: Create the installation directory
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: unarchive hive package
+  unarchive:
+    src: "{{ software_home }}/{{ hive1_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ hive1_home }}"
+
+- name: Create the installation directory
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ hive1_local_scratchdir }}"
+  - "{{ hive1_local_tmp_dir }}"
+  - "{{ hive1_home }}/logs"
+  - "{{ hive1_home }}/exec"
+  - "{{ hive1_home }}/downloadedresources"
+
+- name: copy mysql-connector-java-5.1.x.jar
+  copy:
+    src: "mysql-connector-java-5.1.47.jar"
+    dest: "{{ hive1_home }}/lib/mysql-connector-java.jar"
+    force: yes
+
+- name: create hive configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'hive-env-{{ hive1_version }}.sh.shj2', dest: '{{ hive1_conf_dir }}/hive-env.sh' }
+  - { src: 'hive-site-{{ hive1_version }}.xml.xj2', dest: '{{ hive1_conf_dir }}/hive-site.xml' }
+  - { src: 'hive-log4j.properties.j2', dest: '{{ hive1_conf_dir }}/hive-log4j.properties' }
+
+- name: Write the environment variable $HADOOP_HOME, and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export HIVE_HOME={{ hive1_home }}'
+  - 'export PATH=$PATH:$HIVE_HOME/bin'
+

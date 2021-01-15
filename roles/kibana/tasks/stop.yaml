@@ -3,7 +3,7 @@
   register: pid
 
 - name: kill kibana
-  shell: kill -15 pid {{ pid.stdout }}
+  shell: kill -15 {{ pid.stdout }}
   async: 30
   poll: 2
   args:

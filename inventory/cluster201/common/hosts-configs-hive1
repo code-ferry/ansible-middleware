@@ -1,0 +1,47 @@
+[hive1:vars]
+# default 10000
+hive1_server2_port = 10001
+# default 9083
+hive1_metastore_port = 9084
+
+[hive1:vars]
+hive1_version = 1.2.2
+hive1_file = "apache-hive-{{ hive1_version }}-bin.tar.gz"
+hive1_folder = "apache-hive-{{ hive1_version }}-bin"
+hive1_home = "{{ install_home }}/{{ hive1_folder }}"
+
+hive1_conf_dir = "{{ hive1_home }}/conf"
+hive1_local_scratchdir = "{{ hive1_home }}/scratchdir"
+hive1_local_tmp_dir = "{{ hive1_home }}/tmp"
+
+hive1_warehouse_dir = "/user/hive/warehouse"
+hive1_scratchdir = "/user/hive/scratchdir"
+hive1_log_dir = "/user/hive/logs"
+
+hive1_heapsize = 2048
+
+# hive1 ha的相关配置
+hive1_ha_enable = true
+hive1_dynamic_discovery = true
+hive1_zk_namespace = hivezk1
+hive1_zk_quorum = host201:2181
+hive1_zk_port = 2181
+
+[hive1:vars]
+hive1_mysql_addr = 192.168.128.1
+hive1_mysql_port = 3306
+hive1_mysql_db = metastore
+hive1_jdbc_url = "jdbc:mysql://{{ hive1_mysql_addr }}:{{ hive1_mysql_port }}/{{ hive1_mysql_db }}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false"
+hive1_jdbc_driver = com.mysql.jdbc.Driver
+hive1_jdbc_username = hive
+hive1_jdbc_password = hive
+
+[hive1:vars]
+# NONE, KERBEROS, LDAP
+hive1_server2_authentication = KERBEROS
+hive1_server2_kerberos_principal = {{ install_user }}/_HOST@NEWLAND.COM
+hive1_server2_kerberos_keytab = /home/{{ install_user }}/hadoop.keytab
+
+hive1_metastore_sasl_enabled = true
+hive1_metastore_kerberos_principal = {{ install_user }}/_HOST@NEWLAND.COM
+hive1_metastore_kerberos_keytab = /home/{{ install_user }}/hadoop.keytab

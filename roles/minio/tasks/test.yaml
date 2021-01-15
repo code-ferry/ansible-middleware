@@ -1,0 +1,5 @@
+- name: copy
+  template:
+    dest: "{{ minio_home }}/miniodir"
+    mode: 0666
+    src: miniodir.j2

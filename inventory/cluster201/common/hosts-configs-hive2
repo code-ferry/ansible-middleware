@@ -1,0 +1,50 @@
+[hive2:vars]
+# default 10000
+hive2_server2_port = 10000
+# default 9083
+hive2_metastore_port = 9083
+# default 10002, after hive 2.x
+hive2_webui_port = 10002
+
+[hive2:vars]
+hive2_version = 2.3.7
+hive2_file = "apache-hive-{{ hive2_version }}-bin.tar.gz"
+hive2_folder = "apache-hive-{{ hive2_version }}-bin"
+hive2_home = "{{ install_home }}/{{ hive2_folder }}"
+
+hive2_conf_dir = "{{ hive2_home }}/conf"
+hive2_local_scratchdir = "{{ hive2_home }}/scratchdir"
+hive2_local_tmp_dir = "{{ hive2_home }}/tmp"
+
+# hive 2的版本中目录区分下
+hive2_warehouse_dir = "/user/hive2/warehouse"
+hive2_scratchdir = "/user/hive2/scratchdir"
+hive2_log_dir = "/user/hive2/logs"
+
+hive2_heapsize = 2048
+
+# hive ha的相关配置
+hive2_ha_enable = true
+hive2_dynamic_discovery = true
+hive2_zk_namespace = hivezk2
+hive2_zk_quorum = host201:2181
+hive2_zk_port = 2181
+
+[hive2:vars]
+hive2_mysql_addr = 192.168.128.1
+hive2_mysql_port = 3306
+hive2_mysql_db = hive2
+hive2_jdbc_url = "jdbc:mysql://{{ hive2_mysql_addr }}:{{ hive2_mysql_port }}/{{ hive2_mysql_db }}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false"
+hive2_jdbc_driver = com.mysql.jdbc.Driver
+hive2_jdbc_username = hive2
+hive2_jdbc_password = hive2
+
+[hive2:vars]
+# NONE, KERBEROS, LDAP
+hive2_server2_authentication = KERBEROS
+hive2_server2_kerberos_principal = {{ install_user }}/_HOST@NEWLAND.COM
+hive2_server2_kerberos_keytab = /home/{{ install_user }}/hadoop.keytab
+
+hive2_metastore_sasl_enabled = true
+hive2_metastore_kerberos_principal = {{ install_user }}/_HOST@NEWLAND.COM
+hive2_metastore_kerberos_keytab = /home/{{ install_user }}/hadoop.keytab

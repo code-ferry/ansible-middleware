@@ -1,6 +1,6 @@
 ---
 
-- name: Stop the kerberos services
+- name: Restart the kerberos services
   service:
     name: "{{ item }}"
     state: restarted

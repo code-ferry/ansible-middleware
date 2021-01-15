@@ -1,0 +1,14 @@
+- name: Stop minio
+  shell: ". ~/.bash_profile; ./handle-cluster.sh stop >> run.log 2>&1 &"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ minio_home }}"
+
+- name: "等待端口{{ minio_port }}是否关闭"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ minio_port }}"
+    state: stopped
+    timeout: 20

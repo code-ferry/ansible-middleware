@@ -3,7 +3,7 @@
   tags: [ 'never', 'create' ]
 
 # 删除密钥。
-- import_tasks: delete.yaml
+- import_tasks: delete-keystore.yaml
   tags: [ 'never', 'delete' ]
 
 # 分发密钥(应用服务器之间免密)，包括两步创建公钥，分发认证文件。

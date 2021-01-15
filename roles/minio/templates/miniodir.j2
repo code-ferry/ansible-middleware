@@ -1,0 +1,5 @@
+{% for host in groups['minio'] -%}
+{% set dataDirs = minio_data_dirs.split(',')|list %}
+{% for dataDir in dataDirs -%}
+http://{{ host }}{{ dataDir }}{%- if not loop.last %} {% endif -%}
+{% endfor %}{%- if not loop.last %} {% endif -%}{% endfor %}

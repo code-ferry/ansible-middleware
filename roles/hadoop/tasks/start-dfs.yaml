@@ -7,7 +7,7 @@
     chdir: "{{ hadoop_home }}/sbin"
   register: result
   run_once: true
-  delegate_to: "{{ namenode_host }}"
+  delegate_to: "{{ namenode_hosts[0] }}"
 
 #- name: 再确认namenode的端口
 #  wait_for:
