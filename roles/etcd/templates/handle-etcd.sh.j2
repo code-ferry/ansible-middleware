@@ -99,19 +99,6 @@ compact() {
     return 1
 }
 
-# 查看绑定的lease的关联keys
-lease() {
-    cat /dev/null > /tmp/etcd_lease
-    {{ etcd_home }}/etcdctl lease list | sed '1d' | while read line
-    do
-        {{ etcd_home }}/etcdctl lease timetolive $line --keys >> /tmp/etcd_lease
-    done
-
-    sort -t ',' -k 3 /tmp/etcd_lease
-
-    return 0
-}
-
 defrag() {
     ts=` date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- defrag ----------- ${ts}"
@@ -134,6 +121,19 @@ defrag() {
     done
 
     return 1
+}
+
+# 查看绑定的lease的关联keys
+lease() {
+    cat /dev/null > /tmp/etcd_lease
+    {{ etcd_home }}/etcdctl lease list | sed '1d' | while read line
+    do
+        {{ etcd_home }}/etcdctl lease timetolive $line --keys >> /tmp/etcd_lease
+    done
+
+    sort -t ',' -k 3 /tmp/etcd_lease
+
+    return 0
 }
 
 snapshot() {

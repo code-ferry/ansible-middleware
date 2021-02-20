@@ -32,7 +32,7 @@ host203.com taskmanager="yes"
 [hadoop]
 # host201.com namenode="yes" yarn="yes" datanode="yes"
 host201.com namenode="yes" yarn="yes"
-host202.com namenode="yes" datanode="yes"
+host202.com datanode="yes"
 host203.com datanode="yes"
 
 [hive1]

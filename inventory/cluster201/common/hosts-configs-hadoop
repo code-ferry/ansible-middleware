@@ -1,4 +1,9 @@
 [hadoop:vars]
+# 后面考虑这个是算出来的
+namenode_ha_enable=false
+yarn_ha_enable=false
+
+[hadoop:vars]
 # namenode
 namenode_hosts = "{{ lookup('template', 'host/namenodes.j2').split(',')|list -}}"
 namenode_port = 9000
