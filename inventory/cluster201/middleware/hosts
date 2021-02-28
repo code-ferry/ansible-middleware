@@ -1,0 +1,56 @@
+
+
+[flink]
+host201.com jobmanager="yes"
+host202.com taskmanager="yes"
+host203.com taskmanager="yes"
+
+[hadoop]
+# host201.com namenode="yes" yarn="yes" datanode="yes"
+host201.com namenode="yes" yarn="yes"
+host202.com datanode="yes"
+host203.com datanode="yes"
+
+[hive1]
+host201.com
+
+[hive2]
+host201.com
+
+[elasticsearch]
+host201.com
+host202.com
+host203.com
+
+[kibana]
+host201.com
+
+[etcd]
+192.168.128.201
+192.168.128.202
+192.168.128.203
+# host201.com
+# host202.com
+# host203.com
+
+[zookeeper]
+host201.com
+
+[pulsar]
+host201.com
+
+[ssl]
+host202.com
+host203.com
+
+[kerberos]
+host201.com
+
+[kerberos_client]
+host201.com
+host202.com
+host203.com
+
+[minio]
+host201.com
+host202.com

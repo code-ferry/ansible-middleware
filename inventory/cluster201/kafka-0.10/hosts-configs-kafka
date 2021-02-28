@@ -11,7 +11,7 @@
 ###############################
 # 部署服务器: 运行这份ansible脚本的节点
 [deploy]
-host201.com ansible_ssh_pass='bduser'
+host201.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 ###############################
 ##########应用服务器############

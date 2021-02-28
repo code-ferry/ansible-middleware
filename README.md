@@ -21,6 +21,10 @@
 提取码：o9jh
 
 ### 修改各应用软件配置hosts-configs-xxx
+通常情况下配置文件common目录下，为了避免同一个中间件不同版本之间配置相互影响。   
+比如kafka的不同版本就在目录kafka-0.10，kafka-2.3.0目录下。  
+在
+
 根据要安装的软件，修改中间件的配置，如：
 * host-config-hadoop
 * host-config-hive

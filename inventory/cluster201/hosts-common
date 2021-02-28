@@ -1,0 +1,24 @@
+# 示例: 属于'webservers'组的主机集合描述
+# [webservers]
+# alpha.example.org
+# www[001:006].example.com
+# www[a-f].example.com
+# 192.168.1.100 ansible_ssh_user=test ansible_ssh_pass=123456 ansible_become_user=root ansible_become_pass=1q2w3e ansible_become_method=sudo
+# 192.168.1:[1:10]
+
+###############################
+##########部署服务器############
+###############################
+# 部署服务器: 运行这份ansible脚本的节点，为方便应用部署主机时。
+[deploy]
+host201.com ansible_ssh_user='test' ansible_ssh_pass='test' ansible_become_method=sudo ansible_become_pass='test'
+
+[all:vars]
+# 应用软件在部署服务器的目录
+software_home=/home/test/software
+
+# 应用软件在应用服务器的安装家目录
+install_home=/home/bduser/deploy
+
+# java家目录
+java_home=/usr/local/java/jdk1.8.0_201

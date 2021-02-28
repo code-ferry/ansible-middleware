@@ -1,5 +1,5 @@
 [deploy]
-host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host201.com ansible_ssh_user='test' ansible_ssh_pass='test' ansible_become_method='sudo'
 
 [ssl]
 host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
