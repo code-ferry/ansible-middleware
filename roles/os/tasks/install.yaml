@@ -162,6 +162,3 @@
   when:
   - ansible_distribution == "CentOS" or ansible_distribution == "RedHat" or ansible_distribution == "SLES"
   - handle_ntp == "yes"
-
-# 安装cgroup
-# TODO

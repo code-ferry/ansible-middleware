@@ -14,11 +14,17 @@
 host201.com ansible_ssh_user='test' ansible_ssh_pass='test' ansible_become_method=sudo ansible_become_pass='test'
 
 [all:vars]
-# 应用软件在部署服务器的目录
-software_home=/home/test/software
+# 应用软件安装的普通用户
+install_user="{{ ansible_user }}"
+install_group="{{ ansible_user }}"
 
-# 应用软件在应用服务器的安装家目录
-install_home=/home/bduser/deploy
+# 应用软件在部署服务器的目录，在例子中是test
+software_home="/home/test/software"
+
+# 应用软件在应用服务器的安装家目录，在例子中是bduser
+install_home="/home/{{ ansible_user }}/deploy"
 
 # java家目录
 java_home=/usr/local/java/jdk1.8.0_201
+# jdk_install_home=/usr/local/java
+jdk_file=jdk-8u201-linux-x64.tar.gz

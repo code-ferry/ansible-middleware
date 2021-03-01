@@ -3,14 +3,14 @@
     path: "{{ item }}"
     state: directory
   with_items:
-  - "{{ jdk_install_home }}"
+  - "{{ java_home }}"
 
 - name: unarchive jdk package
   unarchive:
     src: "{{ software_home }}/{{ jdk_file }}"
-    dest: "{{ jdk_install_home }}"
+    dest: "{{ java_home }}/.."
     copy: yes
-    creates: "{{ java_home }}"
+    creates: "{{ java_home }}/bin"
 
 - name: get home directory of install user
   shell: ". ~/.bash_profile; cat /etc/passwd | grep {{ install_user }}"

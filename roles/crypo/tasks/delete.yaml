@@ -1,6 +1,15 @@
-- name: 删除公钥, authorized_key等文件
+- name: 删除应用服务器公钥, authorized_key等文件
   shell: ". ~/.bash_profile; rm -fr ~/.ssh"
   args:
     executable: /bin/bash
     chdir: "~/"
     removes: "~/.ssh"
+
+- name: 删除部署服务器公钥, authorized_key等文件
+  shell: ". ~/.bash_profile; rm -fr ~/.ssh"
+  args:
+    executable: /bin/bash
+    chdir: "~/"
+    removes: "~/.ssh"
+  run_once: true
+  delegate_to: localhost

@@ -1,4 +1,4 @@
-- name: 部署服务器的公钥，生成authorized_key文件，分发到各应用服务器
+- name: 部署服务器的公钥，生成authorized_key文件，分发到各应用服务器；本地部署机生成known_hosts
   authorized_key:
     user: "{{ install_user }}"
     key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

@@ -4,7 +4,7 @@
 # 应用服务器：所有安装中间件的服务器。
 # ansible_ssh_pass是用户的密码。
 # ansible_become_method是提权的方式，本脚本默认采用sudo方式。如果sudo需要密码，还需要加上参数ansible_become_pass。
-[os]
+[crypo]
 host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 host202.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 host203.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
@@ -12,22 +12,4 @@ host203.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_m
 ###############################
 ##########配置信息##############
 ###############################
-#下面是环境安装时的一些可选项
-#需要安装时, 将"no"改成"yes"
-[os:vars]
-#是否关闭操作系统selinux
-handle_selinux="yes"
-
-#是否关闭防火墙
-handle_firewall="yes"
-
-#是否修改操作系统最大进程数和最大文件打开数限制
-handle_ulimit="yes"
-
-#是否修改内核参数
-handle_linux_core="yes"
-
-#是否进行时钟同步
-#如果有内网服务器则配置ntp_server变量, 不配置则使用外网的'1.cn.pool.ntp.org'
-handle_ntp="no"
-#ntp_server="10.1.4.38"
+[crypo:vars]

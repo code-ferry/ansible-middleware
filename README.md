@@ -21,6 +21,7 @@
 提取码：o9jh
 
 ### 修改各应用软件配置hosts-configs-xxx
+TODO: 这部分内容补齐。   
 通常情况下配置文件common目录下，为了避免同一个中间件不同版本之间配置相互影响。   
 比如kafka的不同版本就在目录kafka-0.10，kafka-2.3.0目录下。  
 在
@@ -35,34 +36,53 @@
 * ...
 
 ### 约束说明
-本脚本只在centos7上做过严格测试。
+最新的脚本只在CentOS 7.5.1804，ansible 2.9.17上做过严格测试。
 
+# 脚本准备工作  
+配置公共
+
+bin目录下存放着一些已经简化过的脚本，可以方便脚本的使用。在使用之前先运行如下脚本：
+```
+./bin/ansible-prepare.sh
+```
+![prepare-images](./images/prepare-script.png)
+
+## 运行脚本的两种方式
+下面的例子以ansible-playbook的命令为主
+方法1：直接采用ansible-playbook的命令  
+```
+ansible-playbook 01.jdk.yaml -t install -i ./inventory/cluster201/jdk
+```
+方法2：用简化的命令
+```
+./bin/role-jdk.sh -t install
+```
 # 安装准备
-## 初始化操作系统
+## 初始化操作系统(os)
 hosts-configs-all中是否设置操作系统的初始化（yes表示开启），接着运行安装命令。
 
 可支持的设置如下：
 * 是否关闭操作系统selinux
 * 是否关闭防火墙
 * 是否修改操作系统最大进程数和最大文件打开数限制
-* 是否修改内核参数
+* 是否修改内核参数  
 * 是否进行时钟同步  
 
 运行安装命令：
 ```
-ansible-playbook 01.os.yaml -t install
+ansible-playbook 01.os.yaml -t install -i ./inventory/cluster201/os
 ```
 ## JDK安装
 hosts-configs-all中配置jdk_install_home等变量后，运行安装命令。
 
 运行安装命令：
 ```
-ansible-playbook 01.jdk.yaml -t install
+ansible-playbook 01.jdk.yaml -t install -i ./inventory/cluster201/jdk
 ```
 
 ## 应用服务器间的免密
 ```
-ansible-playbook 01.crypo.yaml -t dispatch
+ansible-playbook 01.crypo.yaml -t dispatch -i ./inventory/cluster201/crypo
 ```
 
 ## kerberos的安装
