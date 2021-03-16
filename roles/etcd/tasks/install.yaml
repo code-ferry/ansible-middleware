@@ -11,7 +11,8 @@
   - "{{ etcd_home }}"
   - "{{ etcd_data_dir }}"
   - "{{ etcd_conf_dir }}"
-  - "{{ etcd_wal_dir }}"
+  - "{{ etcd_proxy_data_dir }}"
+  - "{{ etcd_snapshot_home }}"
 
 - name: 解压etcd_folder压缩包
   unarchive:

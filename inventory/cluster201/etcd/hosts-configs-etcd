@@ -1,18 +1,36 @@
+###############################
+##########应用服务器############
+###############################
+# 应用服务器：所有安装中间件的服务器。
+# ansible_ssh_pass是用户的密码。
+# ansible_become_method是提权的方式，本脚本默认采用sudo方式。如果sudo需要密码，还需要加上参数ansible_become_pass。
+# TODO: etcd用主机名会报错
+[etcd]
+192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+192.168.128.202 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+192.168.128.203 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+###############################
+##########配置信息##############
+###############################
 [etcd:vars]
 etcd_initial_cluster = "{{ lookup('template', 'cluster.j2') -}}"
 etcd_port = 2379
 etcd_peer_port = 2380
+etcd_proxy_port = 2381
 
 [etcd:vars]
 etcd_file = etcd-3.3.8.tar.gz
 etcd_folder = etcd-3.3.8
 etcd_home = "{{ install_home }}/{{ etcd_folder }}"
 etcd_name = "{% for host in groups['etcd'] -%}{% if host == inventory_hostname %}etcd0{{ loop.index }}{% endif %}{% endfor %}"
+etcd_snapshot_home = "{{ install_home }}/etcd-snapshot"
 
 # etcd的路径参数
 etcd_data_dir = "{{ etcd_home }}/data"
 etcd_conf_dir = "{{ etcd_home }}/config"
-etcd_wal_dir = "{{ etcd_home }}/wal"
+etcd_proxy_data_dir = "{{ etcd_home }}/proxy"
+
 etcd_schema = http
 etcd_initial_cluster_token = "etcd-cluster-01"
 etcd_max_request_bytes = 5242880

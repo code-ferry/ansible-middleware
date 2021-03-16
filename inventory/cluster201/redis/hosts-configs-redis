@@ -1,0 +1,24 @@
+[redis]
+host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[redis:vars]
+## 通常不需要变更的变量
+redis_version = 5.0.5
+redis_file = "redis-{{ redis_version }}-bin.tar.gz"
+redis_folder = "redis-{{ redis_version }}-bin"
+redis_home = "{{ install_home }}/{{ redis_folder }}"
+redis_log_dir = "{{ redis_home }}/logs"
+redis_config_dir = "{{ redis_home }}/config"
+redis_storage_dir = "{{ redis_home }}/storage"
+
+## network
+redis_port = 6379
+
+## memory
+redis_maxmemory = 1g
+
+## thread
+redis_daemonize = yes
+
+# storage
+redis_appendonly = yes

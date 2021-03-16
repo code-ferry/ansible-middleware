@@ -8,20 +8,6 @@ host203.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_m
 [zookeeper]
 host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
-[all:vars]
-# 应用软件安装的普通用户
-install_user=bduser
-install_group=bduser
-
-# 应用软件在部署服务器的目录
-software_home=/home/bduser/software
-
-# 应用软件在应用服务器的安装家目录
-install_home=/home/bduser/deploy
-
-# java家目录
-java_home=/usr/local/java/jdk1.8.0_201
-
 [kafka:vars]
 kafka_port = 9092
 kafka_ssl_port = 9093

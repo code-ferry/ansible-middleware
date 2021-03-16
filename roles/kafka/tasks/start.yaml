@@ -1,5 +1,5 @@
 - name: get kafka pid
-  shell: ". ~/.bash_profile; OSUSER=$(id -nu); ps -ef | grep java | grep {{ kafka_home }} | grep $OSUSER | grep -v grep | awk '{print $2}'"
+  shell: ". ~/.bash_profile; OSUSER=$(id -nu); ps -ef | grep java | grep {{ kafka_home }} | grep $OSUSER | grep -v grep | grep -v 'kafka.tools.ConsoleConsumer' | grep -v 'kafka.tools.ConsoleProducer' | awk '{print $2}'"
   args:
     executable: /bin/bash
   register: v_pid

@@ -1,0 +1,6 @@
+- name: delete redis install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ redis_home }}"

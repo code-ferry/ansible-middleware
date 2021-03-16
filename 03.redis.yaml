@@ -1,4 +1,4 @@
-- hosts: etcd
+- hosts: redis
   gather_facts: no
   roles:
-  - etcd
+  - redis

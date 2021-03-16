@@ -5,20 +5,28 @@
 # 启动etcd
 - import_tasks: start.yaml
   tags: ['never','start']
+- import_tasks: start-proxy.yaml
+  tags: ['never','start-proxy']
 
 # 停止etcd
 - import_tasks: stop.yaml
   tags: ['never','stop']
+- import_tasks: stop-proxy.yaml
+  tags: ['never','stop-proxy']
 
 # 卸载etcd
 - import_tasks: uninstall.yaml
   tags: ['never','uninstall']
 
 # 重启etcd
+- import_tasks: stop-proxy.yaml
+  tags: [ 'never','restart' ]
 - import_tasks: stop.yaml
   tags: ['never','restart']
 - import_tasks: start.yaml
   tags: ['never','restart']
+- import_tasks: start-proxy.yaml
+  tags: [ 'never','restart' ]
 
 # 压缩与碎片整理etcd
 - import_tasks: compact.yaml
@@ -27,3 +35,11 @@
 # 获取etcd状态
 - import_tasks: status.yaml
   tags: ['never','status']
+
+# 获取etcd快照
+- import_tasks: snapshot.yaml
+  tags: ['never','snapshot']
+
+# 恢复etcd快照
+- import_tasks: restore.yaml
+  tags: ['never','restore']

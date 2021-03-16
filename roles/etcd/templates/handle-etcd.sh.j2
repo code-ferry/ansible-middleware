@@ -12,7 +12,7 @@ start() {
     ts=` date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- start ----------- ${ts}"
 
-    pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
+    pid=`ps -ef | grep "name={{ etcd_name }}" |  grep "{{ etcd_home }}" | grep -v "grep" | grep -v "proxy" | awk '{print $2}'`
 
     if [ X"" = X"$pid" ]; then
         echo "start etcd member, name={{ etcd_name }}"
@@ -33,7 +33,48 @@ stop() {
     ts=` date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- stop ----------- ${ts}"
 
-    pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
+    pid=`ps -ef | grep "name={{ etcd_name }}" |  grep "{{ etcd_home }}" | grep -v "grep" | grep -v "proxy" | awk '{print $2}'`
+    echo "pid="${pid}
+    if [ X"" = X"$pid" ]; then
+        echo "etcd member not run, name={{ etcd_name }}"
+        return 1
+    fi
+
+    kill -9 $pid
+    if [ $? -ne 0 ]; then
+        echo "kill etcd member fail, pid=$pid, name={{ etcd_name }}"
+        return
+    fi
+
+    return 0
+}
+
+start-proxy() {
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- start ----------- ${ts}"
+
+    pid=`ps -ef | grep "{{ etcd_home }}" | grep -v "grep" | grep "proxy" | awk '{print $2}'`
+
+    if [ X"" = X"$pid" ]; then
+        echo "start etcd proxy"
+    else
+        echo "etcd proxy is running now, pid=${pid}"
+        return 0
+    fi
+
+    echo "etcd starting!"
+    {{ etcd_home }}/etcd --proxy readonly --listen-client-urls http://0.0.0.0:{{ etcd_proxy_port }} --initial-cluster {{ etcd_initial_cluster }} --data-dir {{ etcd_proxy_data_dir }}
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+    return 0
+}
+
+stop-proxy() {
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- stop ----------- ${ts}"
+
+    pid=`ps -ef |  grep "{{ etcd_home }}" | grep -v "grep" | grep "proxy" | awk '{print $2}'`
     echo "pid="${pid}
     if [ X"" = X"$pid" ]; then
         echo "etcd member not run, name={{ etcd_name }}"
@@ -137,8 +178,9 @@ lease() {
 }
 
 snapshot() {
-    ts=` date "+%Y-%m-%d_%H:%M:%S"`
-    {{ etcd_home }}/etcdctl snapshot save {{ etcd_home }}/${ts}.db
+    # ts=`date "+%Y-%m-%d_%H:%M:%S"`
+    snapshot_db=$1
+    {{ etcd_home }}/etcdctl snapshot save {{ etcd_snapshot_home }}/${snapshot_db}
 }
 
 restore() {
@@ -148,7 +190,7 @@ restore() {
         return 1
     fi
 
-    {{ etcd_home }}/etcdctl snapshot restore ${db} --config-file={{ etcd_conf_dir }}/etcd.yaml
+    {{ etcd_home }}/etcdctl snapshot restore {{ etcd_home }}/${db} --data-dir {{ etcd_data_dir }}
     if [ $? -ne 0 ]; then
         echo "snapshot restore ${db} fail"
         return 1
@@ -166,6 +208,12 @@ if [ "$1" == "start" ]; then
 elif [ "$1" == "stop" ]; then
     stop
     result=$?
+elif [ "$1" == "start-proxy" ]; then
+    start-proxy
+    result=$?
+elif [ "$1" == "stop-proxy" ]; then
+    stop-proxy
+    result=$?
 elif [ "$1" == "status" ]; then
     status
 elif [ "$1" == "list" ]; then
@@ -174,10 +222,18 @@ elif [ "$1" == "lease" ]; then
     lease
     result=$?
 elif [ "$1" == "snapshot" ]; then
-    snapshot
+    if [ X"$2" == X"" ]; then
+        snapshot snapshot.db
+    else
+        snapshot $2
+    fi
     result=$?
 elif [ "$1" == "restore" ]; then
-    restore $2
+    if [ X"$2" == X"" ]; then
+        restore snapshot.db
+    else
+        restore $2
+    fi
     result=$?
 elif [ "$1" == "restart" ]; then
     stop
