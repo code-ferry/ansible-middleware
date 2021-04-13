@@ -1,0 +1,9 @@
+- hosts: kerberos_server
+  become: true
+  become_user: root
+  gather_facts: yes
+  vars:
+    vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+    ansible_home: "{{ lookup('env', 'PWD') }}"
+  roles:
+  - kerberos-server

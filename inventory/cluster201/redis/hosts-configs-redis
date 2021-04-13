@@ -1,5 +1,5 @@
 [redis]
-host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [redis:vars]
 ## 通常不需要变更的变量

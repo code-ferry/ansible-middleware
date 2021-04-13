@@ -11,7 +11,7 @@
 ###############################
 # 部署服务器: 运行这份ansible脚本的节点，为方便应用部署主机时。
 [deploy]
-host201.com ansible_ssh_user='test' ansible_ssh_pass='test' ansible_become_method=sudo ansible_become_pass='test'
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test' ansible_become_method=sudo ansible_become_pass='test'
 
 [all:vars]
 # 应用软件安装的普通用户

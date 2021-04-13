@@ -1,0 +1,7 @@
+# 安装kerberos客户端
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# 分发keytab
+- import_tasks: dispatch.yaml
+  tags: [ 'never', 'dispatch' ]

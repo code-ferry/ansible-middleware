@@ -5,9 +5,9 @@
 # ansible_ssh_pass是用户的密码。
 # ansible_become_method是提权的方式，本脚本默认采用sudo方式。如果sudo需要密码，还需要加上参数ansible_become_pass。
 [test]
-host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-host202.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-host203.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 ###############################
 ##########配置信息##############

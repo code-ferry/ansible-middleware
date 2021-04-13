@@ -1,7 +1,0 @@
-# 安装kerberos客户端
-- import_tasks: install.yaml
-  tags: [ 'never', 'install' ]
-
-# 安装kerberos客户端配置与keytab
-- import_tasks: install-config.yaml
-  tags: [ 'never', 'install-config' ]

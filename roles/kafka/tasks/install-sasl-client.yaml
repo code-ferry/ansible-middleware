@@ -1,0 +1,23 @@
+- name: create property and config file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'conf/kafka-client-jaas.conf', dest: '{{ kafka_home }}/config/kafka-client-jaas.conf'}
+    - { src: 'conf/kafka-server-jaas.conf', dest: '{{ kafka_home }}/config/kafka-server-jaas.conf'}
+    - { src: 'conf/producer.properties.j2', dest: '{{ kafka_home }}/config/producer.properties'}
+    - { src: 'conf/producer-plain.properties.j2', dest: '{{ kafka_home }}/config/producer-plain.properties'}
+    - { src: 'conf/producer-gssapi.properties.j2', dest: '{{ kafka_home }}/config/producer-gssapi.properties'}
+    - { src: 'conf/consumer.properties.j2', dest: '{{ kafka_home }}/config/consumer.properties'}
+    - { src: 'conf/consumer-plain.properties.j2', dest: '{{ kafka_home }}/config/consumer-plain.properties'}
+    - { src: 'conf/consumer-gssapi.properties.j2', dest: '{{ kafka_home }}/config/consumer-gssapi.properties'}
+
+- name: create executor file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    # - { src: 'bin/kafka-consumer-groups.shj2', dest: '{{ kafka_home }}/bin/kafka-consumer-groups.sh'}
+    # - { src: 'bin/kafka-console-consumer.shj2', dest: '{{ kafka_home }}/bin/kafka-console-consumer.sh'}
+    # - { src: 'bin/kafka-console-producer.shj2', dest: '{{ kafka_home }}/bin/kafka-console-producer.sh'}
+    - { src: 'bin/kafka-server-start.shj2', dest: '{{ kafka_home }}/bin/kafka-server-start.sh'}

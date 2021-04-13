@@ -1,7 +1,8 @@
 - hosts: kerberos_client
-  remote_user: "{{ install_user }}"
   become: true
   become_user: root
-  gather_facts: no
+  gather_facts: yes
+  vars:
+    vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
   roles:
-  - kerberos_client
+  - kerberos-client

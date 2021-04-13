@@ -10,11 +10,12 @@
     copy: yes
     creates: "{{ kafka_home }}"
 
-- name: create logs directory
+- name: create data and log directory
   file:
     name: "{{ item }}"
     state: directory
   with_items:
+  - "{{ kafka_data_dir }}"
   - "{{ kafka_log_dir }}"
 
 - name: create property file 'server.properties'
@@ -45,4 +46,8 @@
 
 # 当需要鉴权时，需要安装ssl客户端的配置文件
 - import_tasks: install-ssl-client.yaml
-  when: kafka_ssl_enable == "true"
+  when: kafka_ssl_enable|lower == "true"
+
+# 当需要SASL
+- import_tasks: install-sasl-client.yaml
+  when: kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true"

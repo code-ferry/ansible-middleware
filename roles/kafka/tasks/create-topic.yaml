@@ -1,0 +1,27 @@
+- name: create kafka topic
+  shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --create --zookeeper {{ zookeeper_hosts }} --replication-factor {{ item[1] }} --partitions {{ item[2] }} --topic {{ item[0] }}"
+  run_once: true
+  with_together:
+  - "{{ kafka_topic }}"
+  - "{{ kafka_replication }}"
+  - "{{ kafka_partition }}"
+  ignore_errors: true
+
+- name: get kafka status
+  shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --list --zookeeper {{ zookeeper_hosts }} | grep -v '__consumer_offsets'"
+  run_once: true
+  register: result
+- name: print kafka status
+  debug:
+    msg: "{{ result.stdout_lines }}"
+  run_once: true
+
+- name: get kafka topic info
+  shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --describe --zookeeper {{ zookeeper_hosts }} | grep -v '__consumer_offsets'"
+  run_once: true
+  register: result
+
+- name: print kafka topic info
+  debug:
+    msg: "{{ result.stdout_lines }}"
+  run_once: true

@@ -38,19 +38,33 @@ auto.create.topics.enable=false
 #     listeners = PLAINTEXT://your.host.name:9092
 #listeners=PLAINTEXT://:9092
 
-{% if kafka_ssl_enable == "true" %}
-listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
+{% if kafka_ssl_enable|lower == "true" %}
+
+# TODO SSL部分后面再处理。
+# listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+# advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+# listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
+
 {% else %}
-host.name={{ vhostipv4 }}
+
+    {% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" %}
+listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+advertised.listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+    {% else %}
 listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+    {% endif %}
+
 {% endif %}
+host.name={{ vhostipv4 }}
 
 # Hostname and port the broker will advertise to producers and consumers. If not set,
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
 # returned from java.net.InetAddress.getCanonicalHostName().
 #advertised.listeners=PLAINTEXT://your.host.name:9092
+
+# Maps listener names to security protocols, the default is for them to be the same. See the config documentation for more details
+#listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
 
 # The number of threads handling network requests
 num.network.threads=3
@@ -71,7 +85,7 @@ socket.request.max.bytes=104857600
 ############################# Log Basics #############################
 
 # A comma seperated list of directories under which to store log files
-log.dirs={{ kafka_home }}/logs
+log.dirs={{ kafka_data_dir }}
 
 # The default number of log partitions per topic. More partitions allow greater
 # parallelism for consumption, but this will also result in more files across
@@ -136,7 +150,7 @@ zookeeper.connection.timeout.ms=6000
 offsets.topic.replication.factor=1
 
 ############################# SSL #############################
-{% if kafka_ssl_enable == "true" %}
+{% if kafka_ssl_enable|lower == "true" %}
 # security.inter.broker.protocol=ssl
 # none, requested, required
 ssl.client.auth=required
@@ -150,4 +164,25 @@ ssl.key.password={{ ssl_server_key_password }}
 ssl.truststore.type=JKS
 ssl.truststore.location={{ ssl_path }}/{{ ssl_server_ts }}
 ssl.truststore.password={{ ssl_server_ts_password }}
+{% endif %}
+
+############################# SASL #############################
+{% if kafka_sasl_plain_enable|lower == "true" and kafka_sasl_gssapi_enable|lower == "true" %}
+sasl.enabled.mechanisms=PLAIN,GSSAPI
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=GSSAPI
+
+{% elif kafka_sasl_plain_enable|lower == "true" %}
+sasl.enabled.mechanisms=PLAIN
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=PLAIN
+authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+super.users=User:admin
+allow.everyone.if.no.acl.found=false
+
+{% elif kafka_sasl_gssapi_enable|lower == "true" %}
+sasl.enabled.mechanisms=GSSAPI
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=GSSAPI
+sasl.kerberos.service.name=bduser
 {% endif %}

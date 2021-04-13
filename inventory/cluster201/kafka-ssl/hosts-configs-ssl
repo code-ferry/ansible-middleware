@@ -1,10 +1,10 @@
 [deploy]
-host201.com ansible_ssh_user='test' ansible_ssh_pass='test' ansible_become_method='sudo'
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test' ansible_become_method='sudo'
 
 [ssl]
-host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-# host202.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-# host203.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [all:vars]
 # 应用软件在部署服务器的目录

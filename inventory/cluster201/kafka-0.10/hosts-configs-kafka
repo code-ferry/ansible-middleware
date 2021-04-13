@@ -1,15 +1,12 @@
-# 示例: 属于'webservers'组的主机集合描述
-# [webservers]
-# alpha.example.org
-# www[001:006].example.com
-# www[a-f].example.com
-# 192.168.1.100 ansible_ssh_user=test ansible_ssh_pass=123456 ansible_become_user=root ansible_become_pass=1q2w3e ansible_become_method=sudo
-# 192.168.1:[1:10]
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [kafka]
-host201.com
-host202.com
-host203.com
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[zookeeper]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [kafka:vars]
 kafka_port = 9092
@@ -23,6 +20,7 @@ kafka_file = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}.tgz"
 kafka_folder = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}"
 kafka_home = "{{ install_home }}/{{ kafka_folder }}"
 kafka_log_dir = "{{ kafka_home }}/logs"
+kafka_data_dir = "{{ kafka_home }}/data"
 
 [kafka:vars]
 kafka_zk_root = /kafka

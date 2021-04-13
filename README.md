@@ -97,11 +97,13 @@ ansible-playbook 01.crypo.yaml -i ./inventory/cluster201/crypo -t delete
 ## kerberos的安装
 ```
 # 安装kerberos KDC
-ansible-playbook 01.kerberos.yaml -t install
+ansible-playbook 01.kerberos-server.yaml -i ./inventory/cluster201/kerberos-server -t install
+./bin/kerberos-server.sh -t install
 # 创建与初始化kerberos数据库
-ansible-playbook 01.kerberos.yaml -t createdb
-# 创建与初始化kerberos数据库
-ansible-playbook 01.kerberos.yaml -t createkeytab
+ansible-playbook 01.kerberos.yaml -t create-db
+# 创建主体并生成keytab
+ansible-playbook 01.kerberos.yaml -t create-princ
+ansible-playbook 01.kerberos.yaml -t create-keytab
 ansible-playbook 01.kerberos.yaml -t start
 
 # 安装kerberos客户端

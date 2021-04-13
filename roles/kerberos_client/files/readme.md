@@ -1,1 +1,0 @@
-### store keytab for kerberos client

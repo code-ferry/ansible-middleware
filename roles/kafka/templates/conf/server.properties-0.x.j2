@@ -131,3 +131,29 @@ zookeeper.connect={{ zookeeper_hosts }}
 
 # Timeout in ms for connecting to zookeeper
 zookeeper.connection.timeout.ms=6000
+
+############################# SSL #############################
+{% if kafka_ssl_enable|lower == "true" %}
+# security.inter.broker.protocol=ssl
+# none, requested, required
+ssl.client.auth=required
+ssl.enabled.protocols=TLSv1.2,TLSv1.1,TLSv1
+
+ssl.keystore.type=JKS
+ssl.keystore.location={{ ssl_path }}/{{ ssl_server_ks }}
+ssl.keystore.password={{ ssl_server_ks_password }}
+ssl.key.password={{ ssl_server_key_password }}
+
+ssl.truststore.type=JKS
+ssl.truststore.location={{ ssl_path }}/{{ ssl_server_ts }}
+ssl.truststore.password={{ ssl_server_ts_password }}
+{% endif %}
+
+############################# SASL #############################
+{% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" %}
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=PLAIN
+sasl.enabled.mechanisms=PLAIN
+authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+super.users=User:admin
+{% endif %}

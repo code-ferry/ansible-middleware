@@ -1,0 +1,22 @@
+- name: Stop the kerberos services
+  service:
+    name: "{{ item }}"
+    state: stopped
+  with_items: "{{ kerberos_services }}"
+
+- name: Delete kerberos directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - /etc/krb5.conf
+  - /etc/krb5.conf.d
+  - /var/kerberos
+  - /var/log/kadmind.log
+  - /var/log/krb5kdc.log
+
+- name: Uninstall the kerberos packages
+  yum:
+    # name: ['krb5-libs', 'krb5-server', 'krb5-workstation']
+    name: ['krb5-server', 'krb5-workstation']
+    state: absent

@@ -1,0 +1,8 @@
+kerberos_server_redhat_package:
+- krb5-libs
+- krb5-server
+- krb5-workstation
+
+kerberos_client_redhat_package:
+- krb5-libs
+- krb5-workstation

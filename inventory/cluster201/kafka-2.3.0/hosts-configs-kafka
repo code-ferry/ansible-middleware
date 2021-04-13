@@ -1,12 +1,12 @@
 [deploy]
-host201.com ansible_ssh_user='test' ansible_ssh_pass='test'
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [kafka]
-host202.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-host203.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [zookeeper]
-host201.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [kafka:vars]
 kafka_port = 9092
@@ -21,6 +21,7 @@ kafka_file = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}.tgz"
 kafka_folder = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}"
 kafka_home = "{{ install_home }}/{{ kafka_folder }}"
 kafka_log_dir = "{{ kafka_home }}/logs"
+kafka_data_dir = "{{ kafka_home }}/data"
 
 [kafka:vars]
 kafka_zk_root = /kafka2
@@ -34,9 +35,9 @@ kafka_log_retention_check_ms = 300000
 kafka_log_retention_hours = 16800
 kafka_log_segment_bytes = 1073741824
 
-[kafka:vars]
 # kafka是否开启ssl的开关
-kafka_ssl_enable = true
+[kafka:vars]
+kafka_ssl_enable = false
 ssl_path = /etc/myssl/kafka2
 
 ssl_server_ts = kafka-server.jts
@@ -51,3 +52,14 @@ ssl_server_key_password = newland
 ssl_client_ks = kafka-client.jks
 ssl_client_ks_password = newland
 ssl_client_key_password = newland
+
+# kafka是否开启sasl的开关, 分别对应PLAIN与GSSAPI
+[kafka:vars]
+kafka_sasl_plain_enable = false
+kafka_sasl_gssapi_enable = true
+
+# Sasl GSSAPI配置
+[kafka:vars]
+kafka_kerberos_path = /etc/newland/kerberos
+kafka_kerberos_file = test.keytab
+kafka_kerberos_principal = bduser/{{ vhostfqdn }}@EXAMPLE.COM
