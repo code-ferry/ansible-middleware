@@ -45,18 +45,18 @@ auto.create.topics.enable=false
 # advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
 # listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
 
-{% else %}
+{% else -%}
 
-    {% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" %}
+{% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" -%}
 listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
 advertised.listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
-    {% else %}
+{% else -%}
 listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
 advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
-    {% endif %}
+{% endif %}
 
 {% endif %}
-host.name={{ vhostipv4 }}
+# host.name={{ vhostipv4 }}
 
 # Hostname and port the broker will advertise to producers and consumers. If not set,
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
@@ -184,5 +184,5 @@ allow.everyone.if.no.acl.found=false
 sasl.enabled.mechanisms=GSSAPI
 security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
-sasl.kerberos.service.name=bduser
+sasl.kerberos.service.name={{ kafka_kerberos_service }}
 {% endif %}

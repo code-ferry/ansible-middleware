@@ -28,7 +28,8 @@ group.id=test-consumer-group
 {% if kafka_sasl_gssapi_enable|lower == "true" %}
 security.protocol=SASL_PLAINTEXT
 sasl.mechanism=GSSAPI
-sasl.kerberos.service.name=bduser
+sasl.kerberos.service.name={{ kafka_kerberos_service }}
+sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab="{{ kafka_kerberos_path }}/{{ kafka_kerberos_file }}" principal="{{ kafka_kerberos_principal }}";
 {% endif %}
 
 {% if kafka_ssl_enable|lower == "true" %}

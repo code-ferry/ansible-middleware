@@ -13,5 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+{% if kafka_sasl_gssapi_enable|lower == "true" %}
+export KAFKA_OPTS="-Djava.security.krb5.conf=/etc/krb5.conf"
+{% endif %}
 
 exec $(dirname $0)/kafka-run-class.sh kafka.admin.ConsumerGroupCommand "$@"

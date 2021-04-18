@@ -62,4 +62,5 @@ kafka_sasl_gssapi_enable = true
 [kafka:vars]
 kafka_kerberos_path = /etc/newland/kerberos
 kafka_kerberos_file = test.keytab
-kafka_kerberos_principal = bduser/{{ vhostfqdn }}@EXAMPLE.COM
+kafka_kerberos_service = bduser
+kafka_kerberos_principal = {{ kafka_kerberos_service }}/{{ vhostfqdn }}@EXAMPLE.COM

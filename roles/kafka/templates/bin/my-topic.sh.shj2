@@ -1,8 +1,7 @@
 #!/bin/bash
 
-{% if kafka_major_version == "0" %}
+{% if kafka_major_version == "0" or kafka_major_version == "1" %}
 kafka-topics.sh --zookeeper {{ zookeeper_hosts }} $*
 {% else %}
 kafka-topics.sh --bootstrap-server {{ kafka_hosts }} $*
 {% endif %}
-
