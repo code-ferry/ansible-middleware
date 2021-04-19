@@ -1,11 +1,11 @@
 #!/bin/bash
 
 status() {
-    {{ etcd_home }}/etcdctl endpoint status --write-out=table
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} endpoint status --write-out=table
 }
 
 list() {
-    {{ etcd_home }}/etcdctl member list --write-out=table
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} member list --write-out=table
 }
 
 start() {
@@ -94,7 +94,7 @@ compact() {
     ts=` date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- compact ----------- ${ts}"
 
-    etcdctl alarm list
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm list
     count=1
     while [ $count -lt 10 ]
     do
@@ -102,13 +102,13 @@ compact() {
        count=`expr $count + 1`
 
        # 先分析能不能获取状态结果(成功:0; 失败:1)，就没有必要进行压缩等动作。示例：如果通信失败时可能得不到状态。
-       statusInfo=$(etcdctl endpoint status 2>&1)
+       statusInfo=$({{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} endpoint status 2>&1)
        statusResult=$?
        echo "Execute 'etcdctl endpoint status' result: ${statusResult}"
        echo "Execute 'etcdctl endpoint info' result: '${statusInfo}'"
 
        if [ $statusResult -eq 0 ]; then
-           rev=$({{ etcd_home }}/etcdctl endpoint status --write-out="json" | egrep -o '"revision":[0-9]*' | egrep -o '[0-9].*')
+           rev=$({{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} endpoint status --write-out="json" | egrep -o '"revision":[0-9]*' | egrep -o '[0-9].*')
 
            if [ X"$rev" == X"" ]; then
              echo "Can't get etcd revision."
@@ -116,7 +116,7 @@ compact() {
            fi
 
            echo "etcd compact, rev=${rev}"
-           compactInfo=$(etcdctl compact ${rev} 2>&1)
+           compactInfo=$({{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} compact ${rev} 2>&1)
            compactResult=$?
            # 打印压缩的情况
            echo "Execute 'etcdctl compact rev' result: ${compactResult}"
@@ -150,13 +150,13 @@ defrag() {
        echo -e "\ndefrag db count: ${count}"
        count=`expr $count + 1`
 
-       etcdctl defrag
+       {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} defrag
        defragResult=$?
        # 打印碎片整理的情况
        echo "Execute 'etcdctl defrag' result: ${defragResult}"
 
        if [ $defragResult -eq 0 ]; then
-           etcdctl alarm disarm
+           {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm disarm
            return 0
        fi
     done
@@ -167,9 +167,9 @@ defrag() {
 # 查看绑定的lease的关联keys
 lease() {
     cat /dev/null > /tmp/etcd_lease
-    {{ etcd_home }}/etcdctl lease list | sed '1d' | while read line
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} lease list | sed '1d' | while read line
     do
-        {{ etcd_home }}/etcdctl lease timetolive $line --keys >> /tmp/etcd_lease
+        {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} lease timetolive $line --keys >> /tmp/etcd_lease
     done
 
     sort -t ',' -k 3 /tmp/etcd_lease
@@ -180,7 +180,7 @@ lease() {
 snapshot() {
     # ts=`date "+%Y-%m-%d_%H:%M:%S"`
     snapshot_db=$1
-    {{ etcd_home }}/etcdctl snapshot save {{ etcd_snapshot_home }}/${snapshot_db}
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} snapshot save {{ etcd_snapshot_home }}/${snapshot_db}
 }
 
 restore() {
@@ -190,7 +190,7 @@ restore() {
         return 1
     fi
 
-    {{ etcd_home }}/etcdctl snapshot restore {{ etcd_home }}/${db} --data-dir {{ etcd_data_dir }}
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} snapshot restore {{ etcd_home }}/${db} --data-dir {{ etcd_data_dir }}
     if [ $? -ne 0 ]; then
         echo "snapshot restore ${db} fail"
         return 1

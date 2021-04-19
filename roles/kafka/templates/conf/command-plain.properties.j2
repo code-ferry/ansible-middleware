@@ -1,7 +1,7 @@
 {% if kafka_sasl_plain_enable|lower == "true" %}
 security.protocol=SASL_PLAINTEXT
 sasl.mechanism=PLAIN
-sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="admin" password="admin";
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="admin";
 {% endif %}
 
 {% if kafka_ssl_enable|lower == "true" %}

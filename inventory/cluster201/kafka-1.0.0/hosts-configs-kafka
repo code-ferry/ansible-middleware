@@ -32,7 +32,7 @@ kafka_partition = [2,2,1]
 
 [kafka:vars]
 kafka_log_retention_check_ms = 300000
-kafka_log_retention_hours = 16800
+kafka_log_retention_hours = 168
 kafka_log_segment_bytes = 1073741824
 
 [kafka:vars]
@@ -57,4 +57,10 @@ ssl_client_key_password = newland
 kafka_sasl_plain_enable = true
 kafka_sasl_gssapi_enable = true
 
+# Sasl GSSAPI配置
+[kafka:vars]
+kafka_kerberos_path = /etc/newland/kerberos
+kafka_kerberos_file = example.keytab
+kafka_kerberos_service = bduser
+kafka_kerberos_principal = {{ kafka_kerberos_service }}/{{ vhostfqdn }}@EXAMPLE.COM
 

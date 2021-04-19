@@ -3,24 +3,14 @@ host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test' ansible_beco
 
 [ssl]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-# host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-# host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-
-[all:vars]
-# 应用软件在部署服务器的目录
-software_home=/home/bduser/software
-
-# 应用软件在应用服务器的安装家目录
-install_home=/home/bduser/deploy
-
-# java家目录
-java_home=/usr/local/java/jdk1.8.0_201
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [ssl:vars]
 # ssl中ca产生文件存放的目录(在部署机上运行)
 ssl_local_path = /home/bduser/ansible-ssl
 # ssl相关keystore,truststore文件存放的目录(在应用服务器上运行)
-ssl_path = /etc/myssl/kafka2
+ssl_path = /etc/newland/ssl/kafka2
 
 [ssl:vars]
 ssl_ca_key = kafka-ca.key

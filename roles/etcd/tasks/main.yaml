@@ -43,3 +43,15 @@
 # 恢复etcd快照
 - import_tasks: restore.yaml
   tags: ['never','restore']
+
+# 升级etcd
+- import_tasks: stop-proxy.yaml
+  tags: [ 'never','upgrade' ]
+- import_tasks: stop.yaml
+  tags: ['never','upgrade']
+- import_tasks: install.yaml
+  tags: ['never','upgrade']
+- import_tasks: start.yaml
+  tags: ['never','upgrade']
+- import_tasks: start-proxy.yaml
+  tags: [ 'never','upgrade' ]

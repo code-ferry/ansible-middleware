@@ -14,7 +14,6 @@
 ##########配置信息##############
 ###############################
 [etcd:vars]
-etcd_initial_cluster = "{{ lookup('template', 'cluster.j2') -}}"
 etcd_port = 2379
 etcd_peer_port = 2380
 etcd_proxy_port = 2381

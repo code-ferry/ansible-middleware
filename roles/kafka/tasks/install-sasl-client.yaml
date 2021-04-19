@@ -1,3 +1,14 @@
+- name: create customer shell
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items:
+    - { src: 'bin/stopic-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/stopic-gssapi.sh'}
+    - { src: 'bin/sproducer-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sproducer-gssapi.sh'}
+    - { src: 'bin/sconsumer-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer-gssapi.sh'}
+    - { src: 'bin/sconsumer-group-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer-group-gssapi.sh'}
+
 - name: create common property
   template:
     src: "{{ item.src }}"

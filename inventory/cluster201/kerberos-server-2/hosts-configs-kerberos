@@ -18,7 +18,7 @@ kerberos_admin_password = newland
 
 # principal
 [kerberos_server:vars]
-kerberos_keytab_name = test.keytab
+kerberos_keytab_name = newland.keytab
 kerberos_service_name = bduser,nn,sn,dn,jn,rm,nm,jhs,HTTP,zookeeper
 kerberos_instance_name = host200.newland.com,host201.example.com,host202.example.com,host203.example.com
 

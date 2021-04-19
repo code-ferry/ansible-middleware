@@ -1,0 +1,1 @@
+"{% for host in groups['etcd'] -%}{{ host }}:{{ etcd_port }}{%- if not loop.last -%},{%- endif -%}{% endfor %}"

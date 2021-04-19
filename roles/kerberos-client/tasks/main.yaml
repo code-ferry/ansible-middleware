@@ -5,3 +5,7 @@
 # 分发keytab
 - import_tasks: dispatch.yaml
   tags: [ 'never', 'dispatch' ]
+
+# 测试双KDC时需要的krb5文件
+- import_tasks: test.yaml
+  tags: [ 'never', 'test' ]

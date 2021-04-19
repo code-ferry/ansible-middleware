@@ -40,10 +40,15 @@ auto.create.topics.enable=false
 
 {% if kafka_ssl_enable|lower == "true" %}
 
-# TODO SSL部分后面再处理。
-# listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-# advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-# listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
+{% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" -%}
+listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+advertised.listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+listener.security.protocol.map=SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
+{% else -%}
+listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
+{% endif %}
 
 {% else -%}
 
@@ -125,7 +130,7 @@ log.retention.hours={{ kafka_log_retention_hours }}
 
 # A size-based retention policy for logs. Segments are pruned from the log as long as the remaining
 # segments don't drop below log.retention.bytes.
-#log.retention.bytes=1073741824
+log.retention.bytes={{ kafka_log_retention_bytes }}
 
 # The maximum size of a log segment file. When this size is reached a new log segment will be created.
 log.segment.bytes={{ kafka_log_segment_bytes }}
@@ -171,6 +176,10 @@ ssl.truststore.password={{ ssl_server_ts_password }}
 sasl.enabled.mechanisms=PLAIN,GSSAPI
 security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
+sasl.kerberos.service.name={{ kafka_kerberos_service }}
+authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+super.users=User:admin;User:{{ kafka_kerberos_service }}
+allow.everyone.if.no.acl.found=false
 
 {% elif kafka_sasl_plain_enable|lower == "true" %}
 sasl.enabled.mechanisms=PLAIN
@@ -185,4 +194,7 @@ sasl.enabled.mechanisms=GSSAPI
 security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
 sasl.kerberos.service.name={{ kafka_kerberos_service }}
+authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+super.users=User:{{ kafka_kerberos_service }}
+allow.everyone.if.no.acl.found=false
 {% endif %}

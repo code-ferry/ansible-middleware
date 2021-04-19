@@ -1,3 +1,10 @@
+- name: Copy the krb5 configuration file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "krb5.conf.j2", dest: "/etc/krb5.conf" }
+
 - name: create keytab directory
   file:
     path: "{{ item }}"
@@ -12,11 +19,6 @@
     src: "{{ kerberos_keytab_name }}"
     dest: "/etc/newland/kerberos"
     force: yes
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
     mode: 0444
-
-- name: dispatch the krb5 configuration file
-  copy:
-    src: "krb5.conf"
-    dest: "/etc/krb5.conf"
-    force: yes
-    mode: 0666

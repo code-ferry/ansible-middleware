@@ -1,0 +1,5 @@
+#!/bin/bash
+
+FWDIR="$(cd `dirname $0`/..; pwd)"
+
+bin/kafka-console-producer.sh --broker-list {{ kafka_hosts }} --consumer.config config/consumer-gssapi.properties $*

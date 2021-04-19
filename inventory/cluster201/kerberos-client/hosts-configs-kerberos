@@ -2,15 +2,11 @@
 host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [kerberos_client]
+host200.newland.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
-# KDC相关信息
+# principal and keytab
 [kerberos_client:vars]
-kerberos_port = 88
-kerberos_realm_name = EXAMPLE.COM
-
-# principal
-[kerberos_client:vars]
-kerberos_keytab_name = test.keytab
+kerberos_keytab_name = newland.keytab

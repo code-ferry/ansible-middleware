@@ -31,14 +31,19 @@ kafka_replication = [1,1,1]
 kafka_partition = [2,2,1]
 
 [kafka:vars]
+# 日志片段文件的检查周期，查看它们是否达到了删除策略的设置（log.retention.hours或log.retention.bytes）
 kafka_log_retention_check_ms = 300000
-kafka_log_retention_hours = 16800
+# 日志保存时间 (hours|minutes)，默认为7天（168小时）。超过这个时间会根据policy处理数据。bytes和minutes无论哪个先达到都会触发。
+kafka_log_retention_hours = 120
+# 日志数据存储的最大字节数。超过这个时间会根据policy处理数据。
+kafka_log_retention_bytes = 1073741824
+# 控制日志segment文件的大小，超出该大小则追加到一个新的日志segment文件中
 kafka_log_segment_bytes = 1073741824
 
 # kafka是否开启ssl的开关
 [kafka:vars]
 kafka_ssl_enable = false
-ssl_path = /etc/myssl/kafka2
+ssl_path = /etc/newland/ssl/kafka2
 
 ssl_server_ts = kafka-server.jts
 ssl_server_ts_password = newland
@@ -55,12 +60,12 @@ ssl_client_key_password = newland
 
 # kafka是否开启sasl的开关, 分别对应PLAIN与GSSAPI
 [kafka:vars]
-kafka_sasl_plain_enable = false
+kafka_sasl_plain_enable = true
 kafka_sasl_gssapi_enable = true
 
 # Sasl GSSAPI配置
 [kafka:vars]
 kafka_kerberos_path = /etc/newland/kerberos
-kafka_kerberos_file = test.keytab
+kafka_kerberos_file = example.keytab
 kafka_kerberos_service = bduser
 kafka_kerberos_principal = {{ kafka_kerberos_service }}/{{ vhostfqdn }}@EXAMPLE.COM

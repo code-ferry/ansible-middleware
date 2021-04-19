@@ -32,7 +32,16 @@
   tags: ['never','delete-topic']
 
 # ---------------------------------------------
+- import_tasks: clean-log.yaml
+  tags: ['never','clean-log']
+
+- import_tasks: clean-data.yaml
+  tags: ['never','clean-data']
+
+# ---------------------------------------------
 - import_tasks: stop.yaml
+  tags: ['never','upgrade']
+- import_tasks: clean-log.yaml
   tags: ['never','upgrade']
 - import_tasks: install.yaml
   tags: ['never','upgrade']
