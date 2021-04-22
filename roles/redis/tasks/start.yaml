@@ -1,0 +1,34 @@
+#- name: get kafka pid
+#  shell: ". ~/.bash_profile; OSUSER=$(id -nu); ps -ef | grep java | grep {{ kafka_home }} | grep $OSUSER | grep -v grep | grep -v 'kafka.tools.ConsoleConsumer' | grep -v 'kafka.tools.ConsoleProducer' | awk '{print $2}'"
+#  args:
+#    executable: /bin/bash
+#  register: v_pid
+#  ignore_errors: true
+#
+#- name: print kafka pid
+#  debug:
+#    msg: "kafka pid: '{{ v_pid.stdout }}'"
+
+- name: start redis
+  shell: ". ~/.bash_profile; ./bin/redis-server ./config/redis-{{ redis_port }}.conf"
+  async: 30         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ redis_home }}"
+
+- name: "check redis port {{ redis_port }}"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ redis_port }}"
+    delay: 5
+    state: started
+    timeout: 200
+
+#- name: print redis status
+#  shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --list --zookeeper {{ zookeeper_hosts }}"
+#  environment:
+#    KAFKA_HOME: "{{ kafka_home }}"
+#  register: result
+#- debug:
+#    msg: "{{ result.stdout_lines }}"

@@ -200,7 +200,7 @@
     <!-- 指定NameNode的元数据在JournalNode上的存放位置 -->
     <property>
         <name>dfs.namenode.shared.edits.dir</name>
-        <value>qjournal://host201.com:8485;host202.com:8485;host203.com:8485/ns</value>
+        <value>qjournal://host201.example.com:8485;host202.example.com:8485;host203.example.com:8485/ns</value>
     </property>
     <!-- 指定JournalNode在本地磁盘存放数据的位置 -->
     <property>

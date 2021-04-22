@@ -9,14 +9,13 @@
   run_once: true
   delegate_to: "{{ namenode_hosts[0] }}"
 
-#- name: 再确认namenode的端口
-#  wait_for:
-#    host: "{{ inventory_hostname }}"
-#    port: "{{ namenode_port }}"
-#    state: started
-#    timeout: 20
-#  run_once: true
-#  delegate_to: "{{ namenode_host }}"
+- name: 再确认namenode的端口
+  wait_for:
+    host: "{{ namenode_hosts[0] }}"
+    port: "{{ namenode_port }}"
+    state: started
+    timeout: 20
+  run_once: true
 
 #- name: 启动datanode
 #  shell: ". ~/.bash_profile; HADOOP_DATANODE_USER=bduser sudo -E {{ hadoop_home }}/sbin/start-secure-dns.sh"

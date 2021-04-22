@@ -1,0 +1,35 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[zookeeper]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[zookeeper:vars]
+zk_client_port = 2181
+
+[zookeeper:vars]
+zk_version = 3.4.14
+zk_file = "zookeeper-{{ zk_version }}.tar.gz"
+zk_folder = "zookeeper-{{ zk_version }}"
+zk_home = "{{ install_home }}/{{ zk_folder }}"
+
+[zookeeper:vars]
+zk_data_dir = "{{ zk_home }}/data"
+zk_log_dir = "{{ zk_home }}/logs"
+zk_datalogs_dir = "{{ zk_home }}/datalogs"
+
+# zookeeper一些参数
+zk_tick_time = 2000
+zk_init_limit = 20
+zk_sync_limit = 10
+# snapshots的个数
+zk_snap_retain_count = 50
+# 清理任务的间隔的小时数
+zk_purge_interval = 5
+# 最大的客户端连接数
+zk_max_client_cnxns = 500
+
+# zk中kerberos的配置
+zk_kerberos_enable = false
+zk_kerberos_principal = "zookeeper/{{ inventory_hostname }}@NEWLAND.COM"
+zk_keytab_file = "/home/bduser/hadoop.keytab"

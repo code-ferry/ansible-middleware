@@ -1,0 +1,3 @@
+etcd_initial_cluster: "{{ lookup('template', 'cluster.j2') -}}"
+# etcd_endpoints: "{{ lookup('template', 'endpoints.j2') -}}"
+etcd_endpoints: "127.0.0.1:{{ etcd_port }}"

@@ -1,20 +1,25 @@
-- name: 生成known_hosts。1.删除部署服务器上/tmp/hosts目录
+- name: 生成known_hosts。1.部署服务器上删除/tmp/hosts目录
   file:
     path: "/tmp/hosts"
     state: absent
   run_once: true
   delegate_to: localhost
 
-- name: 生成known_hosts。2.应用服务器生成hosts.tmp
-  shell: "echo {{ hostvars[inventory_hostname].ansible_facts.hostname }},{{ hostvars[inventory_hostname].ansible_all_ipv4_addresses[0] }} > /tmp/hosts.tmp"
+- name: 生成known_hosts。2.应用服务器上删除/tmp/hosts.tmp文件
+  file:
+    path: "/tmp/hosts"
+    state: absent
 
-- name: 生成known_hosts。3.获取hosts.tmp到部署服务器
+- name: 生成known_hosts。3.应用服务器生成hosts.tmp
+  shell: "echo {{ vhostipv4 }},{{ vhostname }},{{ vhostfqdn }} > /tmp/hosts.tmp"
+
+- name: 生成known_hosts。4.获取hosts.tmp到部署服务器
   fetch:
     src: "/tmp/hosts.tmp"
     dest: "/tmp/hosts"
     fail_on_missing: true
 
-- name: 生成known_hosts。4.查找/tmp/hosts目录下的hosts.tmp
+- name: 生成known_hosts。5.查找/tmp/hosts目录下的hosts.tmp
   find:
     paths: "/tmp/hosts"
     patterns: "hosts.tmp"
@@ -24,13 +29,13 @@
   run_once: true
   delegate_to: localhost
 
-- name: 生成known_hosts。5.得到所有应用服务器的主机信息
+- name: 生成known_hosts。6.得到所有应用服务器的主机信息
   shell: "cat {{ item.path }}"
   run_once: true
   delegate_to: localhost
   with_items: "{{ result.files|list }}"
   register: hostinfo
 
-- name: 生成known_hosts。6.生成known_hosts，并分发到所有应用服务器
+- name: 生成known_hosts。7.生成known_hosts，并分发到所有应用服务器
   action: sshknownhosts host="{{ item.stdout }}" enctype=ecdsa dest="~/.ssh/known_hosts" state=present
   with_items: "{{ hostinfo.results|list }}"

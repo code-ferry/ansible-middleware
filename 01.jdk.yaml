@@ -1,6 +1,6 @@
-- hosts: application
-  remote_user: "{{ install_user }}"
+- hosts: jdk
   become: true
   become_user: root
+  gather_facts: no
   roles:
   - jdk

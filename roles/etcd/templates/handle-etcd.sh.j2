@@ -1,18 +1,18 @@
 #!/bin/bash
 
 status() {
-    {{ etcd_home }}/etcdctl endpoint status --write-out=table
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} endpoint status --write-out=table
 }
 
 list() {
-    {{ etcd_home }}/etcdctl member list --write-out=table
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} member list --write-out=table
 }
 
 start() {
     ts=` date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- start ----------- ${ts}"
 
-    pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
+    pid=`ps -ef | grep "name={{ etcd_name }}" |  grep "{{ etcd_home }}" | grep -v "grep" | grep -v "proxy" | awk '{print $2}'`
 
     if [ X"" = X"$pid" ]; then
         echo "start etcd member, name={{ etcd_name }}"
@@ -33,7 +33,48 @@ stop() {
     ts=` date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- stop ----------- ${ts}"
 
-    pid=`ps -ef | grep "name={{ etcd_name }}" | grep -v "grep" | awk '{print $2}'`
+    pid=`ps -ef | grep "name={{ etcd_name }}" |  grep "{{ etcd_home }}" | grep -v "grep" | grep -v "proxy" | awk '{print $2}'`
+    echo "pid="${pid}
+    if [ X"" = X"$pid" ]; then
+        echo "etcd member not run, name={{ etcd_name }}"
+        return 1
+    fi
+
+    kill -9 $pid
+    if [ $? -ne 0 ]; then
+        echo "kill etcd member fail, pid=$pid, name={{ etcd_name }}"
+        return
+    fi
+
+    return 0
+}
+
+start-proxy() {
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- start ----------- ${ts}"
+
+    pid=`ps -ef | grep "{{ etcd_home }}" | grep -v "grep" | grep "proxy" | awk '{print $2}'`
+
+    if [ X"" = X"$pid" ]; then
+        echo "start etcd proxy"
+    else
+        echo "etcd proxy is running now, pid=${pid}"
+        return 0
+    fi
+
+    echo "etcd starting!"
+    {{ etcd_home }}/etcd --proxy readonly --listen-client-urls http://0.0.0.0:{{ etcd_proxy_port }} --initial-cluster {{ etcd_initial_cluster }} --data-dir {{ etcd_proxy_data_dir }}
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+    return 0
+}
+
+stop-proxy() {
+    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- stop ----------- ${ts}"
+
+    pid=`ps -ef |  grep "{{ etcd_home }}" | grep -v "grep" | grep "proxy" | awk '{print $2}'`
     echo "pid="${pid}
     if [ X"" = X"$pid" ]; then
         echo "etcd member not run, name={{ etcd_name }}"
@@ -53,7 +94,7 @@ compact() {
     ts=` date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- compact ----------- ${ts}"
 
-    etcdctl alarm list
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm list
     count=1
     while [ $count -lt 10 ]
     do
@@ -61,13 +102,13 @@ compact() {
        count=`expr $count + 1`
 
        # 先分析能不能获取状态结果(成功:0; 失败:1)，就没有必要进行压缩等动作。示例：如果通信失败时可能得不到状态。
-       statusInfo=$(etcdctl endpoint status 2>&1)
+       statusInfo=$({{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} endpoint status 2>&1)
        statusResult=$?
        echo "Execute 'etcdctl endpoint status' result: ${statusResult}"
        echo "Execute 'etcdctl endpoint info' result: '${statusInfo}'"
 
        if [ $statusResult -eq 0 ]; then
-           rev=$({{ etcd_home }}/etcdctl endpoint status --write-out="json" | egrep -o '"revision":[0-9]*' | egrep -o '[0-9].*')
+           rev=$({{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} endpoint status --write-out="json" | egrep -o '"revision":[0-9]*' | egrep -o '[0-9].*')
 
            if [ X"$rev" == X"" ]; then
              echo "Can't get etcd revision."
@@ -75,7 +116,7 @@ compact() {
            fi
 
            echo "etcd compact, rev=${rev}"
-           compactInfo=$(etcdctl compact ${rev} 2>&1)
+           compactInfo=$({{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} compact ${rev} 2>&1)
            compactResult=$?
            # 打印压缩的情况
            echo "Execute 'etcdctl compact rev' result: ${compactResult}"
@@ -109,13 +150,13 @@ defrag() {
        echo -e "\ndefrag db count: ${count}"
        count=`expr $count + 1`
 
-       etcdctl defrag
+       {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} defrag
        defragResult=$?
        # 打印碎片整理的情况
        echo "Execute 'etcdctl defrag' result: ${defragResult}"
 
        if [ $defragResult -eq 0 ]; then
-           etcdctl alarm disarm
+           {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm disarm
            return 0
        fi
     done
@@ -123,9 +164,23 @@ defrag() {
     return 1
 }
 
+# 查看绑定的lease的关联keys
+lease() {
+    cat /dev/null > /tmp/etcd_lease
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} lease list | sed '1d' | while read line
+    do
+        {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} lease timetolive $line --keys >> /tmp/etcd_lease
+    done
+
+    sort -t ',' -k 3 /tmp/etcd_lease
+
+    return 0
+}
+
 snapshot() {
-    ts=` date "+%Y-%m-%d_%H:%M:%S"`
-    {{ etcd_home }}/etcdctl snapshot save {{ etcd_home }}/${ts}.db
+    # ts=`date "+%Y-%m-%d_%H:%M:%S"`
+    snapshot_db=$1
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} snapshot save {{ etcd_snapshot_home }}/${snapshot_db}
 }
 
 restore() {
@@ -135,7 +190,7 @@ restore() {
         return 1
     fi
 
-    {{ etcd_home }}/etcdctl snapshot restore ${db} --config-file={{ etcd_conf_dir }}/etcd.yaml
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} snapshot restore {{ etcd_home }}/${db} --data-dir {{ etcd_data_dir }}
     if [ $? -ne 0 ]; then
         echo "snapshot restore ${db} fail"
         return 1
@@ -153,15 +208,32 @@ if [ "$1" == "start" ]; then
 elif [ "$1" == "stop" ]; then
     stop
     result=$?
+elif [ "$1" == "start-proxy" ]; then
+    start-proxy
+    result=$?
+elif [ "$1" == "stop-proxy" ]; then
+    stop-proxy
+    result=$?
 elif [ "$1" == "status" ]; then
     status
 elif [ "$1" == "list" ]; then
     list
+elif [ "$1" == "lease" ]; then
+    lease
+    result=$?
 elif [ "$1" == "snapshot" ]; then
-    snapshot
+    if [ X"$2" == X"" ]; then
+        snapshot snapshot.db
+    else
+        snapshot $2
+    fi
     result=$?
 elif [ "$1" == "restore" ]; then
-    restore $2
+    if [ X"$2" == X"" ]; then
+        restore snapshot.db
+    else
+        restore $2
+    fi
     result=$?
 elif [ "$1" == "restart" ]; then
     stop

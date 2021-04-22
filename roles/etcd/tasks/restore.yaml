@@ -1,0 +1,36 @@
+- name: "stop etcd"
+  shell: ". ~/.bash_profile; ./handle-etcd.sh stop >> run.log 2>&1 &"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+
+- name: "wait port {{ etcd_port }} is closed"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ etcd_port }}"
+    state: stopped
+    timeout: 20
+
+- name: "backup etcd data directory"
+  shell: ". ~/.bash_profile; rm -fr {{ etcd_data_dir }}.bak; mv {{ etcd_data_dir }} {{ etcd_data_dir }}.bak"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+
+- name: "copy snapshot"
+  copy:
+    src: "{{ software_home }}/snapshot/snapshot.db"
+    dest: "{{ etcd_home }}"
+    force: yes
+
+- name: "restore snapshot"
+  shell: ". ~/.bash_profile; ./handle-etcd.sh restore >> run.log 2>&1 &"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"

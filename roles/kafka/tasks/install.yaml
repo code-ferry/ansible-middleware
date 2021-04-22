@@ -10,12 +10,13 @@
     copy: yes
     creates: "{{ kafka_home }}"
 
-- name: create logs directory
+- name: create data and log directory
   file:
     name: "{{ item }}"
     state: directory
   with_items:
   - "{{ kafka_log_dir }}"
+  - "{{ kafka_data_dir.split(',')|list }}"
 
 - name: create property file 'server.properties'
   template:
@@ -23,6 +24,7 @@
     dest: "{{ item.dest }}"
   with_items:
   - { src: 'conf/server.properties-{{ kafka_major_version }}.x.j2', dest: '{{ kafka_home }}/config/server.properties'}
+  - { src: 'conf/tools-log4j.properties', dest: '{{ kafka_home }}/config/tools-log4j.properties'}
 
 - name: create customer shell
   template:
@@ -30,9 +32,9 @@
     dest: "{{ item.dest }}"
     mode: 0755
   with_items:
-  - { src: 'bin/my-producer.sh.shj2', dest: '{{ kafka_home }}/bin/my-producer.sh'}
-  - { src: 'bin/my-consumer.sh.shj2', dest: '{{ kafka_home }}/bin/my-consumer.sh'}
-  - { src: 'bin/my-topic.sh.shj2', dest: '{{ kafka_home }}/bin/my-topic.sh'}
+  - { src: 'bin/sproducer.sh.shj2', dest: '{{ kafka_home }}/bin/sproducer.sh'}
+  - { src: 'bin/sconsumer.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer.sh'}
+  - { src: 'bin/stopic.sh.shj2', dest: '{{ kafka_home }}/bin/stopic.sh'}
 
 - name: write environment variable KAFKA_HOME etc
   lineinfile:
@@ -45,4 +47,8 @@
 
 # 当需要鉴权时，需要安装ssl客户端的配置文件
 - import_tasks: install-ssl-client.yaml
-  when: kafka_ssl_enable == "true"
+  when: kafka_ssl_enable|lower == "true"
+
+# 当需要SASL
+- import_tasks: install-sasl-client.yaml
+  when: kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true"

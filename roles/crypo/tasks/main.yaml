@@ -1,9 +1,9 @@
 # 生成密钥。
-- import_tasks: create.yaml
-  tags: [ 'never', 'create' ]
+#- import_tasks: create.yaml
+#  tags: [ 'never', 'create' ]
 
 # 删除密钥。
-- import_tasks: delete-keystore.yaml
+- import_tasks: delete.yaml
   tags: [ 'never', 'delete' ]
 
 # 分发密钥(应用服务器之间免密)，包括两步创建公钥，分发认证文件。
@@ -11,16 +11,11 @@
   tags: [ 'never', 'dispatch' ]
 - import_tasks: dispatch.yaml
   tags: [ 'never', 'dispatch' ]
-#- import_tasks: known-hosts.yaml
-#  tags: [ 'never', 'dispatch' ]
-- import_tasks: create-hostinfo.yaml
+- import_tasks: known-hosts.yaml
   tags: [ 'never', 'dispatch' ]
 
 # 分发密钥(部署服务器与应用服务器之间单向免密)，包括两步创建公钥，分发认证文件。
-- import_tasks: create.yaml
+- import_tasks: deploy-create.yaml
   tags: [ 'never', 'deploy-dispatch' ]
 - import_tasks: deploy-dispatch.yaml
   tags: [ 'never', 'deploy-dispatch' ]
-
-- import_tasks: known-hosts.yaml
-  tags: [ 'never', 'known-hosts' ]

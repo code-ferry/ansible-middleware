@@ -21,6 +21,10 @@
 提取码：o9jh
 
 ### 修改各应用软件配置hosts-configs-xxx
+TODO: 这部分内容补齐。   
+通常情况下配置文件common目录下，为了避免同一个中间件不同版本之间配置相互影响。   
+比如kafka的不同版本就在目录kafka-0.10，kafka-2.3.0目录下。
+
 根据要安装的软件，修改中间件的配置，如：
 * host-config-hadoop
 * host-config-hive
@@ -31,44 +35,75 @@
 * ...
 
 ### 约束说明
-本脚本只在centos7上做过严格测试。
+最新的脚本只在CentOS 7.5.1804，ansible 2.9.17上做过严格测试。
 
+# 脚本准备工作  
+配置公共
+
+bin目录下存放着一些已经简化过的脚本，可以方便脚本的使用。在使用之前先运行如下脚本：
+```
+./bin/ansible-prepare.sh
+```
+![prepare-images](./images/prepare-script.png)
+
+## 运行脚本的两种方式
+下面的例子以ansible-playbook的命令为主  
+方法1：直接采用ansible-playbook的命令  
+```
+ansible-playbook 01.jdk.yaml -i ./inventory/cluster201/jdk -t install
+```
+方法2：用简化的命令
+```
+./bin/role-jdk.sh -t install
+```
 # 安装准备
-## 初始化操作系统
+## 初始化操作系统(os)
 hosts-configs-all中是否设置操作系统的初始化（yes表示开启），接着运行安装命令。
 
-可支持的设置如下：
-* 是否关闭操作系统selinux
-* 是否关闭防火墙
-* 是否修改操作系统最大进程数和最大文件打开数限制
-* 是否修改内核参数
+可支持的设置如下：  
+* 是否关闭操作系统selinux  
+* 是否关闭防火墙  
+* 是否修改操作系统最大进程数和最大文件打开数限制  
+* 是否修改内核参数  
 * 是否进行时钟同步  
 
 运行安装命令：
 ```
-ansible-playbook 01.os.yaml -t install
+ansible-playbook 01.os.yaml -i ./inventory/cluster201/os -t install
 ```
 ## JDK安装
 hosts-configs-all中配置jdk_install_home等变量后，运行安装命令。
 
 运行安装命令：
 ```
-ansible-playbook 01.jdk.yaml -t install
+ansible-playbook 01.jdk.yaml -i ./inventory/cluster201/jdk -t install
 ```
 
 ## 应用服务器间的免密
+脚本支持两种情况：应用服务器之间的相互免密，以及部署服务器到应用服务器的免密
+### 应用服务器之间的相互免密
 ```
-ansible-playbook 01.crypo.yaml -t dispatch
+ansible-playbook 01.crypo.yaml -i ./inventory/cluster201/crypo -t dispatch
+```
+### 部署服务器到应用服务器的免密
+```
+ansible-playbook 01.crypo.yaml -i ./inventory/cluster201/crypo -t deploy-dispatch
+```
+### 删除部署服务器与应用服务器的.ssh目录下内容
+```
+ansible-playbook 01.crypo.yaml -i ./inventory/cluster201/crypo -t delete
 ```
 
 ## kerberos的安装
 ```
 # 安装kerberos KDC
-ansible-playbook 01.kerberos.yaml -t install
+ansible-playbook 01.kerberos-server.yaml -i ./inventory/cluster201/kerberos-server -t install
+./bin/kerberos-server.sh -t install
 # 创建与初始化kerberos数据库
-ansible-playbook 01.kerberos.yaml -t createdb
-# 创建与初始化kerberos数据库
-ansible-playbook 01.kerberos.yaml -t createkeytab
+ansible-playbook 01.kerberos.yaml -t create-db
+# 创建主体并生成keytab
+ansible-playbook 01.kerberos.yaml -t create-princ
+ansible-playbook 01.kerberos.yaml -t create-keytab
 ansible-playbook 01.kerberos.yaml -t start
 
 # 安装kerberos客户端
@@ -169,12 +204,12 @@ flink_run_historyserver = true
 本脚本支持kb的安装
 ```
 ansible-playbook 02.hadoop.yaml -t install
-# 需要提权到root用户下的一些安装步骤
-ansible-playbook 02.hadoop.yaml -t install-root -e "ansible_become=true"
+# 需要提权到root用户下的一些安装步骤，需要通过参数-b进行提权
+ansible-playbook 02.hadoop.yaml -t install-root -b
 # 格式化datanode
 ansible-playbook 02.hadoop.yaml -t format
-# 生成yarn的cgroup，用于资源控制
-ansible-playbook 02.hadoop.yaml -t install-cgroup -e "ansible_become=true"
+# 生成yarn的cgroup，用于资源控制，需要通过参数-b进行提权
+ansible-playbook 02.hadoop.yaml -t install-cgroup -b
 # 启动hadoop
 ansible-playbook 02.hadoop.yaml -t start
 ```
@@ -236,9 +271,27 @@ ansible-playbook 02.kafka.yaml -t uninstall
 * kafka_zk_root
 
 ## etcd安装
+etcd常用的几个命令
 ```
-ansible-playbook 03.etcd.yaml -t install
-ansible-playbook 03.etcd.yaml -t start
+# 安装 
+ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t install
+# 启动
+ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t start
+# 启动
+ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t start
+# 卸载
+ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t stop
+```
+etcd也支持备份与恢复。本脚本为了简化只保留一个备份。
+```
+# 备份。会在部署机的software/snapshot目录下生成snapshot.db文件，用于需要时恢复。
+ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t i snapshot
+......
+......
+# 当需要恢复时，可以调用restore命令。
+ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t restore
+# 恢复后，需要再重新启动下。
+ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t start
 ```
 
 ## elasticsearch安装

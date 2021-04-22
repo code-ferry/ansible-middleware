@@ -11,9 +11,8 @@
 
 - name: 再确认resource manager的端口
   wait_for:
-    host: "{{ inventory_hostname }}"
+    host: "{{ yarn_hosts[0] }}"
     port: "{{ resourcemanager_port }}"
     state: started
     timeout: 30
   run_once: true
-  delegate_to: "{{ yarn_hosts[0] }}"

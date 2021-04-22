@@ -11,7 +11,8 @@
   - "{{ etcd_home }}"
   - "{{ etcd_data_dir }}"
   - "{{ etcd_conf_dir }}"
-  - "{{ etcd_wal_dir }}"
+  - "{{ etcd_proxy_data_dir }}"
+  - "{{ etcd_snapshot_home }}"
 
 - name: 解压etcd_folder压缩包
   unarchive:
@@ -29,8 +30,8 @@
     line: "{{ item }}"
   with_items:
   - "export ETCDCTL_API=3"
-  - "export ETCD_HOME={{ etcd_home }}"
-  - "export PATH=$ETCD_HOME:$PATH"
+  # - "export ETCD_HOME={{ etcd_home }}"
+  # - "export PATH=$ETCD_HOME:$PATH"
 
 - name: 配置与安装文件etcd.yaml
   template:

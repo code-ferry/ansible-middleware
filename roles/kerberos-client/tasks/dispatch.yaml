@@ -1,0 +1,22 @@
+- name: create keytab directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0555
+  with_items:
+    - "/etc/newland"
+    - "/etc/newland/kerberos"
+
+- name: dispatch xxxx.keytab
+  copy:
+    src: "{{ kerberos_keytab_name }}"
+    dest: "/etc/newland/kerberos"
+    force: yes
+    mode: 0444
+
+- name: dispatch the krb5 configuration file
+  copy:
+    src: "krb5.conf"
+    dest: "/etc/krb5.conf"
+    force: yes
+    mode: 0666

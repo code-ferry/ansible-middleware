@@ -1,18 +1,22 @@
 - name: 停止etcd
-  shell: ". ~/.bash_profile; nohup {{ etcd_home }}/handle-etcd.sh stop > {{ etcd_home }}/run.log 2>&1 &"
+  shell: ". ~/.bash_profile; nohup ./handle-etcd.sh stop > {{ etcd_home }}/run.log 2>&1 &"
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
   ignore_errors: true
 
 - name: 删除etcd安装目录与安装软件压缩包
   file: path={{ item }} state=absent
   with_items:
   - "{{ etcd_home }}"
+  - "{{ etcd_snapshot_home }}"
 
-- name: 擦除环境变量ETCDCTL_API等
-  lineinfile:
-    dest: ~/.bash_profile
-    state: absent
-    line: "{{ item }}"
-  with_items:
-  - "export ETCDCTL_API=3"
-  - "export ETCD_HOME={{ etcd_home }}"
-  - "export PATH=$ETCD_HOME:$PATH"
+#- name: 擦除环境变量ETCDCTL_API等
+#  lineinfile:
+#    dest: ~/.bash_profile
+#    state: absent
+#    line: "{{ item }}"
+#  with_items:
+#  - "export ETCDCTL_API=3"
+#  - "export ETCD_HOME={{ etcd_home }}"
+#  - "export PATH=$ETCD_HOME:$PATH"

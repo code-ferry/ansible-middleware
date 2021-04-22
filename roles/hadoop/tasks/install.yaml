@@ -47,10 +47,11 @@
       group: "{{ install_group }}"
       mode: 644
 
-- name: Check Namenode should be 2 size when HA is used
-  when: not ((namenode_hosts.count|int != 2) and (namenode_ha_enable|lower == "true"))
-  fail:
-    msg: "Namenode should be 2 size when HA is used."
+# TODO 判断
+#- name: Check Namenode should be 2 size when HA is used
+#  when: not ((namenode_hosts.count|int != 2) and (namenode_ha_enable|lower == "true"))
+#  fail:
+#    msg: "Namenode should be 2 size when HA is used."
 
 - name: 创建hadoop配置文件
   template:

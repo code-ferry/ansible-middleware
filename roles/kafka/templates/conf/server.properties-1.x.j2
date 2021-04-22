@@ -37,7 +37,20 @@ auto.create.topics.enable=false
 #   EXAMPLE:
 #     listeners = PLAINTEXT://your.host.name:9092
 #listeners=PLAINTEXT://:9092
+
+{% if kafka_ssl_enable|lower == "true" %}
+listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
+
+{% elif kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" %}
+listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+advertised.listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+
+{% else %}
+host.name={{ vhostipv4 }}
 listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+{% endif %}
 
 # Hostname and port the broker will advertise to producers and consumers. If not set,
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
@@ -146,3 +159,29 @@ zookeeper.connection.timeout.ms=6000
 # The default value for this is 3 seconds.
 # We override this to 0 here as it makes for a better out-of-the-box experience for development and testing.
 # However, in production environments the default value of 3 seconds is more suitable as this will help to avoid unnecessary, and potentially expensive, rebalances during application startup.
+
+############################# SSL #############################
+{% if kafka_ssl_enable|lower == "true" %}
+# security.inter.broker.protocol=ssl
+# none, requested, required
+ssl.client.auth=required
+ssl.enabled.protocols=TLSv1.2,TLSv1.1,TLSv1
+
+ssl.keystore.type=JKS
+ssl.keystore.location={{ ssl_path }}/{{ ssl_server_ks }}
+ssl.keystore.password={{ ssl_server_ks_password }}
+ssl.key.password={{ ssl_server_key_password }}
+
+ssl.truststore.type=JKS
+ssl.truststore.location={{ ssl_path }}/{{ ssl_server_ts }}
+ssl.truststore.password={{ ssl_server_ts_password }}
+{% endif %}
+
+############################# SASL #############################
+{% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" %}
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=PLAIN
+sasl.enabled.mechanisms=PLAIN
+authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+super.users=User:admin
+{% endif %}

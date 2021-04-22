@@ -1,7 +1,6 @@
 # 名称与路径
 name: {{ etcd_name }}
 data-dir: {{ etcd_data_dir }}
-wal-dir: {{ etcd_wal_dir }}
 
 # 存储
 snapshot-count: 100000
@@ -18,8 +17,9 @@ election-timeout: 2000
 # 网络连接
 cors:
 listen-peer-urls: http://{{ inventory_hostname }}:{{ etcd_peer_port }}
-advertise-client-urls: http://{{ inventory_hostname }}:{{ etcd_port }}
 listen-client-urls: http://{{ inventory_hostname }}:{{ etcd_port }},http://127.0.0.1:{{ etcd_port }}
+advertise-client-urls: http://{{ inventory_hostname }}:{{ etcd_port }}
+
 initial-advertise-peer-urls: http://{{ inventory_hostname }}:{{ etcd_peer_port }}
 initial-cluster: {{ etcd_initial_cluster }}
 initial-cluster-token: {{ etcd_initial_cluster_token }}

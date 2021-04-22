@@ -1,0 +1,9 @@
+#!/bin/bash
+
+FWDIR="$(cd `dirname $0`/..; pwd)"
+
+{% if kafka_major_version == "0" or kafka_major_version == "1" %}
+bin/kafka-topics.sh --zookeeper {{ zookeeper_hosts }} $*
+{% else %}
+bin/kafka-topics.sh --bootstrap-server {{ kafka_hosts }} --command-config config/command-gssapi.properties $*
+{% endif %}

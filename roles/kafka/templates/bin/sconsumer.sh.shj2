@@ -1,0 +1,9 @@
+#!/bin/bash
+
+FWDIR="$(cd `dirname $0`/..; pwd)"
+
+{% if kafka_major_version == "0" %}
+bin/kafka-console-consumer.sh --zookeeper {{ zookeeper_hosts }} --group test-consumer-group $*
+{% else %}
+bin/kafka-console-consumer.sh --bootstrap-server {{ kafka_hosts }} --group test-consumer-group $*
+{% endif %}

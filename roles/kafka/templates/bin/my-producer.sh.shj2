@@ -1,3 +1,0 @@
-#!/bin/bash
-
-kafka-console-producer.sh --broker-list {{ kafka_hosts }} $*
