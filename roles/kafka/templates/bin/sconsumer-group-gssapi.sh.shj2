@@ -1,5 +1,6 @@
 #!/bin/bash
 
 FWDIR="$(cd `dirname $0`/..; pwd)"
+cd $FWDIR
 
-bin/kafka-consumer-groups.sh --bootstrap-server {{ kafka_hosts }} --command.config config/consumer-gssapi.properties $*
+bin/kafka-consumer-groups.sh --bootstrap-server {{ kafka_sasl_hosts }} --command.config config/consumer-gssapi.properties $*

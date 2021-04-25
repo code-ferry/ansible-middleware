@@ -1,9 +1,10 @@
 #!/bin/bash
 
 FWDIR="$(cd `dirname $0`/..; pwd)"
+cd $FWDIR
 
 {% if kafka_major_version == "0" %}
 bin/kafka-console-consumer.sh --zookeeper {{ zookeeper_hosts }} $*
 {% else %}
-bin/kafka-console-consumer.sh --bootstrap-server {{ kafka_hosts }} --consumer.config config/consumer-gssapi.properties $*
+bin/kafka-console-consumer.sh --bootstrap-server {{ kafka_sasl_hosts }} --consumer.config config/consumer-gssapi.properties $*
 {% endif %}

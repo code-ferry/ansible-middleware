@@ -35,15 +35,16 @@
   - { src: 'bin/sproducer.sh.shj2', dest: '{{ kafka_home }}/bin/sproducer.sh'}
   - { src: 'bin/sconsumer.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer.sh'}
   - { src: 'bin/stopic.sh.shj2', dest: '{{ kafka_home }}/bin/stopic.sh'}
+  - { src: 'bin/kafka-server-stop.shj2', dest: '{{ kafka_home }}/bin/kafka-server-stop.sh' }
 
-- name: write environment variable KAFKA_HOME etc
-  lineinfile:
-    dest: ~/.bash_profile
-    state: present
-    line: "{{ item }}"
-  with_items:
-  - 'export KAFKA_HOME={{ kafka_home }}'
-  - 'export PATH=$KAFKA_HOME/bin:$PATH'
+#- name: write environment variable KAFKA_HOME etc
+#  lineinfile:
+#    dest: ~/.bash_profile
+#    state: present
+#    line: "{{ item }}"
+#  with_items:
+#  - 'export KAFKA_HOME={{ kafka_home }}'
+#  - 'export PATH=$KAFKA_HOME/bin:$PATH'
 
 # 当需要鉴权时，需要安装ssl客户端的配置文件
 - import_tasks: install-ssl-client.yaml

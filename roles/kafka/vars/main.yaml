@@ -1,4 +1,5 @@
 zookeeper_hosts: "{{ lookup('template', 'host/zookeeper.j2') }}"
 kafka_hosts: "{{ lookup('template', 'host/kafka.j2') }}"
+kafka_sasl_hosts: "{{ lookup('template', 'host/kafka-sasl.j2') }}"
 
 kafka_major_version: "{{ kafka_version.split('.')[0] }}"

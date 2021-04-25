@@ -9,7 +9,9 @@ host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [kafka:vars]
-kafka_port = 9092
+# 当没有开启sasl或者ssl时,kafka_sasl_port与kafka_ssl_port还是需要配置一个,但并不会实际使用
+kafka_port = 9091
+kafka_sasl_port = 9092
 kafka_ssl_port = 9093
 zk_port = 2181
 
@@ -69,3 +71,7 @@ kafka_kerberos_path = /etc/newland/kerberos
 kafka_kerberos_file = example.keytab
 kafka_kerberos_service = bduser
 kafka_kerberos_principal = {{ kafka_kerberos_service }}/{{ vhostfqdn }}@EXAMPLE.COM
+
+# acl配置
+[kafka:vars]
+kafka_acl_allow_all = false

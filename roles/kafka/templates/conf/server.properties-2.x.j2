@@ -41,9 +41,9 @@ auto.create.topics.enable=false
 {% if kafka_ssl_enable|lower == "true" %}
 
 {% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" -%}
-listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-advertised.listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-listener.security.protocol.map=SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
+listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
 {% else -%}
 listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
 advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
@@ -53,8 +53,8 @@ listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
 {% else -%}
 
 {% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" -%}
-listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
-advertised.listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }}
+advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }}
 {% else -%}
 listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
 advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
@@ -178,16 +178,16 @@ security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
 sasl.kerberos.service.name={{ kafka_kerberos_service }}
 authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
-super.users=User:admin;User:{{ kafka_kerberos_service }}
-allow.everyone.if.no.acl.found=false
+super.users=User:admin;User:{{ kafka_kerberos_service }};User:ANONYMOUS
+allow.everyone.if.no.acl.found={{ kafka_acl_allow_all }}
 
 {% elif kafka_sasl_plain_enable|lower == "true" %}
 sasl.enabled.mechanisms=PLAIN
 security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=PLAIN
 authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
-super.users=User:admin
-allow.everyone.if.no.acl.found=false
+super.users=User:admin;User:ANONYMOUS
+allow.everyone.if.no.acl.found={{ kafka_acl_allow_all }}
 
 {% elif kafka_sasl_gssapi_enable|lower == "true" %}
 sasl.enabled.mechanisms=GSSAPI
@@ -195,6 +195,6 @@ security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
 sasl.kerberos.service.name={{ kafka_kerberos_service }}
 authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
-super.users=User:{{ kafka_kerberos_service }}
-allow.everyone.if.no.acl.found=false
+super.users=User:{{ kafka_kerberos_service }};User:ANONYMOUS
+allow.everyone.if.no.acl.found={{ kafka_acl_allow_all }}
 {% endif %}
