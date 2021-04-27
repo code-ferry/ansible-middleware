@@ -277,8 +277,8 @@ etcd常用的几个命令
 ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t install
 # 启动
 ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t start
-# 启动
-ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t start
+# 压缩与去碎片化
+ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t compact
 # 卸载
 ansible-playbook 03.etcd.yaml -i ./inventory/cluster201/ -t stop
 ```

@@ -1,7 +1,4 @@
 - hosts: kafka
   gather_facts: yes
-  vars:
-    vhostipv4: "{{ hostvars[inventory_hostname].ansible_all_ipv4_addresses[0] }}"
-    vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
   roles:
   - kafka

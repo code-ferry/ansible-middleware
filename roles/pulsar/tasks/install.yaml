@@ -32,7 +32,7 @@
 #  with_items:
 #  - { src: 'bin/sproducer.sh.shj2', dest: '{{ kafka_home }}/bin/my-producer.sh'}
 #  - { src: 'bin/sconsumer.sh.shj2', dest: '{{ kafka_home }}/bin/my-consumer.sh'}
-#  - { src: 'bin/stopic.sh.shj2', dest: '{{ kafka_home }}/bin/my-topic.sh'}
+#  - { src: 'bin/stopics.sh.shj2', dest: '{{ kafka_home }}/bin/my-topic.sh'}
 
 - name: write environment variable PULSAR_HOME etc
   lineinfile:

@@ -4,7 +4,7 @@
     dest: "{{ item.dest }}"
     mode: 0755
   with_items:
-    - { src: 'bin/stopic-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/stopic-gssapi.sh'}
+    - { src: 'bin/stopics-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/stopics-gssapi.sh'}
     - { src: 'bin/sproducer-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sproducer-gssapi.sh'}
     - { src: 'bin/sconsumer-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer-gssapi.sh'}
     - { src: 'bin/sconsumer-group-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer-group-gssapi.sh'}
@@ -44,6 +44,7 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
+    mode: 0755
   with_items:
     - { src: 'bin/kafka-consumer-groups.shj2', dest: '{{ kafka_home }}/bin/kafka-consumer-groups.sh' }
     - { src: 'bin/kafka-console-consumer.shj2', dest: '{{ kafka_home }}/bin/kafka-console-consumer.sh' }
