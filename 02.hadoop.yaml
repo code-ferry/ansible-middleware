@@ -1,7 +1,4 @@
 - hosts: hadoop
-  remote_user: "{{ install_user }}"
-  become: false
-  become_user: root
   gather_facts: yes
   vars:
     ansible_home: "{{ lookup('env', 'PWD') }}"

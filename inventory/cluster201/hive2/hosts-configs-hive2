@@ -1,3 +1,9 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[hive2]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
 [hive2:vars]
 # default 10000
 hive2_server2_port = 10000
