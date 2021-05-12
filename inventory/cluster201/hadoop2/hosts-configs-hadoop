@@ -6,9 +6,6 @@ host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_
 host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' datanode="yes"
 host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' datanode="yes"
 
-# [hadoop]
-# host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' namenode="yes" yarn="yes" datanode="yes"
-
 [hadoop:vars]
 # 后面考虑这个是算出来的
 namenode_ha_enable=false
@@ -65,7 +62,7 @@ hadoop_namenode_dir = "{{ hadoop_tmp_dir }}/dfs/name"
 hadoop_datanode_dir = "{{ hadoop_tmp_dir }}/dfs/data"
 
 dfs_replication = 1
-dfs_permissions = false
+dfs_permissions = true
 dfs_blocksize = 16m
 
 # yarn
@@ -90,9 +87,9 @@ dfs_block_access_token_enable = true
 dfs_http_policy = HTTPS_ONLY
 
 # kerberos
-kerberos_realm_name = NEWLAND.COM
-kerberos_keytab_name = hadoop.keytab
-hadoop_keytab_path = /home/{{ install_user }}
+kerberos_realm_name = EXAMPLE.COM
+kerberos_keytab_name = example.keytab
+hadoop_keytab_path = /etc/newland/kerberos
 hadoop_keytab_file = "{{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}"
 hadoop_kerberos_principal = {{ install_user }}/_HOST@{{ kerberos_realm_name }}
 hadoop_kerberos_principal_nn = nn/_HOST@{{ kerberos_realm_name }}
@@ -105,6 +102,7 @@ hadoop_kerberos_principal_jhs = jhs/_HOST@{{ kerberos_realm_name }}
 hadoop_kerberos_principal_http = HTTP/_HOST@{{ kerberos_realm_name }}
 
 # ssl
+hadoop_ssl_path = /etc/newland/ssl/hadoop2
 hadoop_ssl_password = newland
 hadoop_truststore_password = newland
 hadoop_keystore_password = newland

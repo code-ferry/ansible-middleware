@@ -105,3 +105,7 @@
 # create yarn cgroup
 - import_tasks: install-cgroup.yaml
   tags: [ 'never', 'install-cgroup' ]
+
+# create ssl
+- import_tasks: install-ssl.yaml
+  tags: [ 'never', 'install-ssl' ]

@@ -1,4 +1,5 @@
 - hosts: hadoop
+  become_user: root
   gather_facts: yes
   vars:
     ansible_home: "{{ lookup('env', 'PWD') }}"

@@ -6,8 +6,7 @@
     state: absent
   with_items:
   - "/etc/hadoop"
-  - "/var/opt/security"
-  - "/var/opt/ssl"
+  - "{{ hadoop_ssl_path }}"
   - "/tmp/keystore"
   - "/tmp/truststore"
   ignore_errors: true

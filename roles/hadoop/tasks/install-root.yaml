@@ -9,8 +9,8 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   with_items:
-  - { src: "container-executor", dest: "{{ hadoop_home }}/bin/", owner: "root", group: "{{ install_user }}", mode: 6050 }
-  - { src: "test-container-executor", dest: "{{ hadoop_home }}/bin/", owner: "root", group: "{{ install_user }}", mode: 6050 }
+  - { src: "container-executor", dest: "{{ hadoop_home }}/bin/", owner: "root", group: "{{ install_group }}", mode: 6050 }
+  - { src: "test-container-executor", dest: "{{ hadoop_home }}/bin/", owner: "root", group: "{{ install_group }}", mode: 6050 }
 
 - name: 得到用户id
   shell: "id -u {{ install_user }}"
@@ -32,13 +32,8 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
-    group: "{{ install_user }}"
+    group: "{{ install_group }}"
     force: yes
     mode: 0400
   with_items:
   - { src: 'site/container-executor.cfg.j2', dest: '/etc/hadoop/container-executor.cfg' }
-
-# FIXME ssl相关调整后，没有install-ssl-client这个文件了
-# 当需要鉴权时，需要安装ssl。
-#- import_tasks: install-ssl-client.yaml
-#  when: hadoop_security_authorization == "true"

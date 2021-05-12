@@ -97,17 +97,22 @@ ansible-playbook 01.crypo.yaml -i ./inventory/cluster201/crypo -t delete
 ## kerberos的安装
 ```
 # 安装kerberos KDC
+# 同时将服务端生成的/etc/krb5.conf复制到ansible的安装目录下，其用于客户端命令分发
 ansible-playbook 01.kerberos-server.yaml -i ./inventory/cluster201/kerberos-server -t install
 ./bin/kerberos-server.sh -t install
 # 创建与初始化kerberos数据库
-ansible-playbook 01.kerberos.yaml -t create-db
+./bin/kerberos-server.sh -t create-db
+# 启动kerberos数据库
+./bin/kerberos-server.sh -t start
 # 创建主体并生成keytab
-ansible-playbook 01.kerberos.yaml -t create-princ
-ansible-playbook 01.kerberos.yaml -t create-keytab
-ansible-playbook 01.kerberos.yaml -t start
+./bin/kerberos-server.sh -t create-princ
+./bin/kerberos-server.sh -t create-keytab
 
 # 安装kerberos客户端
-ansible-playbook 01.kerberos-client.yaml -t install
+./bin/kerberos-client.sh -t install
+# 分发keytab到各客户端（create-keytab命令需要运行后）
+# 需要分发的keytab在参数kerberos_keytab_name中配置
+./bin/kerberos-client.sh -t dispatch
 ```
 
 ## ssl的安装
@@ -203,15 +208,18 @@ flink_run_historyserver = true
 ## hadoop安装
 本脚本支持kb的安装
 ```
-ansible-playbook 02.hadoop.yaml -t install
-# 需要提权到root用户下的一些安装步骤，需要通过参数-b进行提权
-ansible-playbook 02.hadoop.yaml -t install-root -b
+# hadoop2的基本安装
+./bin/role-hadoop2.sh -t install
+# 需要提权到root用户下的一些安装步骤，需要通过参数-b进行提权。操作container-executor.cfg生成等内容。
+./bin/role-hadoop2.sh -t install-root -b
+# 如果开启SSL，还需要运行下面的语句生成ca证书与密钥，以及密钥库等
+./bin/role-hadoop2.sh -t install-ssl -b
 # 格式化datanode
-ansible-playbook 02.hadoop.yaml -t format
+./bin/role-hadoop2.sh -t format
 # 生成yarn的cgroup，用于资源控制，需要通过参数-b进行提权
-ansible-playbook 02.hadoop.yaml -t install-cgroup -b
+./bin/role-hadoop2.sh -t install-cgroup -b
 # 启动hadoop
-ansible-playbook 02.hadoop.yaml -t start
+./bin/role-hadoop2.sh -t start
 ```
 
 ## hive安装

@@ -3,7 +3,7 @@
 <configuration>
     <property>
         <name>ssl.client.truststore.location</name>
-        <value>/var/opt/security/truststore</value>
+        <value>{{ hadoop_ssl_path }}/truststore</value>
         <description>Truststore to be used by clients like distcp. Must be specified.</description>
     </property>
 
@@ -27,7 +27,7 @@
 
     <property>
         <name>ssl.client.keystore.location</name>
-        <value>/var/opt/security/keystore</value>
+        <value>{{ hadoop_ssl_path }}/keystore</value>
         <description>Keystore to be used by clients like distcp. Must be specified.</description>
     </property>
 
