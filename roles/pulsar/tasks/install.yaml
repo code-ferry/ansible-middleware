@@ -17,14 +17,14 @@
   with_items:
   - "{{ pulsar_log_dir }}"
 
-#- name: create property file 'server.properties'
+#- name: create property file 'server.properties'.
 #  template:
 #    src: "{{ item.src }}"
 #    dest: "{{ item.dest }}"
 #  with_items:
 #  - { src: 'conf/server.properties-{{ kafka_major_version }}.x.j2', dest: '{{ kafka_home }}/config/server.properties'}
 
-#- name: create customer shell
+#- name: create customer shell.
 #  template:
 #    src: "{{ item.src }}"
 #    dest: "{{ item.dest }}"

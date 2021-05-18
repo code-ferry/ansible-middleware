@@ -34,12 +34,12 @@
   - { src: 'hive-site-{{ hive2_version }}.xml.xj2', dest: '{{ hive2_conf_dir }}/hive-site.xml' }
   - { src: 'hive-log4j2.properties.j2', dest: '{{ hive2_conf_dir }}/hive-log4j2.properties' }
 
-- name: Write the environment variable $HADOOP_HOME, and so on
-  lineinfile:
-    dest: ~/.bash_profile
-    state: present
-    line: "{{ item }}"
-  with_items:
-  - 'export HIVE_HOME={{ hive2_home }}'
-  - 'export PATH=$PATH:$HIVE_HOME/bin'
+#- name: Write the environment variable $HADOOP_HOME, and so on
+#  lineinfile:
+#    dest: ~/.bash_profile
+#    state: present
+#    line: "{{ item }}"
+#  with_items:
+#  - 'export HIVE_HOME={{ hive2_home }}'
+#  - 'export PATH=$PATH:$HIVE_HOME/bin'
 
