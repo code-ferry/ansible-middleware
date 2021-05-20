@@ -1,17 +1,7 @@
-#- name: kill metastore and hiveserver2 server
-#  shell: '. ~/.bash_profile; export HIVE_HOME={{ hive_home }}; {{ item }}'
-#  async: 20
-#  poll: 2
-#  args:
-#    executable: /bin/bash
-#  run_once: true
-#  with_items:
-#  - ps -ef | grep java | grep {{ hive_version }} | grep HiveServer | awk '{print $2}' | xargs kill 2>/dev/null
-#  - ps -ef | grep java | grep {{ hive_version }} | grep HiveMetaStore | awk '{print $2}' | xargs kill 2>/dev/null
-#  ignore_errors: true
+# TODO 启动之前要判断一下是否要有进程存在。
 
 - name: get hive metastore pid
-  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ hive2_version }} | grep HiveMetaStore | grep -v grep | awk '{print $2}'"
+  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ hive2_home }} | grep HiveMetaStore | grep -v grep | awk '{print $2}'"
   environment:
     HIVE_HOME: "{{ hive2_home }}"
   register: pid
@@ -26,17 +16,18 @@
   when: pid.stdout != ""
 
 - name: get hiveserver2 pid
-  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ hive2_version }} | grep HiveServer | grep -v grep | awk '{print $2}'"
+  shell: ". ~/.bash_profile; ps -ef | grep java | grep {{ hive2_home }} | grep HiveServer | grep -v grep | awk '{print $2}'"
   environment:
     HIVE_HOME: "{{ hive2_home }}"
   register: pid
 
 - name: kill hiveserver2
-  shell: kill -9 {{ pid.stdout }}
+  shell: kill -9 {{ item }}
   async: 30
   poll: 2
   args:
     executable: /bin/bash
+  with_items: "{{ pid.stdout_lines }}"
   ignore_errors: true
   when: pid.stdout != ""
 

@@ -22,7 +22,7 @@ hive2_conf_dir = "{{ hive2_home }}/conf"
 hive2_local_scratchdir = "{{ hive2_home }}/scratchdir"
 hive2_local_tmp_dir = "{{ hive2_home }}/tmp"
 
-# hive 2的版本中目录区分下
+# hive2的版本中目录区分下
 hive2_warehouse_dir = "/user/hive2/warehouse"
 hive2_scratchdir = "/user/hive2/scratchdir"
 hive2_log_dir = "/user/hive2/logs"
@@ -48,9 +48,9 @@ hive2_jdbc_password = hive2
 [hive2:vars]
 # NONE, KERBEROS, LDAP
 hive2_server2_authentication = KERBEROS
-hive2_server2_kerberos_principal = {{ install_user }}/_HOST@NEWLAND.COM
-hive2_server2_kerberos_keytab = /home/{{ install_user }}/hadoop.keytab
+hive2_server2_kerberos_principal = {{ install_user }}/_HOST@EXAMPLE.COM
+hive2_server2_kerberos_keytab = /etc/newland/kerberos/example.keytab
 
 hive2_metastore_sasl_enabled = true
-hive2_metastore_kerberos_principal = {{ install_user }}/_HOST@NEWLAND.COM
-hive2_metastore_kerberos_keytab = /home/{{ install_user }}/hadoop.keytab
+hive2_metastore_kerberos_principal = {{ install_user }}/_HOST@EXAMPLE.COM
+hive2_metastore_kerberos_keytab = /etc/newland/kerberos/example.keytab
