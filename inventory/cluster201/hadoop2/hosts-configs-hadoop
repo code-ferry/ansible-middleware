@@ -63,7 +63,10 @@ hadoop_datanode_dir = "{{ hadoop_tmp_dir }}/dfs/data"
 
 dfs_replication = 1
 dfs_permissions = true
+dfs_permissions_umask = "0022"
 dfs_blocksize = 16m
+dfs_webhdfs_enabled = false
+dfs_acls_enabled = true
 
 # yarn
 yarn_lce_group = "{{ install_group }}"
@@ -91,15 +94,16 @@ kerberos_realm_name = EXAMPLE.COM
 kerberos_keytab_name = example.keytab
 hadoop_keytab_path = /etc/newland/kerberos
 hadoop_keytab_file = "{{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}"
-hadoop_kerberos_principal = {{ install_user }}/_HOST@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_nn = nn/_HOST@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_dn = dn/_HOST@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_sn = sn/_HOST@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_jn = jn/_HOST@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_nm = nm/_HOST@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_rm = rm/_HOST@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_jhs = jhs/_HOST@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_http = HTTP/_HOST@{{ kerberos_realm_name }}
+hodoop_kerberos_principal_fqdn = /_HOST
+hadoop_kerberos_principal = {{ install_user }}{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_nn = nn{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_dn = dn{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_sn = sn{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_jn = jn{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_nm = nm{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_rm = rm{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_jhs = jhs{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_http = HTTP{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
 
 # ssl
 hadoop_ssl_path = /etc/newland/ssl/hadoop2

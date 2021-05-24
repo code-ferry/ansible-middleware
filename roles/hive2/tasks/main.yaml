@@ -16,6 +16,14 @@
 - import_tasks: start.yaml
   tags: [ 'never', 'restart' ]
 
+# restart hive
+- import_tasks: stop.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: install.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: start.yaml
+  tags: [ 'never', 'upgrade' ]
+
 # init hive
 - import_tasks: init.yaml
   tags: [ 'never', 'init' ]

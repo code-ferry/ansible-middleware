@@ -27,6 +27,11 @@
     <name>system:user.name</name>
     <value>hive</value>
   </property>
+  <property>
+    <name>hive.files.umask.value</name>
+    <value>0002</value>
+    <description>The dfs.umask value for the hive created folders</description>
+  </property>
 
   <property>
     <name>hive.exec.script.wrapper</name>
@@ -3354,7 +3359,7 @@
   </property>
   <property>
     <name>hive.security.authorization.enabled</name>
-    <value>false</value>
+    <value>{{ hive2_authorization_enabled }}</value>
     <description>enable or disable the Hive client authorization</description>
   </property>
   <property>
@@ -3426,7 +3431,7 @@
   </property>
   <property>
     <name>hive.security.authorization.createtable.owner.grants</name>
-    <value/>
+    <value>ALL</value>
     <description>
       The privileges automatically granted to the owner whenever a table gets created.
       An example like "select,drop" will grant select and drop privilege to the owner
@@ -3893,12 +3898,12 @@
   </property>
   <property>
     <name>hive.server2.webui.spnego.keytab</name>
-    <value/>
+    <value>{{ hive2_http_kerberos_keytab }}</value>
     <description>The path to the Kerberos Keytab file containing the HiveServer2 WebUI SPNEGO service principal.</description>
   </property>
   <property>
     <name>hive.server2.webui.spnego.principal</name>
-    <value>HTTP/_HOST@EXAMPLE.COM</value>
+    <value>{{ hive2_http_kerberos_principal }}</value>
     <description>
       The HiveServer2 WebUI SPNEGO service principal.
       The special string _HOST will be replaced automatically with 
@@ -4874,7 +4879,7 @@
   </property>
   <property>
     <name>hive.users.in.admin.role</name>
-    <value/>
+    <value>{{ hive2_admin_users }}</value>
     <description>
       Comma separated list of users who are in admin role for bootstrapping.
       More users can be added in ADMIN role later.

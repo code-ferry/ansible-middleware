@@ -64,6 +64,23 @@
         <name>hadoop.proxyuser.{{ install_user }}.groups</name>
         <value>*</value>
     </property>
+    <property>
+        <name>hadoop.proxyuser.{{ install_user }}.users</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.hive.hosts</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.hive.groups</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.hive.users</name>
+        <value>*</value>
+    </property>
 
     <!--指定namenode ha时，zookeeper地址-->
     {% if namenode_ha_enable == "true" %}

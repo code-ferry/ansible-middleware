@@ -46,11 +46,23 @@ hive2_jdbc_username = hive2
 hive2_jdbc_password = hive2
 
 [hive2:vars]
+# authentication
 # NONE, KERBEROS, LDAP
 hive2_server2_authentication = KERBEROS
-hive2_server2_kerberos_principal = {{ install_user }}/_HOST@EXAMPLE.COM
-hive2_server2_kerberos_keytab = /etc/newland/kerberos/example.keytab
+hive2_server2_kerberos_fqdn = /_HOST
+hive2_server2_kerberos_principal = hive{{ hive2_server2_kerberos_fqdn }}@EXAMPLE.COM
+hive2_server2_kerberos_keytab = /etc/newland/kerberos/hive.keytab
 
 hive2_metastore_sasl_enabled = true
-hive2_metastore_kerberos_principal = {{ install_user }}/_HOST@EXAMPLE.COM
-hive2_metastore_kerberos_keytab = /etc/newland/kerberos/example.keytab
+hive2_metastore_kerberos_fqdn = /_HOST
+hive2_metastore_kerberos_principal = hive{{ hive2_metastore_kerberos_fqdn }}@EXAMPLE.COM
+hive2_metastore_kerberos_keytab = /etc/newland/kerberos/hive.keytab
+
+hive2_http_kerberos_fqdn = /_HOST
+hive2_http_kerberos_principal = HTTP{{ hive2_metastore_kerberos_fqdn }}@EXAMPLE.COM
+hive2_http_kerberos_keytab = /etc/newland/kerberos/hive.keytab
+
+[hive2:vars]
+# authorization
+hive2_authorization_enabled = true
+hive2_admin_users = bduser

@@ -60,12 +60,20 @@
         <value>{{ dfs_permissions }}</value>
     </property>
     <property>
+        <name>fs.permissions.umask-mode</name>
+        <value>{{ dfs_permissions_umask }}</value>
+    </property>
+    <property>
         <name>dfs.blocksize</name>
         <value>{{ dfs_blocksize }}</value>
     </property>
     <property>
         <name>dfs.webhdfs.enabled</name>
-        <value>false</value>
+        <value>{{ dfs_webhdfs_enabled }}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.acls.enabled</name>
+        <value>{{ dfs_acls_enabled }}</value>
     </property>
 
     <!-- kerberos to namenode -->
