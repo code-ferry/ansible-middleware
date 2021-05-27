@@ -1,0 +1,4 @@
+- hosts: kafka
+  gather_facts: yes
+  roles:
+  - tez

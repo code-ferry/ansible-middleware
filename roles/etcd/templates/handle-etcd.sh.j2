@@ -154,6 +154,7 @@ defrag() {
        defragResult=$?
        # 打印碎片整理的情况
        echo "Execute 'etcdctl defrag' result: ${defragResult}"
+       sleep 3
 
        if [ $defragResult -eq 0 ]; then
            {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm disarm

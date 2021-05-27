@@ -21,6 +21,7 @@ hive2_home = "{{ install_home }}/{{ hive2_folder }}"
 hive2_conf_dir = "{{ hive2_home }}/conf"
 hive2_local_scratchdir = "{{ hive2_home }}/scratchdir"
 hive2_local_tmp_dir = "{{ hive2_home }}/tmp"
+hive2_execution_engine = mr
 
 # hive2的版本中目录区分下
 hive2_warehouse_dir = "/user/hive2/warehouse"

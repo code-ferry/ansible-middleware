@@ -9,7 +9,7 @@
     chdir: "{{ zk_home }}/bin"
   register: result
 
-- name: check zookeeper started statu1s
+- name: check zookeeper started status
   async_status:
     jid: "{{ result.ansible_job_id }}"
   register: job_result
