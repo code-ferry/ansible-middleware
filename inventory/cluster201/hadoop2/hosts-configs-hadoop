@@ -63,8 +63,8 @@ hadoop_datanode_dir = "{{ hadoop_tmp_dir }}/dfs/data"
 
 dfs_replication = 1
 dfs_permissions = true
-dfs_permissions_umask = "0022"
-dfs_blocksize = 16m
+dfs_permissions_umask = "022"
+dfs_blocksize = 16777216
 dfs_webhdfs_enabled = false
 dfs_acls_enabled = true
 
