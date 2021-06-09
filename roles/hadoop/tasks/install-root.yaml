@@ -25,7 +25,7 @@
     state: directory
     mode: 0755
   with_items:
-  - "/etc/hadoop"
+  - "{{ hadoop_container_conf_dir }}"
 
 - name: 创建container-executor.cfg配置文件
   template:
@@ -36,4 +36,4 @@
     force: yes
     mode: 0400
   with_items:
-  - { src: 'site/container-executor.cfg.j2', dest: '/etc/hadoop/container-executor.cfg' }
+  - { src: 'site/container-executor.cfg.j2', dest: '{{ hadoop_container_conf_dir }}/container-executor.cfg' }

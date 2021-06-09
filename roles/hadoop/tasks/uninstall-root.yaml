@@ -5,7 +5,7 @@
     name: "{{ item }}"
     state: absent
   with_items:
-  - "/etc/hadoop"
+  - "{{ hadoop_container_conf_dir }}"
   - "{{ hadoop_ssl_path }}"
   - "/tmp/keystore"
   - "/tmp/truststore"

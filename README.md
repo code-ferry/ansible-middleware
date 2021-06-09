@@ -223,9 +223,23 @@ flink_run_historyserver = true
 ```
 
 ## hive安装
+### 安装与初始化
 ```
 ansible-playbook 02.hive.yaml -t install
+# 初始化metastore的数据
+ansible-playbook 02.hive.yaml -t init
+```
+注意：  
+在初始化之前需要在mysql数据库进行建库、授权等操作。
+```
+create database hivedb;
+grant all privileges on hivedb.* to 'hiveuser'@'%' with grant option;
+```
+
+### 启动与停止等操作
+```
 ansible-playbook 02.hive.yaml -t start
+ansible-playbook 02.hive.yaml -t stop
 ```
 
 ## zookeeper安装

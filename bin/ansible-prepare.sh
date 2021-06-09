@@ -14,8 +14,10 @@ getInventoryPath
 for IV_SUBDIR in $(ls $IV_PATH)
 do
   if [ -d $IV_PATH/$IV_SUBDIR ]; then
-    echo "Copy to $IV_PATH/$IV_SUBDIR"
-    cp $IV_PATH/hosts-common $IV_PATH/$IV_SUBDIR/
+    if [[ !($IV_SUBDIR =~ "single") ]]; then
+      echo "Copy to $IV_PATH/$IV_SUBDIR"
+      cp $IV_PATH/hosts-common $IV_PATH/$IV_SUBDIR/
+    fi
   fi
 done
 

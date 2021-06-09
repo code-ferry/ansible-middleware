@@ -56,6 +56,7 @@ hadoop_home = "{{ install_home }}/{{ hadoop_folder }}"
 # core
 hadoop_tmp_dir = "{{ hadoop_home }}/tmp"
 hadoop_log_dir = "{{ hadoop_home }}/logs"
+hadoop_container_conf_dir = "/etc/hadoop"
 
 # hdfs
 hadoop_namenode_dir = "{{ hadoop_tmp_dir }}/dfs/name"

@@ -27,11 +27,6 @@
     <name>system:user.name</name>
     <value>hive</value>
   </property>
-  <property>
-    <name>hive.files.umask.value</name>
-    <value>0002</value>
-    <description>The dfs.umask value for the hive created folders</description>
-  </property>
 
   <property>
     <name>hive.exec.script.wrapper</name>

@@ -23,4 +23,4 @@
     host: "{{ inventory_hostname }}"
     port: "{{ hive2_server2_port }}"
     state: started
-    timeout: 25
+    timeout: 60
