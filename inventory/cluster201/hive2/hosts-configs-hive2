@@ -13,7 +13,7 @@ hive2_metastore_port = 9083
 hive2_webui_port = 10002
 
 [hive2:vars]
-hive2_version = 2.3.7
+hive2_version = 2.3.6
 hive2_file = "apache-hive-{{ hive2_version }}-bin.tar.gz"
 hive2_folder = "apache-hive-{{ hive2_version }}-bin"
 hive2_home = "{{ install_home }}/{{ hive2_folder }}"
@@ -31,7 +31,7 @@ hive2_log_dir = "/user/hive2/logs"
 hive2_heapsize = 2048
 
 # hive ha的相关配置
-hive2_ha_enable = true
+hive2_ha_enable = false
 hive2_dynamic_discovery = true
 hive2_zk_namespace = hivezk2
 hive2_zk_quorum = host201:2181
@@ -49,12 +49,12 @@ hive2_jdbc_password = hive2
 [hive2:vars]
 # authentication
 # NONE, KERBEROS, LDAP
-hive2_server2_authentication = KERBEROS
+hive2_server2_authentication = NONE
 hive2_server2_kerberos_fqdn = /_HOST
 hive2_server2_kerberos_principal = hive{{ hive2_server2_kerberos_fqdn }}@EXAMPLE.COM
 hive2_server2_kerberos_keytab = /etc/newland/kerberos/hive.keytab
 
-hive2_metastore_sasl_enabled = true
+hive2_metastore_sasl_enabled = false
 hive2_metastore_kerberos_fqdn = /_HOST
 hive2_metastore_kerberos_principal = hive{{ hive2_metastore_kerberos_fqdn }}@EXAMPLE.COM
 hive2_metastore_kerberos_keytab = /etc/newland/kerberos/hive.keytab
@@ -65,5 +65,5 @@ hive2_http_kerberos_keytab = /etc/newland/kerberos/hive.keytab
 
 [hive2:vars]
 # authorization
-hive2_authorization_enabled = true
+hive2_authorization_enabled = false
 hive2_admin_users = bduser

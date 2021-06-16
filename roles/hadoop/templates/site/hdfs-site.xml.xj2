@@ -81,6 +81,7 @@
         <name>dfs.block.access.token.enable</name>
         <value>{{ dfs_block_access_token_enable }}</value>
     </property>
+    {% if hadoop_security_authentication == "kerberos" %}
     <property>
         <name>dfs.namenode.kerberos.principal</name>
         <value>{{ hadoop_kerberos_principal_nn }}</value>
@@ -93,6 +94,7 @@
         <name>dfs.namenode.kerberos.internal.spnego.principal</name>
         <value>{{ hadoop_kerberos_principal_http }}</value>
     </property>
+    {% endif %}
 
     <!-- configuring ssl to the namenode web UI -->
     <property>
@@ -117,6 +119,7 @@
         <name>dfs.namenode.secondary.https-address</name>
         <value>0.0.0.0:{{ namenode_second_https_port }}</value>
     </property>
+    {% if hadoop_security_authentication|lower == "kerberos" %}
     <property>
         <name>dfs.secondary.namenode.keytab.file</name>
         <value>{{ hadoop_keytab_file }}</value>
@@ -129,6 +132,7 @@
         <name>dfs.secondary.namenode.kerberos.internal.spnego.principal</name>
         <value>{{ hadoop_kerberos_principal_http }}</value>
     </property>
+    {% endif %}
 
     <!-- kerberos to datanode -->
     <property>
@@ -151,15 +155,6 @@
         <name>dfs.datanode.https.address</name>
         <value>0.0.0.0:{{ datanode_https_port }}</value>
     </property>
-
-    <property>
-        <name>dfs.datanode.kerberos.principal</name>
-        <value>{{ hadoop_kerberos_principal_dn }}</value>
-    </property>
-    <property>
-        <name>dfs.datanode.keytab.file</name>
-        <value>{{ hadoop_keytab_file }}</value>
-    </property>
     <property>
         <name>dfs.encrypt.data.transfer</name>
         <value>false</value>
@@ -168,8 +163,19 @@
         <name>dfs.data.transfer.protection</name>
         <value>integrity</value>
     </property>
+    {% if hadoop_security_authentication|lower == "kerberos" %}
+    <property>
+        <name>dfs.datanode.kerberos.principal</name>
+        <value>{{ hadoop_kerberos_principal_dn }}</value>
+    </property>
+    <property>
+        <name>dfs.datanode.keytab.file</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    {% endif %}
 
     <!-- kerberos to WebHDFS -->
+    {% if hadoop_security_authentication|lower == "kerberos" %}
     <property>
         <name>dfs.web.authentication.kerberos.principal</name>
         <value>{{ hadoop_kerberos_principal_http }}</value>
@@ -178,6 +184,7 @@
         <name>dfs.web.authentication.kerberos.keytab</name>
         <value>{{ hadoop_keytab_file }}</value>
     </property>
+    {% endif %}
 
     <!-- kerberos to JournalNode -->
     {% if namenode_ha_enable|lower == "true" %}
@@ -236,4 +243,5 @@
         <value>~/.ssh/id_dsa</value>
     </property>
     {% endif %}
+
 </configuration>
