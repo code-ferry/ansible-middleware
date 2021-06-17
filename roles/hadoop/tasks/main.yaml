@@ -71,6 +71,21 @@
   tags: [ 'never', 'restart' ]
 
 # ----------------------------------
+# 升级hadoop
+- import_tasks: stop-dfs.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: stop-yarn.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: clean.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: install.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: start-dfs.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: start-yarn.yaml
+  tags: [ 'never', 'upgrade' ]
+
+# ----------------------------------
 # 格式化hadoop namenode
 - import_tasks: format.yaml
   tags: [ 'never', 'format' ]
