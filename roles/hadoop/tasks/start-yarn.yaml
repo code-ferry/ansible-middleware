@@ -16,3 +16,6 @@
     state: started
     timeout: 30
   run_once: true
+
+- import_tasks: start-jh.yaml
+  when: jobhistory_enable|lower == "true"

@@ -3,4 +3,4 @@
 FWDIR="$(cd `dirname $0`/..; pwd)"
 cd ${FWDIR}
 
-ansible-playbook 02.hadoop.yaml -t start
+./bin/role-hadoop2-single.sh -t start

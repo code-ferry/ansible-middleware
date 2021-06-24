@@ -40,8 +40,17 @@ nodemanager_port = 58040
 nodemanager_webapp_port = 58042
 nodemanager_webapp_https_port = 58044
 
-mapreduce_port = 10020
-mapreduce_webapp_port = 19888
+# log aggregation
+log_aggr_enable = true
+log_aggr_retain_seconds = 86400
+log_aggr_dir = /var/container/logs
+
+# jobhistory
+jobhistory_enable = false
+jobhistory_port = 10020
+jobhistory_webapp_port = 19888
+jobhistory_intermediate_done_dir = /var/history/tmp
+jobhistory_done_dir = /var/history/done
 
 [hadoop:vars]
 ## 通常不需要变更的变量
@@ -116,13 +125,13 @@ yarn_label_enabled = true
 yarn_label_dir = /user/bduser/node-labels
 
 # yarn
-yarn_nm_memory = 4096
-yarn_sc_min_memory = 1024
-yarn_sc_max_memory = 4096
+yarn_nm_memory = 8192
+yarn_sc_min_memory = 512
+yarn_sc_max_memory = 2048
 
-yarn_nm_vcore = 4
+yarn_nm_vcore = 6
 yarn_sc_min_vcore = 1
-yarn_sc_max_vcore = 4
+yarn_sc_max_vcore = 6
 
 # yarn cgroup
 yarn_cgroup_enable = false

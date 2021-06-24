@@ -8,3 +8,11 @@
   register: result
   run_once: true
   delegate_to: "{{ yarn_hosts[0] }}"
+
+- name: 再确认job history的端口
+  wait_for:
+    host: "{{ yarn_hosts[0] }}"
+    port: "{{ jobhistory_port }}"
+    state: stopped
+    timeout: 30
+  run_once: true

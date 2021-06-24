@@ -7,15 +7,6 @@
     </property>
 
     <property>
-        <name>mapreduce.jobhistory.address</name>
-        <value>{{ yarn_hosts[0] }}:{{ mapreduce_port }}</value>
-        <description>MapReduce JobHistory Server host:port</description>
-    </property>
-    <property>
-        <name>mapreduce.jobhistory.webapp.address</name>
-        <value>{{ yarn_hosts[0] }}:{{ mapreduce_webapp_port }}</value>
-    </property>
-    <property>
         <name>mapreduce.application.classpath</name>
         <value>
             {{ hadoop_home }}/etc/hadoop,
@@ -30,6 +21,34 @@
         </value>
     </property>
 
+    <!-- conflict port -->
+    <property>
+        <name>mapreduce.shuffle.port</name>
+        <value>50061</value>
+        <description>default port 13562</description>
+    </property>
+
+    {% if jobhistory_enable|lower == "true" %}
+    <!-- job history -->
+    <property>
+        <name>mapreduce.jobhistory.address</name>
+        <value>{{ yarn_hosts[0] }}:{{ jobhistory_port }}</value>
+        <description>MapReduce JobHistory Server host:port</description>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.webapp.address</name>
+        <value>{{ yarn_hosts[0] }}:{{ jobhistory_webapp_port }}</value>
+    </property>
+
+    <property>
+        <name>mapreduce.jobhistory.intermediate-done-dir</name>
+        <value>{{ jobhistory_intermediate_done_dir }}</value>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.done-dir</name>
+        <value>{{ jobhistory_done_dir }}</value>
+    </property>
+
     <property>
         <name>mapreduce.jobhistory.keytab</name>
         <value>{{ hadoop_keytab_file }}</value>
@@ -38,11 +57,6 @@
         <name>mapreduce.jobhistory.principal</name>
         <value>{{ hadoop_kerberos_principal }}</value>
     </property>
+    {% endif %}
 
-    <!-- conflict port -->
-    <property>
-        <name>mapreduce.shuffle.port</name>
-        <value>50061</value>
-        <description>default port 13562</description>
-    </property>
 </configuration>

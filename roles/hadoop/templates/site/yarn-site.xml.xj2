@@ -189,6 +189,22 @@
     </property>
     {% endif %}
 
+    {% if log_aggr_enable|lower == "true" %}
+    <!-- log aggregation -->
+    <property>
+        <name>yarn.log-aggregation-enable</name>
+        <value>{{ log_aggr_enable }}</value>
+    </property>
+    <property>
+    	<name>yarn.log-aggregation.retain-seconds</name>
+    	<value>{{ log_aggr_retain_seconds }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.remote-app-log-dir</name>
+        <value>{{ log_aggr_dir }}</value>
+    </property>
+    {% endif %}
+
     <!-- node labels -->
 <!--    <property>-->
 <!--        <name>yarn.node-labels.enabled</name>-->
