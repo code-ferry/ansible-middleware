@@ -55,9 +55,11 @@ listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
 {% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" -%}
 listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }}
 advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }}
+listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT
 {% else -%}
 listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
 advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }}
+listener.security.protocol.map=PLAINTEXT:PLAINTEXT
 {% endif %}
 
 {% endif %}

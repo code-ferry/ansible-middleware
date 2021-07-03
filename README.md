@@ -322,5 +322,10 @@ ansible-playbook 03.elasticsearch.yaml -t install
 ansible-playbook 03.elasticsearch.yaml -t start
 ```
 
+# 待改进的内容
+>01. hadoop中namenode, resourcemanager为空的校验  
+>02. hadoop hdfs多目录  
+
+
 # 说明
 文档不是很严谨，只是列出了关键步骤，后续有时间逐步完善。  

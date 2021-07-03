@@ -69,6 +69,7 @@ hadoop_container_conf_dir = "/etc/hadoop"
 hadoop_namenode_dir = "{{ hadoop_tmp_dir }}/dfs/name"
 hadoop_datanode_dir = "{{ hadoop_tmp_dir }}/dfs/data"
 
+[hadoop:vars]
 dfs_replication = 1
 dfs_permissions = true
 dfs_permissions_umask = "022"

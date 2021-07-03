@@ -7,7 +7,7 @@
 
 - name: print kafka pid
   debug:
-    msg: "kafka pid: '{{ v_pid.stdout }}'"
+    msg: "kafka pid: '{{ v_pid.stdout }}', kafka home: {{ kafka_home }}"
 
 - name: start kafka
   shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-server-start.sh -daemon {{ kafka_home }}/config/server.properties"
@@ -26,7 +26,7 @@
     port: "{{ kafka_port }}"
     delay: 5
     state: started
-    timeout: 200
+    timeout: 60
 
 - name: print kafka status
   shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --list --zookeeper {{ zookeeper_hosts }}"

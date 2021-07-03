@@ -18,6 +18,14 @@
 
 # ---------------------------------------------
 - import_tasks: stop.yaml
+  tags: ['never','upgrade']
+- import_tasks: install.yaml
+  tags: ['never','upgrade']
+- import_tasks: start.yaml
+  tags: ['never','upgrade']
+
+# ---------------------------------------------
+- import_tasks: stop.yaml
   tags: ['never','uninstall']
 - import_tasks: delete-topic.yaml
   tags: ['never','uninstall']
