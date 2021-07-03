@@ -89,4 +89,10 @@
         <value>{{ namenode_zk_quorum }}</value>
     </property>
     {% endif %}
+
+<!--    <property>-->
+<!--        <name>fs.hdfs.impl</name>-->
+<!--        <value>org.apache.hadoop.hdfs.DistributedFileSystem</value>-->
+<!--        <description>The FileSystem for hdfs: uris.</description>-->
+<!--    </property>-->
 </configuration>

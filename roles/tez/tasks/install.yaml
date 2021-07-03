@@ -1,0 +1,45 @@
+- name: Create install directory
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: Unarchive tez package
+  unarchive:
+    src: "{{ software_home }}/{{ tez_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ tez_home }}"
+
+- name: Write environment variable TEZ_CONF_DIR and TEZ_JARS etc
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export TEZ_CONF_DIR=$HADOOP_CONF_DIR'
+  - 'export TEZ_JARS={{ tez_home }}/*:{{ tez_home }}/lib/*'
+  - 'export HADOOP_CLASSPATH=$TEZ_CONF_DIR:$TEZ_JARS:$HADOOP_CLASSPATH'
+
+- name: Copy tez-site.xml to hadoop etc directory.
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0644"
+  with_items:
+  - { src: 'conf/tez-site.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/tez-site.xml' }
+
+- name: Copy mkdirAndPut.sh to tez home directory.
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0744"
+  with_items:
+    - { src: 'bin/mkdirAndPut.sh.shj2', dest: '{{ tez_home }}/mkdirAndPut.sh' }
+
+- name: Mkdir hdfs directory and put tez.tar.gz to hdfs.
+  shell: ". ~/.bash_profile; ./mkdirAndPut.sh"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ tez_home }}"

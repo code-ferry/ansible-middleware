@@ -1,0 +1,22 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[tez]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[tez:vars]
+## 通常不需要变更的变量
+tez_version = 0.9.0
+tez_file = "apache-tez-{{tez_version}}-bin.tar.gz"
+tez_folder = "apache-tez-{{tez_version}}-bin"
+tez_home = "{{ install_home }}/{{ tez_folder }}"
+
+[tez:vars]
+hadoop_home = /home/udapdev/deploy/hadoop-2.8.5
+kb_enable = true
+# 如果上传tez.tar.gz需要kb让证的话，则需要配置如下参数：
+keytab = /etc/newland/kerberos/hadoop.keytab
+pricipal = udapdev/edc01.com@NEWLAND.COM
+
+# 需要手动新建这个目录，并上传share/tez.tar.gz到该目录
+tez_hdfs_path = /opt/tez

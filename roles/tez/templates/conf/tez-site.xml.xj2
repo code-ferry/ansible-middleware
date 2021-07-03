@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property>
+        <name>tez.lib.uris</name>
+        <value>${fs.defaultFS}{{ tez_hdfs_path }}/tez.tar.gz</value>
+    </property>
+
+    <property>
+        <name>tez.container.max.java.heap.fraction</name>
+        <value>0.2</value>
+    </property>
+</configuration>

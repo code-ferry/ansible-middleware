@@ -1,0 +1,17 @@
+- name: delete tez install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ tez_home }}"
+  - "{{ hadoop_home }}/etc/hadoop/tez-site.xml"
+
+- name: clean environment variable TEZ_HOME etc
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export TEZ_CONF_DIR=$HADOOP_CONF_DIR'
+  - 'export TEZ_JARS={{ tez_home }}/*:{{ tez_home }}/lib/*'
+  - 'export HADOOP_CLASSPATH=$TEZ_CONF_DIR:$TEZ_JARS:$HADOOP_CLASSPATH'
