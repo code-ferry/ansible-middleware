@@ -1,16 +1,16 @@
-- name: get redis pid
-  shell: ". ~/.bash_profile; OSUSER=$(id -nu); ps -ef | grep java | grep redis-server | grep 'redis-{{ redis_ports | first }}.conf' | grep $OSUSER | grep -v grep | awk '{print $2}'"
+- name: Get redis pid
+  shell: ". ~/.bash_profile; OSUSER=$(id -nu); ps -ef | grep redis-server | grep ':{{ redis_ports | first }}' | grep $OSUSER | grep -v grep | awk '{print $2}'"
   args:
     executable: /bin/bash
   register: v_pid
   ignore_errors: true
 
-- name: print redis pid
+- name: Print redis pid
   debug:
     msg: "redis pid: '{{ v_pid.stdout }}'"
 
-- name: start redis
-  shell: ". ~/.bash_profile; ./bin/redis-server ./config/redis-{{ item }}.conf"
+- name: Stop redis
+  shell: ". ~/.bash_profile; ./bin/redis-cli -c -p {{ item }} shutdown"
   async: 30         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
   args:
@@ -18,15 +18,15 @@
     chdir: "{{ redis_home }}"
   with_items:
   - "{{ redis_ports }}"
-  when: v_pid.stdout == ""
+  when: v_pid.stdout != ""
 
-- name: "check redis port"
+- name: Check redis port
   wait_for:
     host: "{{ inventory_hostname }}"
     port: "{{ item }}"
     delay: 3
-    state: started
-    timeout: 30
+    state: stopped
+    timeout: 20
   with_items:
   - "{{ redis_ports }}"
-  when: v_pid.stdout == ""
+  when: v_pid.stdout != ""

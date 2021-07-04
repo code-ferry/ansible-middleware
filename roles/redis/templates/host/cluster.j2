@@ -1,0 +1,6 @@
+{# 计算中redis的服务地址, 用来生成redis create cluster语句 #}
+{% for host in groups['redis'] -%}
+{% for port in redis_ports -%}
+{{ hostvars[host]['ansible_default_ipv4']['address'] }}:{{ port }}{{ " " -}}
+{% endfor -%}
+{% endfor -%}

@@ -1,16 +1,16 @@
-- name: create install directory
+- name: Create install directory
   file: path={{ item }} state=directory
   with_items:
   - "{{ install_home }}"
 
-- name: unarchive redis package
+- name: Unarchive redis package
   unarchive:
-    src: "{{ software_home }}/redis/{{ redis_file }}"
+    src: "{{ software_home }}/{{ redis_file }}"
     dest: "{{ install_home }}"
     copy: yes
     creates: "{{ redis_home }}"
 
-- name: create logs directory
+- name: Create logs directory
   file:
     name: "{{ item }}"
     state: directory
@@ -19,18 +19,13 @@
   - "{{ redis_config_dir }}"
   - "{{ redis_storage_dir }}"
 
-- name: create property file 'redis.conf'
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-  - { src: 'redis.conf-{{ redis_major_version }}.x.j2', dest: '{{ redis_config_dir }}/redis-{{ redis_port }}.conf' }
+- name: print redis ports
+  debug:
+    msg: "redis ports: '{{ redis_ports }}'"
 
-#- name: write environment variable REDIS_HOME etc
-#  lineinfile:
-#    dest: ~/.bash_profile
-#    state: present
-#    line: "{{ item }}"
-#  with_items:
-#  - 'export REDIS_HOME={{ redis_home }}'
-#  - 'export PATH=$REDIS_HOME/bin:$PATH'
+- name: Create property file 'redis.conf'
+  template:
+    src: "redis.conf-{{ redis_major_version }}.x.j2"
+    dest: '{{ redis_config_dir }}/redis-{{ item }}.conf'
+  with_items:
+  - "{{ redis_ports }}"

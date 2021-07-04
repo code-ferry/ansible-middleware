@@ -84,7 +84,7 @@
     dest: "{{ item.dest }}"
     mode: "0744"
   with_items:
-  - { src: 'script/clean.sh.shj2', dest: '{{ hadoop_home }}/bin/clean.sh' }
+  - { src: 'script/mkdirAndPut.sh.shj2', dest: '{{ hadoop_home }}/bin/clean.sh' }
 
 - name: 写入环境变量$HADOOP_HOME等
   lineinfile:

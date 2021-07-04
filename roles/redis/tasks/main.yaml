@@ -5,5 +5,14 @@
 - import_tasks: uninstall.yaml
   tags: ['never','uninstall']
 
+- import_tasks: create-cluster.yaml
+  tags: ['never','create-cluster']
+
+- import_tasks: cluster-info.yaml
+  tags: ['never','cluster-info']
+
 - import_tasks: start.yaml
   tags: ['never','start']
+
+- import_tasks: stop.yaml
+  tags: ['never','stop']

@@ -1,5 +1,9 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
 [redis]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [redis:vars]
 ## 通常不需要变更的变量
@@ -11,14 +15,19 @@ redis_log_dir = "{{ redis_home }}/logs"
 redis_config_dir = "{{ redis_home }}/config"
 redis_storage_dir = "{{ redis_home }}/storage"
 
+## cluster
+cluster_enabled = yes
+
 ## network
-redis_port = 6379
+# 一台服务器可以有多个实例
+redis_ports = 46379,46380
 
 ## memory
-redis_maxmemory = 1g
+redis_maxmemory = 4g
 
 ## thread
 redis_daemonize = yes
 
-# storage
-redis_appendonly = yes
+# storage(fill 'yes' or 'no')
+redis_rdb = no
+redis_appendonly = no
