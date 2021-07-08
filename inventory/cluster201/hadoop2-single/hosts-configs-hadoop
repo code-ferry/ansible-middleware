@@ -40,8 +40,10 @@ nodemanager_port = 58040
 nodemanager_webapp_port = 58042
 nodemanager_webapp_https_port = 58044
 
+nodemanager_delete_debug_delay_sec = 600
+
 # log aggregation
-log_aggr_enable = true
+log_aggr_enable = false
 log_aggr_retain_seconds = 86400
 log_aggr_dir = /var/container/logs
 

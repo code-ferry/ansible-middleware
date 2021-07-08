@@ -203,7 +203,16 @@
         <name>yarn.nodemanager.remote-app-log-dir</name>
         <value>{{ log_aggr_dir }}</value>
     </property>
+    <property>
+        <name>yarn.log-aggregation-status.time-out.ms</name>
+        <value>6000000</value>
+    </property>
     {% endif %}
+
+    <property>
+        <name>yarn.nodemanager.delete.debug-delay-sec</name>
+        <value>{{ nodemanager_delete_debug_delay_sec }}</value>
+    </property>
 
     <!-- node labels -->
 <!--    <property>-->

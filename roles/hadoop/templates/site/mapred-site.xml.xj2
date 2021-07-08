@@ -55,7 +55,7 @@
     </property>
     <property>
         <name>mapreduce.jobhistory.principal</name>
-        <value>{{ hadoop_kerberos_principal }}</value>
+        <value>{{ hadoop_kerberos_principal_jhs }}</value>
     </property>
     {% endif %}
 
