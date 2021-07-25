@@ -1,4 +1,4 @@
-- name: 停止zookeeper
+- name: Stop zookeeper
   shell: ". ~/.bash_profile; ./zkServer.sh stop"
   environment:
     ZK_HOME: "{{ zk_home }}"
@@ -9,7 +9,7 @@
     chdir: "{{ zk_home }}/bin"
   ignore_errors: true
 
-- name: 等待zookeeper端口的关闭
+- name: Check zookeeper port
   wait_for:
     port: "{{ zk_client_port }}"
     state: stopped

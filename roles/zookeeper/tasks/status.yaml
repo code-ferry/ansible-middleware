@@ -1,4 +1,4 @@
-- name: print zookeeper status
+- name: Print zookeeper status
   shell: ". ~/.bash_profile; sleep 2; ./zkServer.sh status"
   environment:
     ZK_HOME: "{{ zk_home }}"

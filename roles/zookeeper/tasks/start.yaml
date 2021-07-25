@@ -1,4 +1,15 @@
-- name: start zookeeper
+- name: Get zookeeper pid
+  shell: ". ~/.bash_profile; if [ -f {{ zk_home }}/data/zookeeper_server.pid ]; then cat {{ zk_home }}/data/zookeeper_server.pid; fi"
+  args:
+    executable: /bin/bash
+  register: result
+
+- name: Check zookeeper pid
+  fail:
+   msg: "Zookeeper already start, pid {{ result.stdout }}"
+  when: result.stdout != ""
+
+- name: Start zookeeper
   shell: "if [ -f ~/.bash_profile ]; then source ~/.bash_profile; fi; if [ -f ~/.profile ]; then source ~/.profile; fi; ./zkServer.sh start"
   environment:
     ZK_HOME: "{{ zk_home }}"
@@ -9,20 +20,20 @@
     chdir: "{{ zk_home }}/bin"
   register: result
 
-- name: check zookeeper started status
+- name: Check zookeeper started status
   async_status:
     jid: "{{ result.ansible_job_id }}"
   register: job_result
   until: job_result.finished
   retries: 5        # 检查次数为5次, 间隔5秒
 
-- name: recheck zookeeper port
+- name: Recheck zookeeper port
   wait_for:
     port: "{{ zk_client_port }}"
     state: started
     timeout: 10
 
-- name: print zookeeper status
+- name: Print zookeeper status
   shell: ". ~/.bash_profile; sleep 2; ./zkServer.sh status"
   environment:
     ZK_HOME: "{{ zk_home }}"
