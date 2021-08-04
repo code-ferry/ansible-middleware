@@ -1,0 +1,16 @@
+- name: test1
+  debug:
+    msg: "{{ broker_hosts|list }}"
+  when: inventory_hostname in broker_hosts
+
+- name: test1
+  debug:
+    msg: "{{ zookeeper_hosts_string }}"
+
+- name: test2
+  debug:
+    msg: "{{ zookeeper_hosts_first }}"
+
+- name: test3
+  debug:
+    msg: "{{ broker_hosts_first }}"

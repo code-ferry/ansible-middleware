@@ -1,0 +1,16 @@
+- name: Stop bookkeeper
+  shell: ". ~/.bash_profile; ./pulsar-daemon stop bookie"
+  environment:
+    PULSAR_HOME: "{{ pulsar_home }}"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ pulsar_home }}/bin"
+  ignore_errors: true
+
+- name: Check bookkeeper port
+  wait_for:
+    port: "{{ pulsar_bk_port }}"
+    state: stopped
+    timeout: 10

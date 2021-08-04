@@ -1,0 +1,12 @@
+pulsar_short_version: "{{ pulsar_version.split('.')[0] + '.' + flink_version.split('.')[1] }}"
+
+broker_hosts: "{{ lookup('template', 'host/brokers.j2') }}"
+broker_hosts_first: "{{ lookup('template', 'host/brokers-first.j2')|trim }}"
+bookkeeper_hosts: "{{ lookup('template', 'host/bookkeepers.j2') }}"
+zookeeper_hosts: "{{ lookup('template', 'host/zookeepers.j2') }}"
+zookeeper_hosts_string: "{{ lookup('template', 'host/zookeepers-string.j2')|trim }}"
+zookeeper_hosts_first: "{{ lookup('template', 'host/zookeepers-first.j2')|trim }}"
+
+broker_count: "{{ broker_hosts|count }}"
+bookkeeper_count: "{{ bookkeeper_hosts|count }}"
+zookeeper_count: "{{ zookeeper_hosts|count }}"

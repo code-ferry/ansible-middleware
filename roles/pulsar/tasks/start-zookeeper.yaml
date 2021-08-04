@@ -1,0 +1,34 @@
+- name: Get zookeeper pid
+  shell: ". ~/.bash_profile; if [ -f {{ pulsar_home }}/bin/pulsar-zookeeper.pid ]; then cat {{ pulsar_home }}/bin/pulsar-zookeeper.pid; fi"
+  args:
+    executable: /bin/bash
+  register: result
+
+- name: Check zookeeper pid
+  fail:
+    msg: "Zookeeper already start, pid {{ result.stdout }}"
+  when: result.stdout != ""
+
+- name: Start zookeeper
+  shell: "if [ -f ~/.bash_profile ]; then source ~/.bash_profile; fi; if [ -f ~/.profile ]; then source ~/.profile; fi; ./pulsar-daemon start zookeeper"
+  environment:
+    PULSAR_HOME: "{{ pulsar_home }}"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ pulsar_home }}/bin"
+  register: result
+
+- name: Check zookeeper started status
+  async_status:
+    jid: "{{ result.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 5        # 检查次数为5次, 间隔5秒
+
+- name: Recheck zookeeper port
+  wait_for:
+    port: "{{ zk_client_port }}"
+    state: started
+    timeout: 10

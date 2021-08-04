@@ -1,0 +1,36 @@
+# The number of milliseconds of each tick
+tickTime={{ zk_tick_time }}
+# The number of ticks that the initial 
+# synchronization phase can take
+initLimit={{ zk_init_limit }}
+# The number of ticks that can pass between 
+# sending a request and getting an acknowledgement
+syncLimit={{ zk_sync_limit }}
+# the directory where the snapshot is stored.
+dataDir={{ pulsar_zk_data_dir }}
+dataLogDir={{ pulsar_zk_datalog_dir }}
+
+# the port at which the clients will connect
+clientPort={{ zk_client_port }}
+
+# the port at which the admin will listen
+admin.enableServer=true
+admin.serverPort=9991
+
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+maxClientCnxns={{ zk_max_client_cnxns }}
+
+# The number of snapshots to retain in dataDir
+autopurge.snapRetainCount={{ zk_snap_retain_count }}
+# Purge task interval in hours
+# Set to "0" to disable auto purge feature
+autopurge.purgeInterval={{ zk_purge_interval }}
+
+# zookeeper cluster, example:
+# server.1=192.168.0.1:2988:3988
+# server.2=192.168.0.2:2988:3988
+# server.3=192.168.0.3:2988:3988
+{% for host in zookeeper_hosts -%}
+    server.{{ loop.index }}={{ host }}:2988:3988
+{% endfor %}

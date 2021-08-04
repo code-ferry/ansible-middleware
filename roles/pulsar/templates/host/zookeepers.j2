@@ -1,0 +1,8 @@
+{# 计算中zookeeper的服务地址 #}
+{% set zookeepers = [] %}
+{% for host in groups['pulsar'] %}
+{% if hostvars[host].zookeeper is defined and hostvars[host].zookeeper == "yes" %}
+{{ zookeepers.append(host) -}}
+{% endif %}
+{% endfor %}
+{{ zookeepers }}

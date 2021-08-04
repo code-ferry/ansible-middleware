@@ -1,0 +1,8 @@
+{# 计算中broker的服务地址 #}
+{% set brokers = [] %}
+{% for host in groups['pulsar'] %}
+{% if hostvars[host].broker is defined and hostvars[host].broker == "yes" %}
+{{ brokers.append(host) -}}
+{% endif %}
+{% endfor %}
+{{ brokers }}

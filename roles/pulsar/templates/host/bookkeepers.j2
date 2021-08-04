@@ -1,0 +1,8 @@
+{# 计算中bookkeeper的服务地址 #}
+{% set bookkeepers = [] %}
+{% for host in groups['pulsar'] %}
+{% if hostvars[host].bookkeeper is defined and hostvars[host].bookkeeper == "yes" %}
+{{ bookkeepers.append(host) -}}
+{% endif %}
+{% endfor %}
+{{ bookkeepers }}

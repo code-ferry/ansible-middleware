@@ -1,28 +1,124 @@
 # ---------------------------------------------
+# install
+# ---------------------------------------------
 - import_tasks: install.yaml
-  tags: ['never','install']
+  tags: [ 'never','install' ]
 
 # ---------------------------------------------
-#- import_tasks: start.yaml
-#  tags: ['never','start']
-#- import_tasks: start-standalone.yaml
-#  tags: ['never','start-standalone']
+# init
+# ---------------------------------------------
+- import_tasks: start-zookeeper.yaml
+  tags: [ 'never','init' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: init.yaml
+  tags: [ 'never','init' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: stop-zookeeper.yaml
+  tags: [ 'never','init' ]
+  when: inventory_hostname in zookeeper_hosts
 
-## ---------------------------------------------
-#- import_tasks: stop.yaml
-#  tags: ['never','stop']
-#
-## ---------------------------------------------
-#- import_tasks: stop.yaml
-#  tags: ['never','uninstall']
-#- import_tasks: delete-topic.yaml
-#  tags: ['never','uninstall']
+# ---------------------------------------------
+# start
+# ---------------------------------------------
+- import_tasks: start-zookeeper.yaml
+  tags: [ 'never','start' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: start-bookkeeper.yaml
+  tags: [ 'never','start' ]
+  when: inventory_hostname in bookkeeper_hosts
+- import_tasks: start-broker.yaml
+  tags: [ 'never','start' ]
+  when: inventory_hostname in broker_hosts
+
+# ---------------------------------------------
+# stop
+# ---------------------------------------------
+- import_tasks: stop-zookeeper.yaml
+  tags: [ 'never','stop' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: stop-bookkeeper.yaml
+  tags: [ 'never','stop' ]
+  when: inventory_hostname in bookkeeper_hosts
+- import_tasks: stop-broker.yaml
+  tags: [ 'never','stop' ]
+  when: inventory_hostname in broker_hosts
+
+# ---------------------------------------------
+# restart
+# ---------------------------------------------
+- import_tasks: stop-zookeeper.yaml
+  tags: [ 'never','restart' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: stop-bookkeeper.yaml
+  tags: [ 'never','restart' ]
+  when: inventory_hostname in bookkeeper_hosts
+- import_tasks: stop-broker.yaml
+  tags: [ 'never','restart' ]
+  when: inventory_hostname in broker_hosts
+- import_tasks: start-zookeeper.yaml
+  tags: [ 'never','restart' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: start-bookkeeper.yaml
+  tags: [ 'never','restart' ]
+  when: inventory_hostname in bookkeeper_hosts
+- import_tasks: start-broker.yaml
+  tags: [ 'never','restart' ]
+  when: inventory_hostname in broker_hosts
+
+# ---------------------------------------------
+# upgrade
+# ---------------------------------------------
+- import_tasks: stop-zookeeper.yaml
+  tags: [ 'never','upgrade' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: stop-bookkeeper.yaml
+  tags: [ 'never','upgrade' ]
+  when: inventory_hostname in bookkeeper_hosts
+- import_tasks: stop-broker.yaml
+  tags: [ 'never','upgrade' ]
+  when: inventory_hostname in broker_hosts
+- import_tasks: install.yaml
+  tags: [ 'never','upgrade' ]
+- import_tasks: start-zookeeper.yaml
+  tags: [ 'never','upgrade' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: start-bookkeeper.yaml
+  tags: [ 'never','upgrade' ]
+  when: inventory_hostname in bookkeeper_hosts
+- import_tasks: start-broker.yaml
+  tags: [ 'never','upgrade' ]
+  when: inventory_hostname in broker_hosts
+
+# ---------------------------------------------
+# clean
+# ---------------------------------------------
+- import_tasks: stop-zookeeper.yaml
+  tags: [ 'never','clean' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: stop-bookkeeper.yaml
+  tags: [ 'never','clean' ]
+  when: inventory_hostname in bookkeeper_hosts
+- import_tasks: stop-broker.yaml
+  tags: [ 'never','clean' ]
+  when: inventory_hostname in broker_hosts
+- import_tasks: clean.yaml
+  tags: ['never','clean']
+
+# ---------------------------------------------
+# uninstall
+# ---------------------------------------------
+- import_tasks: stop-zookeeper.yaml
+  tags: [ 'never','uninstall' ]
+  when: inventory_hostname in zookeeper_hosts
+- import_tasks: stop-bookkeeper.yaml
+  tags: [ 'never','uninstall' ]
+  when: inventory_hostname in bookkeeper_hosts
+- import_tasks: stop-broker.yaml
+  tags: [ 'never','uninstall' ]
+  when: inventory_hostname in broker_hosts
 - import_tasks: uninstall.yaml
   tags: ['never','uninstall']
 
 ## ---------------------------------------------
-#- import_tasks: create-topic.yaml
-#  tags: ['never','createtopic']
-#
-#- import_tasks: delete-topic.yaml
-#  tags: ['never','deletetopic']
+- import_tasks: test.yaml
+  tags: ['never','test']

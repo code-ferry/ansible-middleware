@@ -21,7 +21,7 @@
   - "{{ zk_log_dir }}"
   - "{{ zk_datalogs_dir }}"
 
-- name: 创建zookeeper配置文件zoo.cfg，log4j.properties，myid
+- name: 创建zookeeper配置文件zoo.cfg, log4j.properties, myid
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"

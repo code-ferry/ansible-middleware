@@ -1,0 +1,58 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[pulsar]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" zookeeper="yes"
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" broker="yes" zookeeper="yes"
+host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" broker="yes" zookeeper="yes"
+
+[pulsar:vars]
+## 通常不需要变更的变量
+pulsar_version = 2.7.2
+pulsar_file = "apache-pulsar-{{ pulsar_version }}-bin.tar.gz"
+pulsar_folder = "apache-pulsar-{{ pulsar_version }}"
+pulsar_home = "{{ install_home }}/{{ pulsar_folder }}"
+pulsar_conf_dir = "{{ pulsar_home }}/conf"
+pulsar_log_dir = "{{ pulsar_home }}/logs"
+pulsar_cluster_name = pulsar-cluster-1
+# 生产上需要改到需要的分区
+pulsar_data_dir = "{{ pulsar_home }}/data"
+
+##########################
+## for zookeeper config
+##########################
+[pulsar:vars]
+zk_client_port = 2184
+
+zk_tick_time = 2000
+zk_init_limit = 20
+zk_sync_limit = 10
+# snapshots的个数
+zk_snap_retain_count = 20
+# 清理任务的间隔的小时数
+zk_purge_interval = 5
+# 最大的客户端连接数
+zk_max_client_cnxns = 500
+
+pulsar_zk_data_dir = "{{ pulsar_data_dir }}/zookeeper/data"
+pulsar_zk_datalog_dir = "{{ pulsar_data_dir }}/zookeeper/datalogs"
+
+##########################
+## for bookkeeper config
+##########################
+[pulsar:vars]
+pulsar_bk_port = 3181
+pulsar_bk_httpserver_port = 8100
+pulsar_bk_prometheus_port = 8100
+
+pulsar_bk_journal_dir = "{{ pulsar_data_dir }}/bookkeeper/journal"
+pulsar_bk_ledger_dir = "{{ pulsar_data_dir }}/bookkeeper/ledgers"
+
+##########################
+## for broker config
+##########################
+[pulsar:vars]
+pulsar_broker_port = 6650
+pulsar_broker_port_tls = 6651
+pulsar_web_port = 8080
+pulsar_web_port_tls = 8443

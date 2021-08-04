@@ -1,0 +1,21 @@
+- name: Start bookkeeper
+  shell: '. ~/.bash_profile; {{ pulsar_home }}/bin/pulsar-daemon start bookie'
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "{{ pulsar_home }}"
+  register: result
+
+- name: Check bookkeeper started status
+  async_status:
+    jid: "{{ result.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 5        # 检查次数为5次, 间隔5秒
+
+- name: Recheck bookkeeper port
+  wait_for:
+    port: "{{ pulsar_bk_port }}"
+    state: started
+    timeout: 10

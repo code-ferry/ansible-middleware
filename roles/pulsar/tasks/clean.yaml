@@ -1,0 +1,29 @@
+- name: clean log and data directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ pulsar_zk_data_dir }}"
+  - "{{ pulsar_zk_datalog_dir }}"
+  - "{{ pulsar_bk_journal_dir }}"
+  - "{{ pulsar_bk_ledger_dir }}"
+  - "{{ pulsar_log_dir }}"
+
+- name: Create data and logs directory
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ pulsar_log_dir }}"
+  - "{{ pulsar_data_dir }}"
+  - "{{ pulsar_zk_data_dir }}"
+  - "{{ pulsar_zk_datalog_dir }}"
+  - "{{ pulsar_bk_ledger_dir }}"
+  - "{{ pulsar_bk_journal_dir }}"
+
+- name: Create configuration file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'conf/myid.j2', dest: '{{ pulsar_zk_data_dir }}/myid' }

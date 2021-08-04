@@ -10,35 +10,34 @@
     copy: yes
     creates: "{{ pulsar_home }}"
 
-- name: create logs directory
+- name: Create data and logs directory
   file:
     name: "{{ item }}"
     state: directory
   with_items:
   - "{{ pulsar_log_dir }}"
+  - "{{ pulsar_data_dir }}"
+  - "{{ pulsar_zk_data_dir }}"
+  - "{{ pulsar_zk_datalog_dir }}"
+  - "{{ pulsar_bk_ledger_dir }}"
+  - "{{ pulsar_bk_journal_dir }}"
 
-#- name: create property file 'server.properties'.
-#  template:
-#    src: "{{ item.src }}"
-#    dest: "{{ item.dest }}"
-#  with_items:
-#  - { src: 'conf/server.properties-{{ kafka_major_version }}.x.j2', dest: '{{ kafka_home }}/config/server.properties'}
-
-#- name: create customer shell.
-#  template:
-#    src: "{{ item.src }}"
-#    dest: "{{ item.dest }}"
-#    mode: 0755
-#  with_items:
-#  - { src: 'bin/sproducer.sh.shj2', dest: '{{ kafka_home }}/bin/my-producer.sh'}
-#  - { src: 'bin/sconsumer.sh.shj2', dest: '{{ kafka_home }}/bin/my-consumer.sh'}
-#  - { src: 'bin/stopics.sh.shj2', dest: '{{ kafka_home }}/bin/my-topic.sh'}
-
-- name: write environment variable PULSAR_HOME etc
-  lineinfile:
-    dest: ~/.bash_profile
-    state: present
-    line: "{{ item }}"
+- name: Create configuration file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
   with_items:
-  - 'export PULSAR_HOME={{ pulsar_home }}'
-  - 'export PATH=$PATH:$PULSAR_HOME/bin'
+  - { src: 'conf/myid.j2', dest: '{{ pulsar_zk_data_dir }}/myid' }
+  - { src: 'conf/zookeeper-{{ pulsar_version }}.conf.j2', dest: '{{ pulsar_conf_dir }}/zookeeper.conf' }
+  - { src: 'conf/zookeeper-{{ pulsar_version }}.conf.j2', dest: '{{ pulsar_conf_dir }}/global_zookeeper.conf' }
+  - { src: 'conf/broker-{{ pulsar_version }}.conf.j2', dest: '{{ pulsar_conf_dir }}/broker.conf' }
+  - { src: 'conf/bookkeeper-{{ pulsar_version }}.conf.j2', dest: '{{ pulsar_conf_dir }}/bookkeeper.conf' }
+
+#- name: write environment variable PULSAR_HOME etc
+#  lineinfile:
+#    dest: ~/.bash_profile
+#    state: present
+#    line: "{{ item }}"
+#  with_items:
+#  - 'export PULSAR_HOME={{ pulsar_home }}'
+#  - 'export PATH=$PATH:$PULSAR_HOME/bin'

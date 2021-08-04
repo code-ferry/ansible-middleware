@@ -1,0 +1,19 @@
+- name: Initialize pulsar cluster metadata
+  shell: '. ~/.bash_profile; {{ pulsar_home }}/bin/pulsar initialize-cluster-metadata \
+          --cluster {{ pulsar_cluster_name }} \
+          --zookeeper {{ zookeeper_hosts_first }} \
+          --configuration-store {{ zookeeper_hosts_first }} \
+          --web-service-url http://{{ broker_hosts_first }}:8080 \
+          --web-service-url-tls https://{{ broker_hosts_first }}:8443 \
+          --broker-service-url pulsar://{{ broker_hosts_first }}:6650 \
+          --broker-service-url-tls pulsar+ssl://{{ broker_hosts_first }}:6651 \
+          '
+  environment:
+    PULSAR_HOME: "{{ pulsar_home }}"
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "{{ pulsar_home }}/bin"
+  run_once: true
+
