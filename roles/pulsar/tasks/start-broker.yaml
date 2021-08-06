@@ -16,7 +16,7 @@
   until: job_result.finished
   retries: 5        # 检查次数为5次, 间隔5秒
 
-- name: Recheck bookkeeper port
+- name: Recheck broker port
   wait_for:
     port: "{{ pulsar_broker_port }}"
     state: started
@@ -30,7 +30,7 @@
     executable: /bin/bash
     chdir: "{{ pulsar_home }}"
   with_items:
-  - "{{ pulsar_home }}/bin/pulsar-admin brokers list pulsar-cluster"
+  - "{{ pulsar_home }}/bin/pulsar-admin --admin-url http://127.0.0.1:{{ pulsar_web_port }} brokers list pulsar-cluster"
   register: result
 
 - name: Print broker cluster

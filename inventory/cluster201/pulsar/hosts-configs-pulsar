@@ -14,7 +14,7 @@ pulsar_folder = "apache-pulsar-{{ pulsar_version }}"
 pulsar_home = "{{ install_home }}/{{ pulsar_folder }}"
 pulsar_conf_dir = "{{ pulsar_home }}/conf"
 pulsar_log_dir = "{{ pulsar_home }}/logs"
-pulsar_cluster_name = pulsar-cluster-1
+pulsar_cluster_name = "pulsar-cluster-1"
 # 生产上需要改到需要的分区
 pulsar_data_dir = "{{ pulsar_home }}/data"
 
@@ -54,5 +54,5 @@ pulsar_bk_ledger_dir = "{{ pulsar_data_dir }}/bookkeeper/ledgers"
 [pulsar:vars]
 pulsar_broker_port = 6650
 pulsar_broker_port_tls = 6651
-pulsar_web_port = 8080
-pulsar_web_port_tls = 8443
+pulsar_web_port = 58080
+pulsar_web_port_tls = 58443

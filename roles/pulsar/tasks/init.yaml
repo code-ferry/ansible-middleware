@@ -3,10 +3,10 @@
           --cluster {{ pulsar_cluster_name }} \
           --zookeeper {{ zookeeper_hosts_first }} \
           --configuration-store {{ zookeeper_hosts_first }} \
-          --web-service-url http://{{ broker_hosts_first }}:8080 \
-          --web-service-url-tls https://{{ broker_hosts_first }}:8443 \
-          --broker-service-url pulsar://{{ broker_hosts_first }}:6650 \
-          --broker-service-url-tls pulsar+ssl://{{ broker_hosts_first }}:6651 \
+          --web-service-url http://{{ broker_hosts_first }}:{{ pulsar_web_port }} \
+          --web-service-url-tls https://{{ broker_hosts_first }}:{{ pulsar_web_port_tls }} \
+          --broker-service-url pulsar://{{ broker_hosts_first }}:{{ pulsar_broker_port }} \
+          --broker-service-url-tls pulsar+ssl://{{ broker_hosts_first }}:{{ pulsar_broker_port_tls }} \
           '
   environment:
     PULSAR_HOME: "{{ pulsar_home }}"
