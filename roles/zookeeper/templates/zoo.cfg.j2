@@ -32,8 +32,9 @@ maxClientCnxns = {{ zk_max_client_cnxns }}
 {% endfor %}
 
 {% if zk_kerberos_enable|lower() == "true" %}
-authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
-jaasLoginRenew=3600000
 kerberos.removeHostFromPrincipal=true
 kerberos.removeRealmFromPrincipal=true
+
+authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+jaasLoginRenew=3600000
 {% endif %}

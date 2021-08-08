@@ -1,0 +1,25 @@
+- import_tasks: stop-force.yaml
+
+- name: Delete hbase install directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ hbase_home }}"
+
+- name: Remove hdfs directory
+  shell: ". ~/.bash_profile; hdfs dfs -rm -r {{ hbase_rootdir }}/*"
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  run_once: true
+
+
+#- name: 删除环境变量$HBASE_HOME等
+#  lineinfile:
+#    dest: ~/.bash_profile
+#    state: absent
+#    line: "{{ item }}"
+#  with_items:
+#  - "export HBASE_HOME={{ hbase_home }}"
+#  - "export PATH=$HBASE_HOME/bin:$PATH"

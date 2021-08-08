@@ -2,9 +2,9 @@
 host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [pulsar]
-host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" zookeeper="yes"
-host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" broker="yes" zookeeper="yes"
-host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" broker="yes" zookeeper="yes"
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" broker="yes" zookeeper="yes"
+# host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" broker="yes" zookeeper="yes"
+# host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' bookkeeper="yes" broker="yes" zookeeper="yes"
 
 [pulsar:vars]
 ## 通常不需要变更的变量

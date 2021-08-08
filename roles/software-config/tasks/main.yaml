@@ -1,0 +1,13 @@
+########################################
+## dispatch
+########################################
+- import_tasks: dispatch.yaml
+  tags: [ 'never', 'dispatch' ]
+- import_tasks: create.yaml
+  tags: [ 'never', 'dispatch' ]
+
+########################################
+## fetch
+########################################
+- import_tasks: fetch.yaml
+  tags: [ 'never', 'fetch' ]

@@ -1,0 +1,6 @@
+- hosts: software_config
+  become: true
+  become_user: root
+  gather_facts: yes
+  roles:
+  - software-config

@@ -30,6 +30,6 @@ zk_purge_interval = 5
 zk_max_client_cnxns = 500
 
 # zk中kerberos的配置
-zk_kerberos_enable = false
+zk_kerberos_enable = true
 zk_kerberos_principal = "zookeeper/{{ inventory_hostname }}@EXAMPLE.COM"
 zk_keytab_file = "/etc/newland/kerberos/example.keytab"

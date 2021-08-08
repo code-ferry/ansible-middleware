@@ -1,0 +1,8 @@
+KafkaClient {
+    com.sun.security.auth.module.Krb5LoginModule required
+    useKeyTab=true
+    storeKey=true
+    serviceName="{{ kafka_service_name }}"
+    keyTab="{{ zookeeper_keytab_path }}"
+    principal="{{ kafka_service_name }}/{{ vhostfqdn }}@EXAMPLE.COM";
+};

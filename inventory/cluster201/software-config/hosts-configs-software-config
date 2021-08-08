@@ -1,0 +1,53 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[software_config]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host200.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+#################################################
+## common
+#################################################
+[software_config:vars]
+software_config_home="/home/test/software-config/"
+
+#################################################
+## fetch info(hadoop)
+#################################################
+hadoop_host=host201.example.com
+hadoop_home=/home/bduser/deploy/hadoop-2.8.5
+
+#################################################
+## dispatch info(hadoop)
+#################################################
+# dispatch directory of hadoop keytab file
+hadoop_keytab_dispatch_dir=/etc/newland/kerberos
+hadoop_keytab_file=example.keytab
+
+# dispatch directory of krb5.conf file
+hadoop_krb5_dispatch_dir=/etc
+hadoop_krb5_file=krb5.conf
+
+# dispatch directory of hadoop configuration file
+hadoop_config_dispatch_dir=/etc/newland/config/hadoop2
+
+#################################################
+## dispatch info(kafka)
+#################################################
+kafka_jaas_dispatch_dir=/etc/newland/jaas/kafka2
+kafka_jaas_file=kafka-client-jaas.conf
+
+kafka_service_name=bduser
+kafka_keytab_path="{{ hadoop_keytab_dispatch_dir }}/example.keytab"
+kafka_principal="{{ kafka_service_name }}/{{ vhostfqdn }}@EXAMPLE.COM"
+
+#################################################
+## dispatch info(zookeeper)
+#################################################
+zookeeper_jaas_dispatch_dir=/etc/newland/jaas/zookeeper
+zookeeper_jaas_file=zookeeper-client-jaas.conf
+
+zookeeper_keytab_path="{{ hadoop_keytab_dispatch_dir }}/example.keytab"
+zookeeper_principal="zookeeper/{{ vhostfqdn }}@EXAMPLE.COM"

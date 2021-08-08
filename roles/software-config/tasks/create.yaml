@@ -1,0 +1,8 @@
+- name: Create kafka etc config
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+  - { src: "kafka/kafka-client-jaas.confj2", dest: "{{ kafka_jaas_dispatch_dir }}/{{ kafka_jaas_file }}" }
+  - { src: "zookeeper/zk-client-jaas.confj2", dest: '{{ zookeeper_jaas_dispatch_dir }}/{{ zookeeper_jaas_file }}' }

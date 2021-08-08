@@ -1,0 +1,36 @@
+- name: Create directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ hadoop_keytab_dispatch_dir }}"  # /etc/newland/kerberos
+  - "{{ hadoop_config_dispatch_dir }}"  # /etc/newland/config/hadoop2
+  - "{{ kafka_jaas_dispatch_dir }}"  # /etc/newland/jaas/kafka2
+  - "{{ zookeeper_jaas_dispatch_dir }}"  # /etc/newland/jaas/zookeeper
+  - "/etc/newland/ssl/hadoop"
+  - "/etc/newland/ssl/kafka2"
+
+# software_config_home=/home/test/software-config/
+- name: Dispatch hadoop file
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    force: yes
+    mode: 0644
+  with_items:
+  - { src: "{{ software_config_home }}{{ hadoop_keytab_file }}", dest: "{{ hadoop_keytab_dispatch_dir }}" }
+  - { src: "{{ software_config_home }}{{ hadoop_krb5_file }}", dest: "{{ hadoop_krb5_dispatch_dir }}" }
+  - { src: "{{ software_config_home }}core-site.xml", dest: "{{ hadoop_config_dispatch_dir }}" }
+  - { src: "{{ software_config_home }}hdfs-site.xml", dest: "{{ hadoop_config_dispatch_dir }}" }
+  - { src: "{{ software_config_home }}yarn-site.xml", dest: "{{ hadoop_config_dispatch_dir }}" }
+  - { src: "{{ software_config_home }}mapred-site.xml", dest: "{{ hadoop_config_dispatch_dir }}" }
+
+#- name: Dispatch kafka, zookeeper file
+#  copy:
+#    src: "{{ item.src }}"
+#    dest: "{{ item.dest }}"
+#    force: yes
+#    mode: 0644
+#  with_items:
+#  - { src: "{{ kafka_jaas_dispatch_dir }}/{{ kafka_jaas_file }}", dest: "{{ kafka_jaas_dispatch_dir }}" }
+#  - { src: "{{ kafka_jaas_dispatch_dir }}/{{ zookeeper_jaas_file }}", dest: "{{ zookeeper_jaas_dispatch_dir }}" }

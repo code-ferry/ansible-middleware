@@ -118,7 +118,3 @@
   when: inventory_hostname in broker_hosts
 - import_tasks: uninstall.yaml
   tags: ['never','uninstall']
-
-## ---------------------------------------------
-- import_tasks: test.yaml
-  tags: ['never','test']

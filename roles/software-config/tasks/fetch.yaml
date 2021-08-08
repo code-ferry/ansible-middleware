@@ -1,0 +1,22 @@
+- name: Create software config directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ software_config_home }}"
+  run_once: true
+  delegate_to: localhost
+
+- name: Fetch hadoop config file
+  fetch:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    flat: true
+    fail_on_missing: false
+  with_items:
+  - { src: "{{ hadoop_home }}/etc/hadoop/core-site.xml", dest: "{{ software_config_home }}" }
+  - { src: "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml", dest: "{{ software_config_home }}" }
+  - { src: "{{ hadoop_home }}/etc/hadoop/yarn-site.xml", dest: "{{ software_config_home }}" }
+  - { src: "{{ hadoop_home }}/etc/hadoop/mapred-site.xml", dest: "{{ software_config_home }}" }
+  run_once: true
+  delegate_to: "{{ hadoop_host }}"
