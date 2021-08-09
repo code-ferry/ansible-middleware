@@ -14,6 +14,12 @@
   ignore_errors: true
   run_once: true
 
+- name: Remove zookeeper directory
+  shell: ". ~/.bash_profile; {{ zk_home }}/bin/zkCli.sh -server {{ ansible_hostname }}:{{ hbase_zookeeper_clientPort }} delete {{ hbase_zookeeper_znode_parent }}"
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  run_once: true
 
 #- name: 删除环境变量$HBASE_HOME等
 #  lineinfile:

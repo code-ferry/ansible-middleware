@@ -1,6 +1,6 @@
 [hbase]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' regionserver="yes" backup_master="yes"
-host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' regionserver="yes"
+# host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' regionserver="yes"
 
 ####################################
 ## hbase path, port, memory etc
@@ -56,3 +56,11 @@ hbase_kerberos_principal_fqdn = /_HOST
 hbase_master_kerberos_principal = {{ install_user }}{{ hbase_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
 hbase_regionserver_kerberos_principal = {{ install_user }}{{ hbase_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
 hbase_thrift_kerberos_principal = {{ install_user }}{{ hbase_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+
+####################################
+## uninstall
+####################################
+# 卸载时需要的一些参数, 删除掉hdfs与zookeeper上的内容
+[hbase:vars]
+# 前提: 委托的机器要有zookeeper客户端
+zk_home = /home/bduser/deploy/zookeeper-3.4.14
