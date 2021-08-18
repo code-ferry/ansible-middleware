@@ -1,0 +1,30 @@
+- name: Create config directory
+  file:
+    name: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+  with_items:
+  - "/etc/clickhouse-server"
+  - "/etc/clickhouse-client"
+
+# data目录不在clickhouse_home下时, 通常是在挂载盘新建目录需要root权限.
+- name: Create data directory
+  file:
+    name: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ install_user }}"
+    group: "{{ install_group }}"
+  with_items:
+  - "{{ clickhouse_data_dir }}"
+  when: (clickhouse_data_dir | regex_search(clickhouse_home)) == ''
+
+- name: Create clickhouse-server.service, clickhouse.conf
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'service/clickhouse-server.service', dest: '/etc/systemd/system/clickhouse-server.service' }
+  - { src: 'security/clickhouse.conf', dest: '/etc/security/limits.d/clickhouse.conf' }

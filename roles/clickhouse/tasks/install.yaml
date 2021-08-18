@@ -1,0 +1,36 @@
+- name: Create install directory
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+# TODO: grep -q sse4_2 /proc/cpuinfo
+
+- name: Unarchive clickhouse package
+  unarchive:
+    src: "{{ software_home }}/{{ clickhouse_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ clickhouse_home }}"
+
+- name: create data and log directory
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ clickhouse_log_dir }}"
+  - "{{ clickhouse_data_dir }}"
+  - "{{ clickhouse_tmp_dir }}"
+  - "{{ clickhouse_user_files_dir }}"
+  - "{{ clickhouse_acl_dir }}"
+  - "{{ clickhouse_format_schema_dir }}"
+
+- name: create service config.xml, client config.xml etc
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'config/config-server.xmlj2', dest: '/etc/clickhouse-server/config.xml'}
+  - { src: 'config/config-client.xmlj2', dest: '/etc/clickhouse-client/config.xml'}
+  - { src: 'config/users.xmlj2', dest: '/etc/clickhouse-server/users.xml'}
+  - { src: 'config/metrika-{{ cluster_id }}.xmlj2', dest: '/etc/clickhouse-server/metrika.xml'}
+

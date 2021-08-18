@@ -1,0 +1,13 @@
+- name: Clean log directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ clickhouse_log_dir }}"
+
+- name: Create log directory
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ clickhouse_log_dir }}"

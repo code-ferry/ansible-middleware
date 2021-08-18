@@ -1,0 +1,20 @@
+#- name: test1
+#  debug:
+#    msg: "{{ testvar[1].split(',')[0] }}"
+#  run_once: true
+
+#- name: test2
+#  debug:
+#    msg: "{{ (clickhouse_data_dir | regex_search(clickhouse_home)) == '' }}"
+#  run_once: true
+#  when: clickhouse_data_dir | select("match", ".*production.*")
+
+- name: test3
+  debug:
+    msg: "{{ testvar|count }}"
+  run_once: true
+
+- name: test4
+  debug:
+    msg: "{{ testvar[0].cluster|list }}"
+  run_once: true

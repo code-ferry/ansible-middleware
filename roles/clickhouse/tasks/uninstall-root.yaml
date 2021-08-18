@@ -1,0 +1,10 @@
+- name: Delete config directory
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ clickhouse_data_dir }}"
+  - "/etc/clickhouse-server"
+  - "/etc/clickhouse-client"
+  - "/etc/security/limits.d/clickhouse.conf"
+  - "/etc/systemd/system/clickhouse-server.service"

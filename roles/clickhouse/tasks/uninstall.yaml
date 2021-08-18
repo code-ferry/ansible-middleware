@@ -1,0 +1,8 @@
+- name: Delete clickhouse install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ clickhouse_home }}"
+  - "{{ clickhouse_data_dir }}"
+

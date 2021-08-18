@@ -1,0 +1,12 @@
+- name: Stop clickhouse server
+  service: name=clickhouse-server state=stopped enabled=no
+  ignore_errors: true
+
+- name: Recheck clickhouse tcp and http port
+  wait_for:
+    port: "{{ item }}"
+    state: stopped
+    timeout: 10
+  with_items:
+  - "{{ clickhouse_tcp_port }}"
+  - "{{ clickhouse_http_port }}"

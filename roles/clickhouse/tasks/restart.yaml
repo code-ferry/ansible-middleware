@@ -1,0 +1,3 @@
+- name: Start clickhouse server
+  service: name=clickhouse-server state=restarted enabled=no
+  ignore_errors: true

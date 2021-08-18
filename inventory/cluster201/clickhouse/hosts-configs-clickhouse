@@ -1,0 +1,54 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[clickhouse]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+##########################
+## clickhouse basic config
+##########################
+[clickhouse:vars]
+clickhouse_version = 20.9.7.11
+clickhouse_file = "clickhouse-all-{{ clickhouse_version }}.tgz"
+clickhouse_folder = "clickhouse-all-{{ clickhouse_version }}"
+clickhouse_home = "{{ install_home }}/{{ clickhouse_folder }}"
+clickhouse_display_name = "production"
+
+clickhouse_tcp_port = 9005
+clickhouse_http_port = 8123
+clickhouse_mysql_port = 9004
+
+clickhouse_data_dir = "{{ clickhouse_home }}/data/"
+clickhouse_tmp_dir = "{{ clickhouse_data_dir }}/tmp/"
+clickhouse_user_files_dir = "{{ clickhouse_data_dir }}/user_files/"
+clickhouse_acl_dir = "{{ clickhouse_data_dir }}/access/"
+clickhouse_format_schema_dir = "{{ clickhouse_data_dir }}/format_schemas/"
+
+clickhouse_log_dir = "{{ clickhouse_home }}/logs"
+clickhouse_log_level = "trace"
+clickhouse_log_size = "100M"
+clickhouse_log_count = 5
+
+##########################
+## clickhouse user config
+##########################
+[clickhouse:vars]
+# password(sha256): ck123456
+clickhouse_password = "5f509343b86641e585fd6eb396046699ece3ba3939d354974a22fa3cd8fb7134"
+clickhouse_max_memory_usage = 4000000000
+
+##########################
+## for zookeeper config
+##########################
+[clickhouse:vars]
+# 多台用逗号分隔
+clickhouse_zk_servers = host201.example.com
+clickhouse_zk_port = 2181
+
+# 用来表示metrika.xml中分片、复本的信息
+# 第一个参数: 名称; 第二个参数: 分片数量; 第三个参数: 复本数; 第四个参数: internal_replication
+# cluster_shard_replica_info = ['cluster_2shards_1replicas,2,1,false', 'cluster_1shards_2replicas,1,2,true']
+
+# 用于区分不同集群, 用于配置metrika.xml中分片、复本的信息
+cluster_id = cluster201

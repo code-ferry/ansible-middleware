@@ -1,0 +1,6 @@
+vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+
+clickhouse_zk_hosts: "{{ clickhouse_zk_servers.split(',') | list }}"
+clickhouse_zk_hosts_count: "{{ clickhouse_zk_servers.split(',') | list | count }}"
+
+
