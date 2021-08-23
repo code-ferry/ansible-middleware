@@ -1,15 +1,15 @@
-- name: get kafka pid
+- name: Get kafka pid
   shell: ". ~/.bash_profile; OSUSER=$(id -nu); ps -ef | grep -i 'kafka.Kafka' | grep java | grep {{ kafka_home }} | grep $OSUSER | grep -v grep | grep -v 'kafka.tools.ConsoleConsumer' | grep -v 'kafka.tools.ConsoleProducer' | awk '{print $2}'"
   args:
     executable: /bin/bash
   register: v_pid
   ignore_errors: true
 
-- name: print kafka pid
+- name: Print kafka pid
   debug:
     msg: "kafka pid: '{{ v_pid.stdout }}', kafka home: {{ kafka_home }}"
 
-- name: start kafka
+- name: Start kafka
   shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-server-start.sh -daemon {{ kafka_home }}/config/server.properties"
   environment:
     KAFKA_HOME: "{{ kafka_home }}"
@@ -20,7 +20,7 @@
     chdir: "{{ kafka_home }}/bin"
   when: v_pid.stdout == ""
 
-- name: "check kafka port {{ kafka_port }}"
+- name: "Check kafka port {{ kafka_port }}"
   wait_for:
     host: "{{ inventory_hostname }}"
     port: "{{ kafka_port }}"
@@ -28,10 +28,12 @@
     state: started
     timeout: 60
 
-- name: print kafka status
+- name: Print kafka status
   shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --list --zookeeper {{ zookeeper_hosts }}"
   environment:
     KAFKA_HOME: "{{ kafka_home }}"
   register: result
-- debug:
+
+- name: List kafka topic
+  debug:
     msg: "{{ result.stdout_lines }}"

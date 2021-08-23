@@ -1,16 +1,16 @@
-- name: create install directory
+- name: Create install directory
   file: path={{ item }} state=directory
   with_items:
   - "{{ install_home }}"
 
-- name: unarchive kafka package
+- name: Unarchive kafka package
   unarchive:
     src: "{{ software_home }}/{{ kafka_file }}"
     dest: "{{ install_home }}"
     copy: yes
     creates: "{{ kafka_home }}"
 
-- name: create data and log directory
+- name: Create data and log directory
   file:
     name: "{{ item }}"
     state: directory
@@ -18,15 +18,15 @@
   - "{{ kafka_log_dir }}"
   - "{{ kafka_data_dir.split(',')|list }}"
 
-- name: create property file 'server.properties'
+- name: Create property file 'server.properties'
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items:
-  - { src: 'conf/server.properties-{{ kafka_major_version }}.x.j2', dest: '{{ kafka_home }}/config/server.properties'}
+  - { src: 'conf/server-{{ kafka_major_version }}.propertiesj2', dest: '{{ kafka_home }}/config/server.properties'}
   - { src: 'conf/tools-log4j.properties', dest: '{{ kafka_home }}/config/tools-log4j.properties'}
 
-- name: create customer shell
+- name: Create customer shell
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"

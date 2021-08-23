@@ -1,0 +1,5 @@
+- debug:
+    var: kafka_versions
+
+- debug:
+    var: kafka_major_version

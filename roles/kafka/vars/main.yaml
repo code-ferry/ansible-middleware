@@ -2,7 +2,8 @@ zookeeper_hosts: "{{ lookup('template', 'host/zookeeper.j2') }}"
 
 kafka_hosts: "{{ lookup('template', 'host/kafka.j2') }}"
 kafka_sasl_hosts: "{{ lookup('template', 'host/kafka-sasl.j2') }}"
-kafka_major_version: "{{ kafka_version.split('.')[0] }}"
+kafka_versions: "{{ kafka_version.split('.') }}"
+kafka_major_version: "{{ kafka_versions[0] + '.' + kafka_versions[1] }}"
 
-vhostipv4: "{{ hostvars[inventory_hostname].ansible_all_ipv4_addresses[0] }}"
+vhostipv4: "{{ hostvars[inventory_hostname].ansible_all_ipv4_addresses[1] }}"
 vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"

@@ -4,6 +4,7 @@
     state: absent
   with_items:
   - "{{ kafka_home }}"
+  - "{{ kafka_data_dir.split(',')|list }}"
 
 - name: clean environment variable KAFKA_HOME etc
   lineinfile:
