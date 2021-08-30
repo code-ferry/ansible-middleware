@@ -101,6 +101,7 @@ hadoop_security_authorization = true
 
 dfs_block_access_token_enable = true
 dfs_http_policy = HTTPS_ONLY
+yarn_http_policy = HTTP_ONLY
 
 # kerberos
 kerberos_realm_name = EXAMPLE.COM

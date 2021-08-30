@@ -117,6 +117,10 @@
         <name>yarn.resourcemanager.webapp.https.address</name>
         <value>{{ yarn_hosts[0] }}:{{ resourcemanager_webapp_https_port }}</value>
     </property>
+    <property>
+        <name>yarn.http.policy</name>
+        <value>{{ yarn_http_policy }}</value>
+    </property>
 
     <!-- kerberos to nodemanager -->
     <property>

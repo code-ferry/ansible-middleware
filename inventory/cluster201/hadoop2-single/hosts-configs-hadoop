@@ -86,7 +86,7 @@ yarn_lce_limit_users = false
 
 [hadoop:vars]
 ## authentication
-## dfs_http_policy: HTTP_ONLY, HHTPS_ONLY, HTTP_AND_HTTPS
+## dfs_http_policy: HTTP_ONLY, HTTPS_ONLY, HTTP_AND_HTTPS
 # kerberos: hadoop_security_authentication = kerberos
 #           hadoop_security_authorization = true
 #           dfs_http_policy = HTTPS_ONLY
@@ -99,6 +99,7 @@ hadoop_security_authorization = true
 
 dfs_block_access_token_enable = true
 dfs_http_policy = HTTPS_ONLY
+yarn_http_policy = HTTP_ONLY
 
 # kerberos
 kerberos_realm_name = EXAMPLE.COM
