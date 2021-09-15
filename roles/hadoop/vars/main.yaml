@@ -1,0 +1,6 @@
+journal_hosts: "{{ lookup('template', 'host/journals.j2') }}"
+journal_hosts_string: "{{ lookup('template', 'host/journals-string.j2')|trim }}"
+journal_count: "{{ journal_hosts|count }}"
+
+datanode_hosts: "{{ lookup('template', 'host/datanodes.j2') }}"
+namenode_hosts: "{{ lookup('template', 'host/namenodes.j2') }}"

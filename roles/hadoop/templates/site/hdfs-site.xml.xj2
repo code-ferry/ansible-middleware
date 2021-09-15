@@ -21,10 +21,6 @@
         <name>dfs.namenode.http-address.ns.nn1</name>
         <value>{{ namenode_hosts[0] }}:{{ namenode_http_port }}</value>
     </property>
-<!--    <property>-->
-<!--        <name>dfs.namenode.https-address.ns.nn1</name>-->
-<!--        <value>{{ namenode_hosts[0] }}:{{ namenode_https_port }}</value>-->
-<!--    </property>-->
     <!-- nn2的rpc, http, https -->
     <property>
         <name>dfs.namenode.rpc-address.ns.nn2</name>
@@ -34,10 +30,6 @@
         <name>dfs.namenode.http-address.ns.nn2</name>
         <value>{{ namenode_hosts[1] }}:{{ namenode_http_port }}</value>
     </property>
-<!--    <property>-->
-<!--        <name>dfs.namenode.https-address.ns.nn2</name>-->
-<!--        <value>{{ namenode_hosts[1] }}:{{ namenode_https_port }}</value>-->
-<!--    </property>-->
     {% endif %}
 
     <!-- hdfs -->
@@ -206,7 +198,7 @@
     </property>
     <property>
         <name>dfs.journalnode.https-address</name>
-        <value>0.0.0.0:8481</value>
+        <value>0.0.0.0:{{ journal_https_port }}</value>
     </property>
     {% endif %}
 
@@ -215,12 +207,12 @@
     <!-- 指定NameNode的元数据在JournalNode上的存放位置 -->
     <property>
         <name>dfs.namenode.shared.edits.dir</name>
-        <value>qjournal://host201.example.com:8485;host202.example.com:8485;host203.example.com:8485/ns</value>
+        <value>qjournal://{{ journal_server }}/ns</value>
     </property>
     <!-- 指定JournalNode在本地磁盘存放数据的位置 -->
     <property>
         <name>dfs.journalnode.edits.dir</name>
-        <value>{{ hadoop_home }}/journal</value>
+        <value>{{ hadoop_journal_dir }}</value>
     </property>
     <!-- 开启NameNode失败自动切换 -->
     <property>
@@ -229,7 +221,7 @@
     </property>
     <!-- 配置失败自动切换实现方式 -->
     <property>
-        <name>dfs.client.failover.proxy.provider.ns1</name>
+        <name>dfs.client.failover.proxy.provider.ns</name>
         <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
     </property>
     <!-- 配置隔离机制, 非默认22端口时可写成sshfence(hadoop:22022) -->

@@ -18,6 +18,7 @@
 # 启动job journal
 - import_tasks: start-jn.yaml
   tags: [ 'never', 'start-jn' ]
+  when: inventory_hostname in journal_hosts
 
 # 启动hdfs, yarn
 - import_tasks: start-dfs.yaml
@@ -41,12 +42,16 @@
 # 停止job journal
 - import_tasks: stop-jn.yaml
   tags: [ 'never', 'stop-jn' ]
+  when: inventory_hostname in journal_hosts
 
 # 停止hdfs, yarn
 - import_tasks: stop-dfs.yaml
   tags: [ 'never', 'stop' ]
 - import_tasks: stop-yarn.yaml
   tags: [ 'never', 'stop' ]
+- import_tasks: stop-zkfc.yaml
+  tags: [ 'never', 'stop' ]
+  when: namenode_ha_enable|lower == "true"
 
 # ----------------------------------
 # 卸载hadoop
@@ -124,3 +129,13 @@
 # create ssl
 - import_tasks: install-ssl.yaml
   tags: [ 'never', 'install-ssl' ]
+
+# create ssl
+- import_tasks: test.yaml
+  tags: [ 'never', 'test' ]
+
+# ----------------------------------
+# create ssl
+- import_tasks: init-ha.yaml
+  tags: [ 'never', 'init-ha' ]
+

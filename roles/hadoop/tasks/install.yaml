@@ -47,11 +47,10 @@
       group: "{{ install_group }}"
       mode: 644
 
-# TODO 判断
-#- name: Check Namenode should be 2 size when HA is used
-#  when: not ((namenode_hosts.count|int != 2) and (namenode_ha_enable|lower == "true"))
-#  fail:
-#    msg: "Namenode should be 2 size when HA is used."
+- name: Check Namenode should be 2 size when HA is used
+  when: not ((namenode_hosts.count|int != 2) or (namenode_ha_enable|lower != "true"))
+  fail:
+   msg: "Namenode size should be 2 when HA is used."
 
 - name: 创建hadoop配置文件
   template:
@@ -62,9 +61,9 @@
   - { src: 'site/hdfs-site.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/hdfs-site.xml' }
   - { src: 'site/mapred-site.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/mapred-site.xml' }
   - { src: 'site/yarn-site.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/yarn-site.xml' }
-  - { src: 'host/datanodes.j2', dest: '{{ hadoop_home }}/etc/hadoop/slaves' }
-  - { src: 'host/namenodes.j2', dest: '{{ hadoop_home }}/etc/hadoop/namenodes.tmp' }
-  - { src: 'host/yarns.j2', dest: '{{ hadoop_home }}/etc/hadoop/yarns.tmp' }
+  - { src: 'host/datanodes-output.j2', dest: '{{ hadoop_home }}/etc/hadoop/slaves' }
+  - { src: 'host/namenodes-output.j2', dest: '{{ hadoop_home }}/etc/hadoop/namenodes.tmp' }
+  - { src: 'host/yarns-output.j2', dest: '{{ hadoop_home }}/etc/hadoop/yarns.tmp' }
   - { src: 'bin/hadoop-env-{{ hadoop_version }}.sh.shj2', dest: '{{ hadoop_home }}/etc/hadoop/hadoop-env.sh' }
   - { src: 'bin/yarn-env-{{ hadoop_version }}.sh.shj2', dest: '{{ hadoop_home }}/etc/hadoop/yarn-env.sh' }
   - { src: 'site/capacity-scheduler.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/capacity-scheduler.xml' }

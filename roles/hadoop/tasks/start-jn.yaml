@@ -8,16 +8,16 @@
     executable: /bin/bash
     chdir: "{{ hadoop_home }}/sbin"
 
-- name: Check journalnode rpc port
+- name: Check journalnode port
   wait_for:
     host: "{{ inventory_hostname }}"
-    port: 8481
+    port: "{{ journal_http_port }}"
     state: started
     timeout: 25
 
-- name: Check journalnode http port
+- name: Check journalnode https port
   wait_for:
     host: "{{ inventory_hostname }}"
-    port: 8485
+    port: "{{ journal_https_port }}"
     state: started
     timeout: 25

@@ -51,6 +51,7 @@
           RULE:[2:$1@$0](dn/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
           RULE:[2:$1@$0](nm/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
           RULE:[2:$1@$0](rm/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
+          RULE:[2:$1@$0](HTTP/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
           RULE:[2:$1@$0](jhs/.*@{{ kerberos_realm_name }})s/.*/{{ install_user }}/
           DEFAULT
         </value>
@@ -82,8 +83,8 @@
         <value>*</value>
     </property>
 
-    <!--指定namenode ha时，zookeeper地址-->
-    {% if namenode_ha_enable == "true" %}
+    <!-- 指定namenode ha时，zookeeper地址 -->
+    {% if namenode_ha_enable|lower == "true" %}
     <property>
         <name>ha.zookeeper.quorum</name>
         <value>{{ namenode_zk_quorum }}</value>

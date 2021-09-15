@@ -3,17 +3,23 @@ host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [hadoop]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' namenode="yes" yarn="yes"
-host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' datanode="yes"
-host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' datanode="yes"
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' namenode="yes" datanode="yes" journal="yes"
+host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' datanode="yes" journal="yes"
 
 [hadoop:vars]
-# 后面考虑这个是算出来的
-namenode_ha_enable=false
+# ha开关配置
+namenode_ha_enable=true
 yarn_ha_enable=false
+
+# ha相关配置
+namenode_zk_quorum=192.168.128.201:2181
+journal_port=8485
+journal_https_port=8481
+journal_server="{{ journal_hosts_string }}"
 
 [hadoop:vars]
 # namenode
-namenode_hosts = "{{ lookup('template', 'host/namenodes.j2').split(',')|list -}}"
+namenode_hosts = "{{ lookup('template', 'host/namenodes-output.j2').split(',')|list -}}"
 namenode_port = 9000
 namenode_http_port = 50070
 namenode_https_port = 50470
@@ -30,7 +36,7 @@ datanode_http_port = 61006
 datanode_https_port = 50476
 
 # yarn(yarn Resource Manager的服务器)
-yarn_hosts = "{{ lookup('template', 'host/yarns.j2').split(',')|list -}}"
+yarn_hosts = "{{ lookup('template', 'host/yarns-output.j2').split(',')|list -}}"
 resourcemanager_port = 8032
 resourcemanager_scheduler_port = 8030
 resourcemanager_tracker_port = 8031
@@ -50,7 +56,7 @@ log_aggr_retain_seconds = 86400
 log_aggr_dir = /var/container/logs
 
 # jobhistory
-jobhistory_enable = true
+jobhistory_enable = false
 jobhistory_port = 10020
 jobhistory_webapp_port = 19888
 jobhistory_intermediate_done_dir = /var/history/tmp
@@ -67,6 +73,7 @@ hadoop_home = "{{ install_home }}/{{ hadoop_folder }}"
 # core
 hadoop_tmp_dir = "{{ hadoop_home }}/tmp"
 hadoop_log_dir = "{{ hadoop_home }}/logs"
+hadoop_journal_dir = "{{ hadoop_home }}/journal"
 hadoop_container_conf_dir = "/etc/hadoop"
 
 # hdfs

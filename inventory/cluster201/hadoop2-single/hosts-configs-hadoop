@@ -11,7 +11,7 @@ yarn_ha_enable=false
 
 [hadoop:vars]
 # namenode
-namenode_hosts = "{{ lookup('template', 'host/namenodes.j2').split(',')|list -}}"
+namenode_hosts = "{{ lookup('template', 'host/namenodes-output.j2').split(',')|list -}}"
 namenode_port = 9000
 namenode_http_port = 50070
 namenode_https_port = 50470
@@ -28,7 +28,7 @@ datanode_http_port = 61006
 datanode_https_port = 50476
 
 # yarn(yarn Resource Manager的服务器)
-yarn_hosts = "{{ lookup('template', 'host/yarns.j2').split(',')|list -}}"
+yarn_hosts = "{{ lookup('template', 'host/yarns-output.j2').split(',')|list -}}"
 resourcemanager_port = 8032
 resourcemanager_scheduler_port = 8030
 resourcemanager_tracker_port = 8031

@@ -1,0 +1,140 @@
+################################
+#### format zk #################
+################################
+- name: format zk(namenode ha)
+  shell: ". ~/.bash_profile; echo -e 'Y\n' | ./hdfs zkfc -formatZK"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/bin"
+  register: result
+  run_once: true
+  delegate_to: "{{ namenode_hosts[0] }}"
+
+################################
+#### start journal #############
+################################
+- name: start journalnode(namenode ha)
+  shell: ". ~/.bash_profile; ./hadoop-daemon.sh start journalnode"
+  environment:
+    HADOOP_HOME: "{{ hadoop_home }}"
+  async: 60         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+  when: inventory_hostname in journal_hosts
+
+- name: Check journalnode port(namenode ha)
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ journal_port }}"
+    state: started
+    timeout: 25
+  when: inventory_hostname in journal_hosts
+
+- name: Check journalnode https port(namenode ha)
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ journal_https_port }}"
+    state: started
+    timeout: 25
+  when: inventory_hostname in journal_hosts
+
+################################
+#### format namenode ###########
+################################
+- name: format namenode(namenode ha)
+  shell: ". ~/.bash_profile; echo -e 'Y\nY\n' | ./hdfs namenode -format ns"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/bin"
+  register: result
+  run_once: true
+  delegate_to: "{{ namenode_hosts[0] }}"
+
+################################
+#### start master namenode #####
+################################
+- name: start master namenode(namenode ha)
+  shell: ". ~/.bash_profile; ./hadoop-daemon.sh start namenode"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+  register: result
+  run_once: true
+  delegate_to: "{{ namenode_hosts[0] }}"
+
+- name: check master namenode port(namenode ha)
+  wait_for:
+    host: "{{ namenode_hosts[0] }}"
+    port: "{{ namenode_port }}"
+    state: started
+    timeout: 20
+  run_once: true
+  delegate_to: "{{ namenode_hosts[0] }}"
+
+################################
+#### start standby namenode ####
+################################
+- name: copy namenode from master to standby(namenode ha)
+  shell: ". ~/.bash_profile; echo -e 'Y\n' | ./hdfs namenode -bootstrapStandby"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/bin"
+  register: result
+  run_once: true
+  delegate_to: "{{ namenode_hosts[1] }}"
+
+- name: start standby namenode(namenode ha)
+  shell: ". ~/.bash_profile; ./hadoop-daemon.sh start namenode"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+  register: result
+  run_once: true
+  delegate_to: "{{ namenode_hosts[1] }}"
+
+- name: check standby namenode port(namenode ha)
+  wait_for:
+    host: "{{ namenode_hosts[1] }}"
+    port: "{{ namenode_port }}"
+    state: started
+    timeout: 20
+  run_once: true
+  delegate_to: "{{ namenode_hosts[1] }}"
+
+################################
+#### start zkfc ################
+################################
+- name: start zkfc
+  shell: ". ~/.bash_profile; ./hadoop-daemon.sh start zkfc"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+  register: result
+  when: inventory_hostname in namenode_hosts
+
+#################################
+##### start datanode ############
+#################################
+#- name: start datanode
+#  shell: ". ~/.bash_profile; ./hadoop-daemon.sh start datanode"
+#  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+#  poll: 2           # 设置为0时, 任务会立即返回
+#  args:
+#    executable: /bin/bash
+#    chdir: "{{ hadoop_home }}/sbin"
+#  register: result
+
