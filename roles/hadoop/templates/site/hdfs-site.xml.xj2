@@ -227,7 +227,10 @@
     <!-- 配置隔离机制, 非默认22端口时可写成sshfence(hadoop:22022) -->
     <property>
         <name>dfs.ha.fencing.methods</name>
-        <value>sshfence</value>
+        <value>
+            sshfence
+            shell(/bin/true)
+        </value>
     </property>
     <!-- 使用隔离机制时需要ssh免登陆 -->
     <property>
