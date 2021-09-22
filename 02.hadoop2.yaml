@@ -5,4 +5,4 @@
     ansible_home: "{{ lookup('env', 'PWD') }}"
     vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
   roles:
-  - hadoop
+  - hadoop2

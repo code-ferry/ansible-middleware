@@ -9,4 +9,4 @@ IVPATH=$(cat ansible.cfg | grep "inventory = " | cut -d"=" -f2 | sed -e 's/^[ ]*
 C_IVPATH="${IVPATH}/hadoop2"
 echo "INVENTORY_PATH = " $C_IVPATH
 
-ansible-playbook 02.hadoop.yaml -i "${C_IVPATH}" $*
+ansible-playbook 02.hadoop2.yaml -i "${C_IVPATH}" $*
