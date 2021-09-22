@@ -80,7 +80,7 @@ ansible-playbook 01.jdk.yaml -i ./inventory/cluster201/jdk -t install
 
 ## 应用服务器间的免密
 > 脚本支持两种情况：应用服务器之间的相互免密，以及部署服务器到应用服务器的免密
-### 应用服务器之间的相互免密
+### 应用服务器之间的相互免密(直接包括了创建密钥)
 ```
 ansible-playbook 01.crypo.yaml -i ./inventory/cluster201/crypo -t dispatch
 ```

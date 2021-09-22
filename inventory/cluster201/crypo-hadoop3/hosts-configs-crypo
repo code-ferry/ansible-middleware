@@ -1,0 +1,21 @@
+###############################
+##########应用服务器############
+###############################
+# 应用服务器：所有安装中间件的服务器。
+# ansible_ssh_pass是用户的密码。
+# ansible_become_method是提权的方式，本脚本默认采用sudo方式。如果sudo需要密码，还需要加上参数ansible_become_pass。
+[crypo]
+host201.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method='root' ansible_become_pass='oracle'
+host202.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method='root' ansible_become_pass='oracle'
+host203.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method='root' ansible_become_pass='oracle'
+
+[all:vars]
+# 应用软件安装的普通用户, 默认情况下是bduser。
+# 因为bduser下已经安装hadoop2，这里安装hadoop3，需要用hadoop3用户覆盖下。
+install_user=hadoop3
+install_group=hadoop3
+
+###############################
+##########配置信息##############
+###############################
+[crypo:vars]
