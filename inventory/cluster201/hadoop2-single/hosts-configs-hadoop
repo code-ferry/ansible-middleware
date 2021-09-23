@@ -2,7 +2,7 @@
 host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [hadoop]
-host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' namenode="yes" yarn="yes" datanode="yes" datanode="yes"
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' namenode="yes" yarn="yes" datanode="yes"
 
 [hadoop:vars]
 # 后面考虑这个是算出来的

@@ -130,12 +130,7 @@
 - import_tasks: install-ssl.yaml
   tags: [ 'never', 'install-ssl' ]
 
-# create ssl
-- import_tasks: test.yaml
-  tags: [ 'never', 'test' ]
-
 # ----------------------------------
-# create ssl
+# initialize namenode ha
 - import_tasks: init-ha.yaml
   tags: [ 'never', 'init-ha' ]
-
