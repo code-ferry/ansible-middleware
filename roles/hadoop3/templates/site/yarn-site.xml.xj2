@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    {% if yarn_ha_enable|lower == "true" %}
+    <property>
+        <name>yarn.resourcemanager.ha.enabled</name>
+        <value>true</value>
+    </property>
+    <!-- 指定RM的cluster id -->
+    <property>
+        <name>yarn.resourcemanager.cluster-id</name>
+        <value>yrc</value>
+    </property>
+    <!-- 指定RM的名字 -->
+    <property>
+        <name>yarn.resourcemanager.ha.rm-ids</name>
+        <value>rm1,rm2</value>
+    </property>
+    <!-- 分别指定RM的地址 -->
+    <property>
+        <name>yarn.resourcemanager.hostname.rm1</name>
+        <value>yarn_hosts[0]</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.hostname.rm2</name>
+        <value>yarn_hosts[1]</value>
+    </property>
+    <!-- 指定zk集群地址 -->
+    <property>
+        <name>yarn.resourcemanager.zk-address</name>
+        <value>{{ yarn_zk_quorum }}</value>
+    </property>
+
+    {% else %}
+    <property>
+        <name>yarn.resourcemanager.hostname</name>
+        <value>{{ yarn_hosts[0] }}</value>
+    </property>
+    {% endif %}
+
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.scheduler.address</name>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_scheduler_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.resource-tracker.address</name>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_tracker_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.address</name>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.admin.address</name>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_admin_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address</name>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_webapp_port }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.am.max-attempts</name>
+        <value>4</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.localizer.address</name>
+        <value>0.0.0.0:{{ nodemanager_port }}</value>
+    </property>
+
+    <!-- yarn resource config -->
+    <property>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>{{ yarn_nm_memory }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>{{ yarn_sc_min_memory }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>{{ yarn_sc_max_memory }}</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.resource.cpu-vcores</name>
+        <value>{{ yarn_nm_vcore }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-vcores</name>
+        <value>{{ yarn_sc_min_vcore }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-vcores</name>
+        <value>{{ yarn_sc_max_vcore }}</value>
+    </property>
+
+    {% if hadoop_security_authentication == "kerberos" %}
+    <!-- kerberos to resourcemanager -->
+    <property>
+        <name>yarn.resourcemanager.principal</name>
+        <value>{{ hadoop_kerberos_principal_rm }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.keytab</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.https.address</name>
+        <value>{{ yarn_hosts[0] }}:{{ resourcemanager_webapp_https_port }}</value>
+    </property>
+    <property>
+        <name>yarn.http.policy</name>
+        <value>{{ yarn_http_policy }}</value>
+    </property>
+
+    <!-- kerberos to nodemanager -->
+    <property>
+        <name>yarn.nodemanager.principal</name>
+        <value>{{ hadoop_kerberos_principal_nm }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.keytab</name>
+        <value>{{ hadoop_keytab_file }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.webapp.address</name>
+        <value>0.0.0.0:{{ nodemanager_webapp_port }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.webapp.https.address</name>
+        <value>0.0.0.0:{{ nodemanager_webapp_https_port }}</value>
+    </property>
+    {% endif %}
+
+    {% if yarn_cgroup_enable == "true" %}
+    <!-- yarn and control group -->
+    <property>
+        <name>yarn.nodemanager.container-executor.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+    </property>
+    <property>
+        <description>启用LinuxContainerExecutor并不强制使用CGroups。如果你想使用，resource-handler-class必须设置为CGroupsLCEResourceHandler</description>
+        <name>yarn.nodemanager.linux-container-executor.resources-handler.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler</value>
+    </property>
+    <property>
+        <description>yarn使用的cgroup组,默认为/hadoop-yarn</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.hierarchy</name>
+        <value>{{ yarn_cgroup_hierarchy }}</value>
+    </property>
+    <property>
+        <description>是否自动挂载cgroup</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.mount</name>
+        <value>{{ yarn_cgroup_mount }}</value>
+    </property>
+    <property>
+        <description>cgroup挂载目录, /sys/fs/cgroup或者是/cgroup目录和系统有关</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.mount-path</name>
+        <value>{{ yarn_cgroup_mount_path }}</value>
+    </property>
+    <property>
+        <description>配置nodemanager使用多少物理cpu资源,比如24核服务器配置90的话,最近使用21.6核</description>
+        <name>yarn.nodemanager.resource.percentage-physical-cpu-limit</name>
+        <value>{{ yarn_cgroup_cpu_limit }}</value>
+    </property>
+    <property>
+        <description>是控制是否严格限制cpu,即按任务申请的core限制,还是非严格限制,即按core的比率限制</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.strict-resource-usage</name>
+        <value>{{ yarn_cgroup_strict_resource }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.group</name>
+        <value>{{ yarn_lce_group }}</value>
+    </property>
+    <property>
+        <description>非安全模式将会以这里设置的用户运行container,比如配置hadoop用户则以hadoop运行container</description>
+        <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user</name>
+        <value>{{ yarn_lce_user }}</value>
+    </property>
+    <property>
+        <description>实际提交作业的用户跑作业,否则会使用上面local-user的固定用户来运行作业</description>
+        <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.limit-users</name>
+        <value>{{ yarn_lce_limit_users }}</value>
+    </property>
+    {% endif %}
+
+    {% if log_aggr_enable|lower == "true" %}
+    <!-- log aggregation -->
+    <property>
+        <name>yarn.log-aggregation-enable</name>
+        <value>{{ log_aggr_enable }}</value>
+    </property>
+    <property>
+    	<name>yarn.log-aggregation.retain-seconds</name>
+    	<value>{{ log_aggr_retain_seconds }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.remote-app-log-dir</name>
+        <value>{{ log_aggr_dir }}</value>
+    </property>
+    <property>
+        <name>yarn.log-aggregation-status.time-out.ms</name>
+        <value>6000000</value>
+    </property>
+    {% endif %}
+
+    <property>
+        <name>yarn.nodemanager.delete.debug-delay-sec</name>
+        <value>{{ nodemanager_delete_debug_delay_sec }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.env-whitelist</name>
+        <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_HOME,PATH,LANG,TZ,HADOOP_COMMON_LIB_NATIVE_DIR,HADOOP_OPTS,LD_LIBRARY_PATH,HADOOP_CLASSPATH,KRB5_CONFIG</value>
+    </property>
+
+    <!-- node labels -->
+<!--    <property>-->
+<!--        <name>yarn.node-labels.enabled</name>-->
+<!--        <value>{{ yarn_label_enabled }}</value>-->
+<!--    </property>-->
+<!--    <property>-->
+<!--        <name>yarn.node-labels.fs-store.root-dir</name>-->
+<!--        <value>{{ yarn_label_dir }}</value>-->
+<!--    </property>-->
+<!--    <property>-->
+<!--        <name>yarn.node-labels.configuration-type</name>-->
+<!--        <value>distributed</value>-->
+<!--    </property>-->
+</configuration>

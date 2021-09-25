@@ -1,0 +1,54 @@
+
+- name: Create ca key and cert file
+  # shell: 'echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}" | openssl req -new -x509 -keyout /tmp/hadoop_ca_key -out /tmp/hadoop_ca_cert -days 9999 -subj "/C=CN/ST=fujian/L=fuzhou/O=newland/OU=bigdata/CN=NEWLAND.COM"'
+  shell: 'echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}" | openssl req -new -x509 -keyout /tmp/hadoop_ca_key -out /tmp/hadoop_ca_cert -days 9999 -subj "/C=CN/ST=fujian/L=fuzhou/O=newland/OU=bigdata/CN=com"'
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+  delegate_to: localhost
+
+- name: Generated directory to save the certificate, key file
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ hadoop_ssl_path }}"
+
+- name: Copy key and cert file to appliction server
+  copy:
+    src: "/tmp/{{ item }}"
+    dest: "{{ hadoop_ssl_path }}"
+    force: yes
+    mode: 0644
+  with_items:
+  - "hadoop_ca_key"
+  - "hadoop_ca_cert"
+
+- name: Delete old key and cert file
+  file:
+    path: "{{ hadoop_ssl_path }}/{{ item }}"
+    state: absent
+  with_items:
+  - keystore
+  - truststore
+
+- name: Create key and cert file
+  shell: "{{ item }}"
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_ssl_path }}"
+  with_items:
+  # 添加CA到truststore
+  - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}\nyes" | {{ java_home }}/bin/keytool -keystore truststore -alias CARoot -import -file {{ hadoop_ssl_path }}/hadoop_ca_cert
+  # 生成keystore
+  - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}\n{{ hadoop_ssl_password }}" | {{ java_home }}/bin/keytool -keystore keystore -alias localhost -validity 9999 -genkey -keyalg RSA -keysize 2048 -dname "CN={{ vhostfqdn }}, OU=bigdata, O=newland, L=fuzhou, ST=fujian, C=CN"
+  # 从keystore中导出cert
+  - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}" | {{ java_home }}/bin/keytool -certreq -alias localhost -keystore keystore -file cert
+  # 用CA对cert签名
+  - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}" | openssl x509 -req -CA {{ hadoop_ssl_path }}/hadoop_ca_cert -CAkey {{ hadoop_ssl_path }}/hadoop_ca_key -in cert -out cert_signed -days 9999 -CAcreateserial
+  # 将CA的cert和用CA签名之后的cert导入keystore
+  - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}\nyes" | {{ java_home }}/bin/keytool -keystore keystore -alias CARoot -import -file {{ hadoop_ssl_path }}/hadoop_ca_cert
+  - . ~/.bash_profile; echo -e "{{ hadoop_ssl_password }}" | {{ java_home }}/bin/keytool -keystore keystore -alias localhost -import -file cert_signed

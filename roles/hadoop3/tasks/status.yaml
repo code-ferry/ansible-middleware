@@ -1,0 +1,13 @@
+- name: 判断namenode状态
+  shell: ". ~/.bash_profile; curl http://{{ namenode_host }}:50070/jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/bin"
+  register: result
+  run_once: true
+  delegate_to: "{{ namenode_hosts[0] }}"
+
+- debug:
+    msg: "{{ result.stdout }}"

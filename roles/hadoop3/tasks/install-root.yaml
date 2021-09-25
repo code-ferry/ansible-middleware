@@ -1,0 +1,37 @@
+- name: 复制container-executor等
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    force: yes
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: "container-executor", dest: "{{ hadoop_home }}/bin/", owner: "root", group: "{{ install_group }}", mode: 6050 }
+  - { src: "test-container-executor", dest: "{{ hadoop_home }}/bin/", owner: "root", group: "{{ install_group }}", mode: 6050 }
+
+- name: 得到用户id
+  shell: "id -u {{ install_user }}"
+  register: userid
+
+- debug:
+    var: "{{ userid.stdout }}"
+
+- name: 创建container-executor.cfg的目录
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+  - "{{ hadoop_container_conf_dir }}"
+
+- name: 创建container-executor.cfg配置文件
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: "{{ install_group }}"
+    force: yes
+    mode: 0400
+  with_items:
+  - { src: 'site/container-executor.cfg.j2', dest: '{{ hadoop_container_conf_dir }}/container-executor.cfg' }

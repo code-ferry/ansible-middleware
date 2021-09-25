@@ -98,20 +98,20 @@ ansible-playbook 01.crypo.yaml -i ./inventory/cluster201/crypo -t delete
 # 安装kerberos KDC
 # 同时将服务端生成的/etc/krb5.conf复制到ansible的安装目录下，其用于客户端命令分发
 ansible-playbook 01.kerberos-server.yaml -i ./inventory/cluster201/kerberos-server -t install
-./bin/kerberos-server.sh -t install
+./bin/role-kerberos-server.sh -t install
 # 创建与初始化kerberos数据库
-./bin/kerberos-server.sh -t create-db
+./bin/role-kerberos-server.sh -t create-db
 # 启动kerberos数据库
-./bin/kerberos-server.sh -t start
-# 创建主体并生成keytab
-./bin/kerberos-server.sh -t create-princ
-./bin/kerberos-server.sh -t create-keytab
+./bin/role-kerberos-server.sh -t start
+# 创建主体并生成keytab, 生成在kerberos服务端的/tmp目录下
+./bin/role-kerberos-server.sh -t create-princ
+./bin/role-kerberos-server.sh -t create-keytab
 
 # 安装kerberos客户端
-./bin/kerberos-client.sh -t install
+./bin/role-kerberos-client.sh -t install
 # 分发keytab到各客户端（create-keytab命令需要运行后）
 # 需要分发的keytab在参数kerberos_keytab_name中配置
-./bin/kerberos-client.sh -t dispatch
+./bin/role-kerberos-client.sh -t dispatch
 ```
 
 ## ssl的安装

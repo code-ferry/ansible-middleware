@@ -1,0 +1,8 @@
+{# 计算中journal的服务地址,用字符串拼接 #}
+{% set journals = [] -%}
+{% for host in groups['hadoop'] -%}
+{% if hostvars[host].journal is defined and hostvars[host].journal == "yes" -%}
+{{ journals.append("%s:%s" % (host, journal_port)) -}}
+{% endif -%}
+{% endfor -%}
+{{ journals|join(";") -}}

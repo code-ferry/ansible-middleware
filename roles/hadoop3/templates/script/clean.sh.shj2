@@ -1,0 +1,13 @@
+#!/bin/bash
+for logFile in $(ls {{ hadoop_log_dir }})
+do
+  fullLogFile={{ hadoop_log_dir }}/${logFile}
+  lineCount=$(/usr/sbin/lsof ${fullLogFile} | grep ${logFile} | wc -l)
+  if (( ${lineCount}>0 )); then
+    cat /dev/null > ${fullLogFile}
+  else
+    rm -f ${fullLogFile}
+  fi
+done
+
+rm -fr {{ hadoop_log_dir }}/userlogs/*

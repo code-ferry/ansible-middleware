@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>ssl.server.truststore.location</name>
+        <value>{{ hadoop_ssl_path }}/truststore</value>
+        <description>Truststore to be used by NN and DN. Must be specified.</description>
+    </property>
+
+    <property>
+        <name>ssl.server.truststore.password</name>
+        <value>{{ hadoop_truststore_password }}</value>
+        <description>Optional. Default value is "".</description>
+    </property>
+
+    <property>
+        <name>ssl.server.truststore.type</name>
+        <value>jks</value>
+        <description>Optional. The keystore file format, default value is "jks".</description>
+    </property>
+
+    <property>
+        <name>ssl.server.truststore.reload.interval</name>
+        <value>10000</value>
+        <description>Truststore reload check interval, in milliseconds. Default value is 10000 (10 seconds).</description>
+    </property>
+
+    <property>
+        <name>ssl.server.keystore.location</name>
+        <value>{{ hadoop_ssl_path }}/keystore</value>
+        <description>Keystore to be used by NN and DN. Must be specified.</description>
+    </property>
+
+    <property>
+        <name>ssl.server.keystore.password</name>
+        <value>{{ hadoop_keystore_password }}</value>
+        <description>Must be specified.</description>
+    </property>
+
+    <property>
+        <name>ssl.server.keystore.keypassword</name>
+        <value>{{ hadoop_keystore_keypassword }}</value>
+        <description>Must be specified.</description>
+    </property>
+
+    <property>
+        <name>ssl.server.keystore.type</name>
+        <value>jks</value>
+        <description>Optional. The keystore file format, default value is "jks".</description>
+    </property>
+
+    <property>
+        <name>ssl.server.exclude.cipher.list</name>
+        <value>TLS_ECDHE_RSA_WITH_RC4_128_SHA,SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA,
+            SSL_RSA_WITH_DES_CBC_SHA,SSL_DHE_RSA_WITH_DES_CBC_SHA,
+            SSL_RSA_EXPORT_WITH_RC4_40_MD5,SSL_RSA_EXPORT_WITH_DES40_CBC_SHA,
+            SSL_RSA_WITH_RC4_128_MD5</value>
+        <description>Optional. The weak security cipher suites that you want excluded from SSL communication.</description>
+    </property>
+</configuration>

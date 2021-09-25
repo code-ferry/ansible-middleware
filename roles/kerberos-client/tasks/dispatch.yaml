@@ -5,18 +5,18 @@
     mode: 0555
   with_items:
     - "/etc/newland"
-    - "/etc/newland/kerberos"
+    - "{{ kerberos_keytab_path }}"
 
 - name: dispatch xxxx.keytab
   copy:
     src: "{{ kerberos_keytab_name }}"
-    dest: "/etc/newland/kerberos"
+    dest: "{{ kerberos_keytab_path }}"
     force: yes
     mode: 0444
 
-- name: dispatch the krb5 configuration file
-  copy:
-    src: "krb5.conf"
-    dest: "/etc/krb5.conf"
-    force: yes
-    mode: 0666
+#- name: dispatch the krb5 configuration file
+#  copy:
+#    src: "krb5.conf"
+#    dest: "/etc/krb5.conf"
+#    force: yes
+#    mode: 0666

@@ -1,0 +1,27 @@
+- name: 擦除环境变量$HADOOP_HOME等
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export HADOOP_HOME={{ hadoop_home }}'
+  - 'export PATH=$PATH:$HADOOP_HOME/bin'
+  - 'export PATH=$PATH:$HADOOP_HOME/sbin'
+  - 'export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop'
+  - 'export HADOOP_MAPRED_HOME=$HADOOP_HOME'
+  - 'export HADOOP_COMMON_HOME=$HADOOP_HOME'
+  - 'export HADOOP_HDFS_HOME=$HADOOP_HOME'
+  - 'export YARN_HOME=$HADOOP_HOME'
+  - 'export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native'
+  - 'export HADOOP_OPTS="-Djava.library.path=$HADOOP_COMMON_LIB_NATIVE_DIR -Djava.net.preferIPv4Stack=true"'
+  - 'export LD_LIBRARY_PATH=$HADOOP_COMMON_LIB_NATIVE_DIR:$LD_LIBRARY_PATH'
+  - 'export HADOOP_CLASSPATH=`$HADOOP_HOME/bin/hadoop classpath`'
+  - 'export JSVC_HOME=$HADOOP_HOME/libexec'
+
+- name: 卸载hadoop
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ hadoop_tmp_dir }}"
+  - "{{ hadoop_home }}"

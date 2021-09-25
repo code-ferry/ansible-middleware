@@ -1,0 +1,7 @@
+- name: Test Dataname
+  debug:
+    msg: "{{ datanode_hosts }}"
+
+- name: Test Namenode
+  debug:
+    msg: "{{ namenode_hosts }}"

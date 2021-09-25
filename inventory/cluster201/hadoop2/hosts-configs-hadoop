@@ -111,20 +111,23 @@ dfs_http_policy = HTTPS_ONLY
 yarn_http_policy = HTTP_ONLY
 
 # kerberos
+krb5conf_path = /etc/krb5.conf
+
 kerberos_realm_name = EXAMPLE.COM
 kerberos_keytab_name = example.keytab
 hadoop_keytab_path = /etc/newland/kerberos
 hadoop_keytab_file = "{{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}"
-hodoop_kerberos_principal_fqdn = /_HOST
-hadoop_kerberos_principal = {{ install_user }}{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_nn = nn{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_dn = dn{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_sn = sn{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_jn = jn{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_nm = nm{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_rm = rm{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_jhs = jhs{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
-hadoop_kerberos_principal_http = HTTP{{ hodoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+
+hadoop_kerberos_principal_fqdn = /_HOST
+hadoop_kerberos_principal = {{ install_user }}{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_nn = nn{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_dn = dn{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_sn = sn{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_jn = jn{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_nm = nm{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_rm = rm{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_jhs = jhs{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hadoop_kerberos_principal_http = HTTP{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
 
 # ssl
 hadoop_ssl_path = /etc/newland/ssl/hadoop2

@@ -3,7 +3,7 @@
 <configuration>
     <!-- see http://hadoop.apache.org/docs/r2.8.5/hadoop-project-dist/hadoop-common/SecureMode.html -->
 
-    {% if namenode_ha_enable|lower == "true" %}
+{% if namenode_ha_enable|lower == "true" %}
     <property>
         <name>dfs.nameservices</name>
         <value>ns</value>
@@ -30,7 +30,7 @@
         <name>dfs.namenode.http-address.ns.nn2</name>
         <value>{{ namenode_hosts[1] }}:{{ namenode_http_port }}</value>
     </property>
-    {% endif %}
+{% endif %}
 
     <!-- hdfs -->
     <property>
@@ -67,13 +67,18 @@
         <name>dfs.namenode.acls.enabled</name>
         <value>{{ dfs_acls_enabled }}</value>
     </property>
+    <property>
+        <name>dfs.namenode.checkpoint.period</name>
+        <value>600</value>
+        <description>SecondaryNameNode默认每隔1分钟执行一次，改成10分钟</description>
+    </property>
 
     <!-- kerberos to namenode -->
     <property>
         <name>dfs.block.access.token.enable</name>
         <value>{{ dfs_block_access_token_enable }}</value>
     </property>
-    {% if hadoop_security_authentication == "kerberos" %}
+{% if hadoop_security_authentication == "kerberos" %}
     <property>
         <name>dfs.namenode.kerberos.principal</name>
         <value>{{ hadoop_kerberos_principal_nn }}</value>
@@ -86,7 +91,7 @@
         <name>dfs.namenode.kerberos.internal.spnego.principal</name>
         <value>{{ hadoop_kerberos_principal_http }}</value>
     </property>
-    {% endif %}
+{% endif %}
 
     <!-- configuring ssl to the namenode web UI -->
     <property>
@@ -111,7 +116,7 @@
         <name>dfs.namenode.secondary.https-address</name>
         <value>0.0.0.0:{{ namenode_second_https_port }}</value>
     </property>
-    {% if hadoop_security_authentication|lower == "kerberos" %}
+{% if hadoop_security_authentication|lower == "kerberos" %}
     <property>
         <name>dfs.secondary.namenode.keytab.file</name>
         <value>{{ hadoop_keytab_file }}</value>
@@ -124,7 +129,7 @@
         <name>dfs.secondary.namenode.kerberos.internal.spnego.principal</name>
         <value>{{ hadoop_kerberos_principal_http }}</value>
     </property>
-    {% endif %}
+{% endif %}
 
     <!-- kerberos to datanode -->
     <property>
@@ -155,7 +160,8 @@
         <name>dfs.data.transfer.protection</name>
         <value>integrity</value>
     </property>
-    {% if hadoop_security_authentication|lower == "kerberos" %}
+
+{% if hadoop_security_authentication|lower == "kerberos" %}
     <property>
         <name>dfs.datanode.kerberos.principal</name>
         <value>{{ hadoop_kerberos_principal_dn }}</value>
@@ -164,10 +170,10 @@
         <name>dfs.datanode.keytab.file</name>
         <value>{{ hadoop_keytab_file }}</value>
     </property>
-    {% endif %}
+{% endif %}
 
     <!-- kerberos to WebHDFS -->
-    {% if hadoop_security_authentication|lower == "kerberos" %}
+{% if hadoop_security_authentication|lower == "kerberos" %}
     <property>
         <name>dfs.web.authentication.kerberos.principal</name>
         <value>{{ hadoop_kerberos_principal_http }}</value>
@@ -176,10 +182,10 @@
         <name>dfs.web.authentication.kerberos.keytab</name>
         <value>{{ hadoop_keytab_file }}</value>
     </property>
-    {% endif %}
+{% endif %}
 
     <!-- kerberos to JournalNode -->
-    {% if namenode_ha_enable|lower == "true" %}
+{% if namenode_ha_enable|lower == "true" %}
     <property>
         <name>dfs.journalnode.kerberos.principal</name>
         <value>{{ hadoop_kerberos_principal_jn }}</value>
@@ -200,10 +206,10 @@
         <name>dfs.journalnode.https-address</name>
         <value>0.0.0.0:{{ journal_https_port }}</value>
     </property>
-    {% endif %}
+{% endif %}
 
     <!-- ha -->
-    {% if namenode_ha_enable|lower == "true" %}
+{% if namenode_ha_enable|lower == "true" %}
     <!-- 指定NameNode的元数据在JournalNode上的存放位置 -->
     <property>
         <name>dfs.namenode.shared.edits.dir</name>
@@ -237,6 +243,42 @@
         <name>dfs.ha.fencing.ssh.private-key-files</name>
         <value>~/.ssh/id_dsa</value>
     </property>
-    {% endif %}
+{% endif %}
 
+{% if dfs_webhdfs_enabled|lower == "true" %}
+    <property>
+        <name>dfs.web.ugi</name>
+        <value>nn,supergroup</value>
+    </property>
+    <!--安全认证初始化的类-->
+    <property>
+        <name>hadoop.http.filter.initializers</name>
+        <value>org.apache.hadoop.security.HttpCrossOriginFilterInitializer</value>
+    </property>
+    <!--是否启用跨域支持-->
+    <property>
+        <name>hadoop.http.cross-origin.enabled</name>
+        <value>true</value>
+    </property>
+    <!--允许跨域访问的来源，如果有多个，用逗号(,)分隔-->
+    <property>
+        <name>hadoop.http.cross-origin.allowed-origins</name>
+        <value>*</value>
+    </property>
+    <!--允许跨域的方法列表，如果有多个，用逗号(,)分隔-->
+    <property>
+        <name>hadoop.http.cross-origin.allowed-methods</name>
+        <value>GET,POST,HEAD</value>
+    </property>
+    <!--允许跨域的标头列表，如果有多个，用逗号(,)分隔-->
+    <property>
+        <name>hadoop.http.cross-origin.allowed-headers</name>
+        <value>X-Requested-With,Content-Type,Accept,Origin</value>
+    </property>
+    <!--预检请求可以缓存的秒数-->
+    <property>
+        <name>hadoop.http.cross-origin.max-age</name>
+        <value>1800</value>
+    </property>
+{% endif %}
 </configuration>

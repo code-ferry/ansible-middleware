@@ -18,9 +18,9 @@
   - { src: "kadm5.acl.j2", dest: "/var/kerberos/krb5kdc/kadm5.acl" }
   - { src: "krb5.conf.j2", dest: "/etc/krb5.conf" }
 
-- name: fetch krb5.conf
-  fetch:
-    src: "/etc/krb5.conf"
-    dest: "{{ ansible_home }}/roles/kerberos-client/files/"
-    flat: true
-    fail_on_missing: true
+#- name: fetch krb5.conf
+#  fetch:
+#    src: "/etc/krb5.conf"
+#    dest: "{{ ansible_home }}/roles/kerberos-client/files/"
+#    flat: true
+#    fail_on_missing: true

@@ -1,0 +1,21 @@
+- name: 停止yarn
+  shell: ". ~/.bash_profile; stop-yarn.sh"
+  async: 60         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+  register: result
+  run_once: true
+  delegate_to: "{{ yarn_hosts[0] }}"
+
+- name: 再确认resource manager的端口
+  wait_for:
+    host: "{{ yarn_hosts[0] }}"
+    port: "{{ resourcemanager_port }}"
+    state: stopped
+    timeout: 60
+  run_once: true
+
+- import_tasks: stop-jh.yaml
+  when: jobhistory_enable|lower == "true"

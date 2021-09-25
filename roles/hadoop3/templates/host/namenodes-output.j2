@@ -1,0 +1,14 @@
+{# 计算中namenode的服务地址，只接受第一个地址 #}
+{% set namenodes = [] %}
+{% for host in groups['hadoop'] %}
+{% if hostvars[host].namenode is defined and hostvars[host].namenode == "yes" %}
+{{ namenodes.append(host) -}}
+{% endif %}
+{% endfor %}
+{% for i in namenodes %}
+{% if loop.last %}
+{{ i -}}
+{% else %}
+{{ i -}},
+{%- endif %}
+{% endfor %}

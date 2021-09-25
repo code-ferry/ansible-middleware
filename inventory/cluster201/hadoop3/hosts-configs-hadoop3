@@ -2,33 +2,51 @@
 host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [hadoop]
-host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' namenode="yes" yarn="yes" datanode="yes"
+host201.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle' namenode="yes" yarn="yes" datanode="yes"
+host202.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle' datanode="yes"
+host203.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle' datanode="yes"
+
+[all:vars]
+# 应用软件安装的普通用户，默认情况下是bduser。
+# 因为bduser用户下已经安装hadoop2，这里安装hadoop3，需要用hadoop3用户覆盖下。
+install_user=hadoop3
+install_group=hadoop3
+install_home="/home/hadoop3/deploy"
 
 [hadoop:vars]
-# 后面考虑这个是算出来的
+# ha开关配置
 namenode_ha_enable=false
 yarn_ha_enable=false
 
+# ha相关配置
+namenode_zk_quorum=10.1.8.1:2181,10.1.8.2:2181,10.1.8.3:2181
+journal_port=8485
+journal_https_port=8481
+journal_server="{{ journal_hosts_string }}"
+
 [hadoop:vars]
 # namenode
-namenode_hosts = "{{ lookup('template', 'host/namenodes-output.j2').split(',')|list -}}"
-namenode_port = 9000
-namenode_http_port = 50070
-namenode_https_port = 50470
-namenode_second_http_port = 50090
-namenode_second_https_port = 50091
+# hadoop2.x时默认是9000
+namenode_port = 8920
+# hadoop2.x时默认是50070
+namenode_http_port = 9870
+# hadoop2.x时默认是50470
+namenode_https_port = 9871
+# hadoop2.x时默认是50090
+namenode_second_http_port = 9868
+# hadoop2.x时默认是50091
+namenode_second_https_port = 9869
 
 # datanode
 # 在simple下会有冲突，改成61005。默认是61004
-datanode_port = 61005
+datanode_port = 9866
 # 在simple下会有冲突，改成60022。默认是60021
-datanode_ipc_port = 60022
-datanode_http_port = 61006
+datanode_ipc_port = 9867
+datanode_http_port = 9864
 # 在simple下会有冲突，改成50476。默认是50475
-datanode_https_port = 50476
+datanode_https_port = 9865
 
 # yarn(yarn Resource Manager的服务器)
-yarn_hosts = "{{ lookup('template', 'host/yarns-output.j2').split(',')|list -}}"
 resourcemanager_port = 8032
 resourcemanager_scheduler_port = 8030
 resourcemanager_tracker_port = 8031
@@ -39,6 +57,9 @@ resourcemanager_webapp_https_port = 8090
 nodemanager_port = 58040
 nodemanager_webapp_port = 58042
 nodemanager_webapp_https_port = 58044
+
+# mapreduce, 默认13562
+mapreduce_shuffle_port = 13562
 
 nodemanager_delete_debug_delay_sec = 600
 
@@ -56,7 +77,7 @@ jobhistory_done_dir = /var/history/done
 
 [hadoop:vars]
 ## 通常不需要变更的变量
-hadoop_version = 2.8.5
+hadoop_version = 3.1.1
 hadoop_file = "hadoop-{{ hadoop_version }}.tar.gz"
 hadoop_folder = "hadoop-{{ hadoop_version }}"
 hadoop_home = "{{ install_home }}/{{ hadoop_folder }}"
@@ -65,18 +86,22 @@ hadoop_home = "{{ install_home }}/{{ hadoop_folder }}"
 # core
 hadoop_tmp_dir = "{{ hadoop_home }}/tmp"
 hadoop_log_dir = "{{ hadoop_home }}/logs"
-hadoop_container_conf_dir = "/etc/hadoop"
+hadoop_journal_dir = "{{ hadoop_home }}/journal"
+hadoop_container_conf_dir = "/etc/hadoop3"
 
-# hdfs
+# hdfs(单目录)
 hadoop_namenode_dir = "file://{{ hadoop_tmp_dir }}/dfs/name"
 hadoop_datanode_dir = "file://{{ hadoop_tmp_dir }}/dfs/data"
+# hdfs(多目录)
+# hadoop_namenode_dir = "file://{{ hadoop_tmp_dir }}/dfs/name1,file://{{ hadoop_tmp_dir }}/dfs/name2"
+# hadoop_datanode_dir = "file://{{ hadoop_tmp_dir }}/dfs/data1,file://{{ hadoop_tmp_dir }}/dfs/data2"
 
 [hadoop:vars]
 dfs_replication = 1
 dfs_permissions = true
 dfs_permissions_umask = "022"
 dfs_blocksize = 16777216
-dfs_webhdfs_enabled = false
+dfs_webhdfs_enabled = true
 dfs_acls_enabled = true
 
 # yarn
@@ -121,7 +146,7 @@ hadoop_kerberos_principal_jhs = jhs{{ hadoop_kerberos_principal_fqdn }}@{{ kerbe
 hadoop_kerberos_principal_http = HTTP{{ hadoop_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
 
 # ssl
-hadoop_ssl_path = /etc/newland/ssl/hadoop2
+hadoop_ssl_path = /etc/newland/ssl/hadoop3
 hadoop_ssl_password = newland
 hadoop_truststore_password = newland
 hadoop_keystore_password = newland

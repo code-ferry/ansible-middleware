@@ -1,0 +1,8 @@
+{# 计算中namenode的服务地址 #}
+{% set namenodes = [] %}
+{% for host in groups['hadoop'] %}
+{% if hostvars[host].namenode is defined and hostvars[host].namenode == "yes" %}
+{{ namenodes.append(host) -}}
+{% endif %}
+{% endfor %}
+{{ namenodes }}

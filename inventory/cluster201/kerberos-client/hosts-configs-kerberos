@@ -9,4 +9,7 @@ host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_
 
 # principal and keytab
 [kerberos_client:vars]
+# 客户端要分发的目录
+kerberos_keytab_path = /etc/newland/kerberos
+# 要与kerberos server产生的文件名一致
 kerberos_keytab_name = example.keytab
