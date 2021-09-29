@@ -31,3 +31,7 @@ redis_daemonize = yes
 # storage(fill 'yes' or 'no')
 redis_rdb = no
 redis_appendonly = no
+
+# security
+redis_security_enable = false
+redis_password = newland123

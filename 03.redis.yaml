@@ -1,4 +1,5 @@
 - hosts: redis
+  become_user: root
   gather_facts: yes
   roles:
   - redis

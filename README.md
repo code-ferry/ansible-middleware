@@ -340,10 +340,18 @@ ansible-playbook 03.elasticsearch.yaml -t install
 ansible-playbook 03.elasticsearch.yaml -t start
 ```
 
+## clickhouse安装
+```
+ansible-playbook 03.clickhouse.yaml -t install-root -b  
+ansible-playbook 03.clickhouse.yaml -t install  
+ansible-playbook 03.clickhouse.yaml -t start  
+```
+
+
 # 待改进的内容
 >01. hadoop中namenode, resourcemanager为空的校验  
->02. hadoop hdfs多目录  
->03. loop and with_items.
+>02. hadoop hdfs多目录(完成)  
+>03. loop and with_items.  
 >04. 
 
 # 说明

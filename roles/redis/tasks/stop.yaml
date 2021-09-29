@@ -10,7 +10,7 @@
     msg: "redis pid: '{{ v_pid.stdout }}'"
 
 - name: Stop redis
-  shell: ". ~/.bash_profile; ./bin/redis-cli -c -p {{ item }} shutdown"
+  shell: ". ~/.bash_profile; ./bin/redis-cli -c -a {{ redis_password }} -p {{ item }} shutdown"
   async: 30         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
   args:

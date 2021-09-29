@@ -51,6 +51,11 @@ appendfilename "appendonly-{{ item }}.aof"
 cluster-enabled {{ cluster_enabled }}
 cluster-config-file {{ vhostname }}-{{ item }}.conf
 
+# security
+{% if redis_security_enable|lower == "true" %}
+requirepass {{ redis_password }}
+{% endif %}
+
 ################################## INCLUDES ###################################
 
 # Include one or more other config files here.  This is useful if you

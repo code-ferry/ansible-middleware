@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <!--指定namenode ha时，zookeeper地址-->
+        <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://ns</value>
+        <description>与hdfs-site.xml中dfs.nameservices的值要相同</description>
+    </property>
+    
+    <!--
+        dfs.namenode.name.dir	        file://${hadoop.tmp.dir}/dfs/name
+        dfs.datanode.data.dir           file://${hadoop.tmp.dir}/dfs/data
+        dfs.namenode.checkpoint.dir     file://${hadoop.tmp.dir}/dfs/namesecondary
+    -->
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>file:/data1/hadoop285</value>
+        <description>hadoop temporary directories</description>
+    </property>
+    <property>
+        <name>io.file.buffer.size</name>
+        <value>131072</value>
+    </property>
+
+    <property>
+        <name>hadoop.security.authentication</name>
+        <value>kerberos</value>
+    </property>
+    <property>
+        <name>hadoop.security.authorization</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hadoop.rpc.protection</name>
+        <value>authentication</value>
+    </property>
+    <property>
+        <name>hadoop.security.auth_to_local</name>
+        <value>
+          RULE:[2:$1@$0](nn/.*@NEWLAND.COM)s/.*/udapdev/
+          RULE:[2:$1@$0](sn/.*@NEWLAND.COM)s/.*/udapdev/
+          RULE:[2:$1@$0](jn/.*@NEWLAND.COM)s/.*/udapdev/
+          RULE:[2:$1@$0](dn/.*@NEWLAND.COM)s/.*/udapdev/
+          RULE:[2:$1@$0](nm/.*@NEWLAND.COM)s/.*/udapdev/
+          RULE:[2:$1@$0](rm/.*@NEWLAND.COM)s/.*/udapdev/
+          RULE:[2:$1@$0](HTTP/.*@NEWLAND.COM)s/.*/udapdev/
+          RULE:[2:$1@$0](jhs/.*@NEWLAND.COM)s/.*/udapdev/
+          DEFAULT
+        </value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.udapdev.hosts</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.udapdev.groups</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.udapdev.users</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.hive.hosts</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.hive.groups</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.hive.users</name>
+        <value>*</value>
+    </property>
+
+    <!-- 指定namenode ha时，zookeeper地址 -->
+        <property>
+        <name>ha.zookeeper.quorum</name>
+        <value>10.1.8.1:2181,10.1.8.2:2181,10.1.8.3:2181</value>
+    </property>
+    
+<!--    <property>-->
+<!--        <name>fs.hdfs.impl</name>-->
+<!--        <value>org.apache.hadoop.hdfs.DistributedFileSystem</value>-->
+<!--        <description>The FileSystem for hdfs: uris.</description>-->
+<!--    </property>-->
+</configuration>
