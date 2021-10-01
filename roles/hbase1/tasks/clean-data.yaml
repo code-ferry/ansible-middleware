@@ -1,0 +1,24 @@
+# 移除hdfs上的数据目录，移除zk上的元数据信息。使用局限性是对应运行的机器上要用hdfs客户端，zk客户端。
+- name: Remove hdfs directory
+  shell: ". ~/.bash_profile; {{ hadoop_home }}/bin/hdfs dfs -rm -r {{ hbase_rootdir }}/*"
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  delegate_to: "{{ hadoop_client_hostname }}"
+  run_once: true
+
+- name:
+  debug:
+    msg: "{{ hbase_zookeeper_quorum_single }}:{{ hbase_zookeeper_clientPort }}"
+
+- name:
+  debug:
+    msg: "{{ hbase_zookeeper_znode_parent }}"
+
+- name: Remove zookeeper directory
+  shell: ". ~/.bash_profile; {{ zk_home }}/bin/zkCli.sh -server {{ hbase_zookeeper_quorum_single }}:{{ hbase_zookeeper_clientPort }} rmr {{ hbase_zookeeper_znode_parent }}"
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  delegate_to: "{{ zk_client_hostname }}"
+  run_once: true

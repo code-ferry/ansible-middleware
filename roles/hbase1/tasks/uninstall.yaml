@@ -1,0 +1,24 @@
+- import_tasks: stop-force.yaml
+
+- name: Delete hbase install directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ hbase_home }}"
+
+- name: Remove hdfs directory
+  shell: ". ~/.bash_profile; {{ hadoop_home }}/bin/hdfs dfs -rm -r {{ hbase_rootdir }}/*"
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  delegate_to: "{{ hadoop_client_hostname }}"
+  run_once: true
+
+- name: Remove zookeeper directory
+  shell: ". ~/.bash_profile; {{ zk_home }}/bin/zkCli.sh -server {{ hbase_zookeeper_quorum_single }}:{{ hbase_zookeeper_clientPort }} rmr {{ hbase_zookeeper_znode_parent }}"
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  delegate_to: "{{ zk_client_hostname }}"
+  run_once: true

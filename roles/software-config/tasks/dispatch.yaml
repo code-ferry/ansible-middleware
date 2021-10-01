@@ -4,13 +4,18 @@
     state: directory
   with_items:
   - "{{ hadoop_keytab_dispatch_dir }}"  # /etc/newland/kerberos
-  - "{{ hadoop_config_dispatch_dir }}"  # /etc/newland/config/hadoop2
   - "{{ kafka_jaas_dispatch_dir }}"  # /etc/newland/jaas/kafka2
   - "{{ zookeeper_jaas_dispatch_dir }}"  # /etc/newland/jaas/zookeeper
+  - "{{ hadoop_config_dispatch_dir }}/hadoop2"  # /etc/newland/config
+  - "{{ hadoop_config_dispatch_dir }}/hadoop2-single"
+  - "{{ hadoop_config_dispatch_dir }}/hadoop2-ha"
+  - "{{ hadoop_config_dispatch_dir }}/hadoop3"
+  - "{{ hadoop_config_dispatch_dir }}/hadoop3-single"
+  - "{{ hadoop_config_dispatch_dir }}/hadoop3-ha"
   - "/etc/newland/ssl/hadoop"
   - "/etc/newland/ssl/kafka2"
 
-# software_config_home=/home/test/software-config/
+# software_config_home=/home/test/software-config
 - name: Dispatch hadoop file
   copy:
     src: "{{ item.src }}"
@@ -18,12 +23,20 @@
     force: yes
     mode: 0644
   with_items:
-  - { src: "{{ software_config_home }}{{ hadoop_keytab_file }}", dest: "{{ hadoop_keytab_dispatch_dir }}" }
-  - { src: "{{ software_config_home }}{{ hadoop_krb5_file }}", dest: "{{ hadoop_krb5_dispatch_dir }}" }
-  - { src: "{{ software_config_home }}core-site.xml", dest: "{{ hadoop_config_dispatch_dir }}" }
-  - { src: "{{ software_config_home }}hdfs-site.xml", dest: "{{ hadoop_config_dispatch_dir }}" }
-  - { src: "{{ software_config_home }}yarn-site.xml", dest: "{{ hadoop_config_dispatch_dir }}" }
-  - { src: "{{ software_config_home }}mapred-site.xml", dest: "{{ hadoop_config_dispatch_dir }}" }
+  - { src: "{{ software_config_home }}/{{ hadoop_keytab_file }}", dest: "{{ hadoop_keytab_dispatch_dir }}" }
+  - { src: "{{ software_config_home }}/{{ hadoop_krb5_file }}", dest: "{{ hadoop_krb5_dispatch_dir }}" }
+  - { src: "{{ software_config_home }}/hadoop2/core-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2" }
+  - { src: "{{ software_config_home }}/hadoop2/hdfs-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2" }
+  - { src: "{{ software_config_home }}/hadoop2/yarn-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2" }
+  - { src: "{{ software_config_home }}/hadoop2/mapred-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2" }
+  - { src: "{{ software_config_home }}/hadoop2-single/core-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2-single" }
+  - { src: "{{ software_config_home }}/hadoop2-single/hdfs-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2-single" }
+  - { src: "{{ software_config_home }}/hadoop2-single/yarn-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2-single" }
+  - { src: "{{ software_config_home }}/hadoop2-single/mapred-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2-single" }
+  - { src: "{{ software_config_home }}/hadoop2-ha/core-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2-ha" }
+  - { src: "{{ software_config_home }}/hadoop2-ha/hdfs-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2-ha" }
+  - { src: "{{ software_config_home }}/hadoop2-ha/yarn-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2-ha" }
+  - { src: "{{ software_config_home }}/hadoop2-ha/mapred-site.xml", dest: "{{ hadoop_config_dispatch_dir }}/hadoop2-ha" }
 
 #- name: Dispatch kafka, zookeeper file
 #  copy:

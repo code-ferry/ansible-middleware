@@ -1,0 +1,73 @@
+[hbase]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' regionserver="yes" master="yes"
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' regionserver="yes" backup_master="yes"
+
+####################################
+## hbase path, port, memory etc
+####################################
+[hbase:vars]
+hbase_version = 1.2.6
+hbase_file = "hbase-{{ hbase_version }}-bin.tar.gz"
+hbase_folder = "hbase-{{ hbase_version }}"
+hbase_home = "{{ install_home }}/{{ hbase_folder }}"
+hbase_conf_dir = "{{ hbase_home }}/conf"
+hbase_log_dir = "{{ hbase_home }}/logs"
+
+[hbase:vars]
+hbase_master_port = 60000
+hbase_master_info_port = 60010
+hbase_regionserver_port = 60020
+hbase_regionserver_info_port = 60030
+hbase_rest_port = 60080
+
+hbase_offheapsize = "4G"
+# hadoop的配置文件，主要将其复制到hbase的配置目录中
+hadoop_config_dir = /etc/newland/config/hadoop2-ha
+
+####################################
+## hbase and hadoop, zookeeper
+####################################
+[hbase:vars]
+# hbase_rootdir = hdfs://host201.example.com:9000/hbase1
+hbase_rootdir = hdfs://ns/hbase1
+
+hbase_manages_zk = false
+hbase_zookeeper_quorum = host201.example.com
+hbase_zookeeper_clientPort = 2181
+hbase_zookeeper_data_dir = {{ hbase_home }}/zkdata
+hbase_zookeeper_znode_parent = /hbase1
+
+####################################
+## hbase security
+####################################
+[hbase:vars]
+hbase_security_authentication = kerberos
+hbase_security_authorization = true
+hbase_superuser = hbase,root,administrator
+
+# 换环境时, 这个变量要修改
+kerberos_realm_name = EXAMPLE.COM
+kerberos_keytab_name = example.keytab
+hadoop_keytab_path = /etc/newland/kerberos
+
+hbase_master_keytab_file = {{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}
+hbase_regionserver_keytab_file = {{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}
+hbase_thrift_keytab_file = {{ hadoop_keytab_path }}/{{ kerberos_keytab_name }}
+
+hbase_kerberos_principal_fqdn = /_HOST
+hbase_master_kerberos_principal = {{ install_user }}{{ hbase_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hbase_regionserver_kerberos_principal = {{ install_user }}{{ hbase_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+hbase_thrift_kerberos_principal = {{ install_user }}{{ hbase_kerberos_principal_fqdn }}@{{ kerberos_realm_name }}
+
+####################################
+## uninstall
+####################################
+# 卸载时需要的一些参数, 删除掉hdfs与zookeeper上的内容
+[hbase:vars]
+# 委托的机器要有hadoop客户端
+hadoop_client_hostname = host201.example.com
+hadoop_home = /home/bduser/deploy/hadoop-2.8.5
+
+# 委托的机器要有zookeeper客户端
+zk_client_hostname = host201.example.com
+zk_home = /home/bduser/deploy/zookeeper-3.4.14

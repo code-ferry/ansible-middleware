@@ -1,6 +1,6 @@
 [hbase]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' regionserver="yes" backup_master="yes"
-# host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' regionserver="yes"
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' regionserver="yes" master="yes"
 
 ####################################
 ## hbase path, port, memory etc
@@ -21,19 +21,20 @@ hbase_regionserver_info_port = 60030
 hbase_rest_port = 60080
 
 hbase_offheapsize = "4G"
-hadoop_config_dir=/etc/newland/config/hadoop2
+hadoop_config_dir=/etc/newland/config/hadoop2-ha
 
 ####################################
 ## hbase and hadoop, zookeeper
 ####################################
 [hbase:vars]
-hbase_rootdir = hdfs://host201.example.com:9000/hbase
+# hbase_rootdir = hdfs://host201.example.com:9000/hbase2
+hbase_rootdir = hdfs://ns/hbase2
 
 hbase_manages_zk = false
 hbase_zookeeper_quorum = host201.example.com
 hbase_zookeeper_clientPort = 2181
 hbase_zookeeper_data_dir = {{ hbase_home }}/zkdata
-hbase_zookeeper_znode_parent = /hbase212
+hbase_zookeeper_znode_parent = /hbase2
 
 ####################################
 ## hbase security
@@ -62,5 +63,10 @@ hbase_thrift_kerberos_principal = {{ install_user }}{{ hbase_kerberos_principal_
 ####################################
 # 卸载时需要的一些参数, 删除掉hdfs与zookeeper上的内容
 [hbase:vars]
-# 前提: 委托的机器要有zookeeper客户端
+# 委托的机器要有hadoop客户端
+hadoop_client_hostname = host201.example.com
+hadoop_home = /home/bduser/deploy/hadoop-2.8.5
+
+# 委托的机器要有zookeeper客户端
+zk_client_hostname = host201.example.com
 zk_home = /home/bduser/deploy/zookeeper-3.4.14

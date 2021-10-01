@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+    <!-- hadoop -->
+    <property>
+        <name>hbase.rootdir</name>
+        <value>{{ hbase_rootdir }}</value>
+        <description>core-site.xml fs.defaultFS</description>
+    </property>
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.unsafe.stream.capability.enforce</name>
+        <value>false</value>
+        <description>生产上不能设置为false, 存在丢失数据的风险</description>
+    </property>
+
+    <!-- hbase master and regionserver -->
+    <property>
+        <name>hbase.master.port</name>
+        <value>{{ hbase_master_port }}</value>
+    </property>
+    <property>
+        <name>hbase.master.info.port</name>
+        <value>{{ hbase_master_info_port }}</value>
+    </property>
+    <property>
+        <name>hbase.regionserver.port</name>
+        <value>{{ hbase_regionserver_port }}</value>
+    </property>
+    <property>
+        <name>hbase.regionserver.info.port</name>
+        <value>{{ hbase_regionserver_info_port }}</value>
+    </property>
+    <property>
+        <name>hbase.rest.port</name>
+        <value>{{ hbase_rest_port }}</value>
+    </property>
+
+    <property>
+        <name>hbase.master.ipc.address</name>
+        <value>0.0.0.0</value>
+    </property>
+    <property>
+        <name>hbase.regionserver.ipc.address</name>
+        <value>0.0.0.0</value>
+    </property>
+
+    <!-- zookeeper -->
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>{{ hbase_zookeeper_quorum }}</value>
+    </property>
+    <property>
+        <name>hbase.zookeeper.property.clientPort</name>
+        <value>{{ hbase_zookeeper_clientPort }}</value>
+    </property>
+    <property>
+        <name>zookeeper.znode.parent</name>
+        <value>{{ hbase_zookeeper_znode_parent }}</value>
+    </property>
+    <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>{{ hbase_zookeeper_data_dir }}</value>
+    </property>
+
+    <!-- other -->
+    <property>
+        <name>hbase.wal.provider</name>
+        <value>multiwal</value>
+    </property>
+
+    {% if hbase_security_authentication|lower == "kerberos" and hbase_security_authorization|lower == "true" %}
+    <!-- kerberos authentication -->
+    <property>
+        <name>hbase.security.authentication</name>
+        <value>{{ hbase_security_authentication }}</value>
+    </property>
+    <property>
+        <name>hbase.rest.authentication.type</name>
+        <value>{{ hbase_security_authentication }}</value>
+    </property>
+    <!-- kerberos authorization  -->
+    <property>
+        <name>hbase.security.authorization</name>
+        <value>{{ hbase_security_authorization }}</value>
+    </property>
+    <property>
+        <name>hbase.superuser</name>
+        <value>{{ hbase_superuser }}</value>
+    </property>
+
+    <!-- kerberos principal -->
+    <property>
+        <name>hbase.master.kerberos.principal</name>
+        <value>{{ hbase_master_kerberos_principal }}</value>
+    </property>
+    <property>
+        <name>hbase.regionserver.kerberos.principal</name>
+        <value>{{ hbase_regionserver_kerberos_principal }}</value>
+    </property>
+    <property>
+        <name>hbase.thrift.kerberos.principal</name>
+        <value>{{ hbase_thrift_kerberos_principal }}</value>
+    </property>
+    <property>
+        <name>hbase.rest.kerberos.principal</name>
+        <value>{{ hbase_thrift_kerberos_principal }}</value>
+    </property>
+    <property>
+        <name>hbase.rest.authentication.kerberos.principal</name>
+        <value>{{ hbase_thrift_kerberos_principal }}</value>
+    </property>
+
+    <!-- kerberos keytab -->
+    <property>
+        <name>hbase.master.keytab.file</name>
+        <value>{{ hbase_master_keytab_file }}</value>
+    </property>
+    <property>
+        <name>hbase.regionserver.keytab.file</name>
+        <value>{{ hbase_regionserver_keytab_file }}</value>
+    </property>
+    <property>
+        <name>hbase.thrift.keytab.file</name>
+        <value>{{ hbase_thrift_keytab_file }}</value>
+    </property>
+    <property>
+        <name>hbase.rest.keytab.file</name>
+        <value>{{ hbase_thrift_keytab_file }}</value>
+    </property>
+    <property>
+        <name>hbase.rest.authentication.kerberos.keytab</name>
+        <value>{{ hbase_thrift_keytab_file }}</value>
+    </property>
+
+    <!-- security -->
+    <property>
+        <name>hbase.coprocessor.master.classes</name>
+        <value>org.apache.hadoop.hbase.security.access.AccessController</value>
+    </property>
+    <property>
+        <name>hbase.coprocessor.region.classes</name>
+        <value>org.apache.hadoop.hbase.security.token.TokenProvider</value>
+    </property>
+    <property>
+        <name>hbase.rpc.engine</name>
+        <value>org.apache.hadoop.hbase.ipc.SecureRpcEngine</value>
+    </property>
+    {% endif %}
+
+</configuration>

@@ -1,0 +1,4 @@
+- hosts: hbase
+  gather_facts: yes
+  roles:
+  - hbase2

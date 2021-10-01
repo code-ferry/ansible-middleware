@@ -27,9 +27,17 @@
   - { src: 'conf/hbase-site.xmlj2', dest: '{{ hbase_conf_dir }}/hbase-site.xml' }
   - { src: 'host/backup-masters.j2', dest: '{{ hbase_conf_dir }}/backup-masters' }
   - { src: 'host/regionservers.j2', dest: '{{ hbase_conf_dir }}/regionservers' }
-  - { src: 'conf/core-site.xml', dest: '{{ hbase_conf_dir }}/core-site.xml' }
-  - { src: 'conf/hdfs-site.xml', dest: '{{ hbase_conf_dir }}/hdfs-site.xml' }
 #   - { src: 'hbase-log4j.properties.j2', dest: '{{ hbase_conf_dir }}/hbase-log4j.properties' }
+
+- name: Copy core-site.xml and hdfs-site.xml
+  copy:
+    src: "{{ hadoop_config_dir }}/{{ item }}"
+    dest: "{{ hbase_conf_dir }}"
+    force: yes
+    remote_src: yes
+  with_items:
+  - "core-site.xml"
+  - "hdfs-site.xml"
 
 - name: Delete redundant file
   file:
@@ -61,10 +69,10 @@
 
 - name: Check master count
   fail:
-    msg: "Master count should be bigger then 0"
-  when: master_count == 0
+    msg: "Master count should be equal 1"
+  when: master_count|int != 1
 
 - name: Check regionserver count
   fail:
     msg: "Regionserver count should be bigger then 0"
-  when: regionserver_count == 0
+  when: regionserver_count|int == 0

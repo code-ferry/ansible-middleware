@@ -11,7 +11,7 @@ host200.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_
 ## common
 #################################################
 [software_config:vars]
-software_config_home="/home/test/software-config/"
+software_config_home="/home/test/software-config"
 
 #################################################
 ## fetch info(hadoop)
@@ -31,7 +31,7 @@ hadoop_krb5_dispatch_dir=/etc
 hadoop_krb5_file=krb5.conf
 
 # dispatch directory of hadoop configuration file
-hadoop_config_dispatch_dir=/etc/newland/config/hadoop2
+hadoop_config_dispatch_dir=/etc/newland/config
 
 #################################################
 ## dispatch info(kafka)

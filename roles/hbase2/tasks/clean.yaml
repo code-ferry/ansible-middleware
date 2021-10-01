@@ -1,0 +1,5 @@
+- name: Clean log file
+  shell: "rm -fr {{ hbase_log_dir }}/*"
+  args:
+    warn: false
+

@@ -1,0 +1,10 @@
+master_hosts: "{{ lookup('template', 'host/masters-list.j2') }}"
+backup_master_hosts: "{{ lookup('template', 'host/backup-masters-list.j2') }}"
+regionserver_hosts: "{{ lookup('template', 'host/regionservers-list.j2') }}"
+
+master_count: "{{ master_hosts|count }}"
+backup_master_count: "{{ backup_master_hosts|count }}"
+regionserver_count: "{{ regionserver_hosts|count }}"
+
+# 只要知道节点就可以了，删除zk上的元数据
+hbase_zookeeper_quorum_single: "{{ hbase_zookeeper_quorum.split(',')[0] }}"

@@ -1,0 +1,8 @@
+{# 计算中backup-master的服务地址 #}
+{% set backup_masters = [] %}
+{% for host in groups['hbase'] %}
+{% if hostvars[host].backup_master is defined and hostvars[host].backup_master == "yes" %}
+{{ backup_masters.append(host) -}}
+{% endif %}
+{% endfor %}
+{{ backup_masters }}

@@ -40,6 +40,9 @@ nodemanager_port = 58040
 nodemanager_webapp_port = 58042
 nodemanager_webapp_https_port = 58044
 
+# mapreduce, 默认13562
+mapreduce_shuffle_port = 13562
+
 nodemanager_delete_debug_delay_sec = 600
 
 # log aggregation
