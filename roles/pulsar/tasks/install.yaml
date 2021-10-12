@@ -32,6 +32,7 @@
   - { src: 'conf/zookeeper-{{ pulsar_version }}.conf.j2', dest: '{{ pulsar_conf_dir }}/global_zookeeper.conf' }
   - { src: 'conf/broker-{{ pulsar_version }}.conf.j2', dest: '{{ pulsar_conf_dir }}/broker.conf' }
   - { src: 'conf/bookkeeper-{{ pulsar_version }}.conf.j2', dest: '{{ pulsar_conf_dir }}/bookkeeper.conf' }
+  - { src: 'conf/pulsar_env.shj2', dest: '{{ pulsar_conf_dir }}/pulsar_env.sh' }
 
 #- name: write environment variable PULSAR_HOME etc
 #  lineinfile:
