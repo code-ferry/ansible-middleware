@@ -25,14 +25,18 @@ bootstrap.servers=localhost:9092
 # offset does not exist any more on the server: latest, earliest, none
 #auto.offset.reset=
 
-{% if kafka_sasl_plain_enable|lower == "true" %}
+{% if (kafka_sasl_gssapi_enable|lower == "true") and (kafka_ssl_enable|lower == "true") %}
+security.protocol=SASL_SSL
+{% else %}
 security.protocol=SASL_PLAINTEXT
+{% endif %}
+
+{% if kafka_sasl_plain_enable|lower == "true" %}
 sasl.mechanism=PLAIN
 sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="admin";
 {% endif %}
 
 {% if kafka_ssl_enable|lower == "true" %}
-security.protocol=SSL
 ssl.truststore.location={{ ssl_path }}/{{ ssl_client_ts }}
 ssl.truststore.password={{ ssl_client_ts_password }}
 ssl.keystore.location={{ ssl_path }}/{{ ssl_client_ks }}

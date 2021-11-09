@@ -36,12 +36,12 @@
     <!-- capacity -->
     <property>
         <name>yarn.scheduler.capacity.root.default.capacity</name>
-        <value>90</value>
+        <value>100</value>
         <description>Default queue target capacity.</description>
     </property>
     <property>
         <name>yarn.scheduler.capacity.root.prod.capacity</name>
-        <value>10</value>
+        <value>0</value>
         <description>prod queue target capacity.</description>
     </property>
 
@@ -54,7 +54,7 @@
     <!-- maximum-capacity -->
     <property>
         <name>yarn.scheduler.capacity.root.default.maximum-capacity</name>
-        <value>90</value>
+        <value>100</value>
         <description>The maximum capacity of the default queue.</description>
     </property>
     <property>

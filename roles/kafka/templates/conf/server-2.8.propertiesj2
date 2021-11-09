@@ -50,13 +50,17 @@ auto.create.topics.enable=false
 {% if kafka_ssl_enable|lower == "true" %}
 
 {% if kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true" -%}
-listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
+# listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+# advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SASL_PLAINTEXT://{{ inventory_hostname }}:{{ kafka_sasl_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+# listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
+listeners=SSL://{{ inventory_hostname }}:{{ kafka_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+advertised.listeners=SSL://{{ inventory_hostname }}:{{ kafka_port }},SASL_SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+listener.security.protocol.map=SSL:SSL,SASL_SSL:SASL_SSL
+
 {% else -%}
-listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:{{ kafka_port }},SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
-listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL
+listeners=SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+advertised.listeners=SSL://{{ inventory_hostname }}:{{ kafka_ssl_port }}
+listener.security.protocol.map=SSL:SSL
 {% endif %}
 
 {% else -%}
@@ -169,6 +173,15 @@ zookeeper.connection.timeout.ms=18000
 # However, in production environments the default value of 3 seconds is more suitable as this will help to avoid unnecessary, and potentially expensive, rebalances during application startup.
 group.initial.rebalance.delay.ms=0
 
+############################# SSL and SASL #############################
+{% if (kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true") and (kafka_ssl_enable|lower == "true") %}
+security.inter.broker.protocol=SASL_SSL
+{% elif (kafka_sasl_plain_enable|lower == "true" or kafka_sasl_gssapi_enable|lower == "true") %}
+security.inter.broker.protocol=SASL_PLAINTEXT
+{% elif (kafka_ssl_enable|lower == "true") %}
+security.inter.broker.protocol=SSL
+{% endif %}
+
 ############################# SSL #############################
 {% if kafka_ssl_enable|lower == "true" %}
 # security.inter.broker.protocol=ssl
@@ -189,7 +202,6 @@ ssl.truststore.password={{ ssl_server_ts_password }}
 ############################# SASL #############################
 {% if kafka_sasl_plain_enable|lower == "true" and kafka_sasl_gssapi_enable|lower == "true" %}
 sasl.enabled.mechanisms=PLAIN,GSSAPI
-security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
 sasl.kerberos.service.name={{ kafka_kerberos_service }}
 authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
@@ -198,7 +210,6 @@ allow.everyone.if.no.acl.found={{ kafka_acl_allow_all }}
 
 {% elif kafka_sasl_plain_enable|lower == "true" %}
 sasl.enabled.mechanisms=PLAIN
-security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=PLAIN
 authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
 super.users=User:admin;User:ANONYMOUS
@@ -206,7 +217,6 @@ allow.everyone.if.no.acl.found={{ kafka_acl_allow_all }}
 
 {% elif kafka_sasl_gssapi_enable|lower == "true" %}
 sasl.enabled.mechanisms=GSSAPI
-security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
 sasl.kerberos.service.name={{ kafka_kerberos_service }}
 authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
