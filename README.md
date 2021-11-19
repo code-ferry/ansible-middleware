@@ -334,6 +334,24 @@ ansible-playbook 03.redis.yaml -i ./inventory/cluster201/ -t stop
 ansible-playbook 03.redis.yaml -i ./inventory/cluster201/ -t uninstall
 ```
 
+## Pulsar安装
+> 本安装主要适用于Pulsar cluster的安装。暂不支持单机与哨兵模式的安装。
+> 如果一台服务器要用多个实例，则redis_ports可以用英文逗号多个实例端口。
+```
+# 安装 
+ansible-playbook 02.pulsar.yaml -i ./inventory/cluster201/ -t install
+# 初始化集群(主要是在ZK上注册信息)
+ansible-playbook 02.pulsar.yaml -i ./inventory/cluster201/ -t init
+# 启动集群(包括zookeeper, bookkeeper, broker)
+ansible-playbook 02.pulsar.yaml -i ./inventory/cluster201/ -t start
+# 停止集群
+ansible-playbook 02.pulsar.yaml -i ./inventory/cluster201/ -t stop
+# 升级集群(包括停止,安装,启动)
+ansible-playbook 02.pulsar.yaml -i ./inventory/cluster201/ -t upgrade
+# 卸载
+ansible-playbook 02.pulsar.yaml -i ./inventory/cluster201/ -t uninstall
+```
+
 ## elasticsearch安装
 ```
 ansible-playbook 03.elasticsearch.yaml -t install
