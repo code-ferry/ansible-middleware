@@ -1,0 +1,6 @@
+- hosts: spark2
+  gather_facts: yes
+  vars:
+    vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+  roles:
+  - spark2

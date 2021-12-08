@@ -12,7 +12,7 @@
   when: inventory_hostname in master_hosts
 
 - name: Kill HMaster processes
-  shell: ". ~/.bash_profile; kill {{ item }}"
+  shell: ". ~/.bash_profile; kill -9 {{ item }}"
   with_items: "{{ result.stdout_lines }}"
   when: inventory_hostname in master_hosts and result.stdout_lines|count > 0
 
@@ -27,7 +27,7 @@
   when: inventory_hostname in backup_master_hosts
 
 - name: Kill backup HMaster processes
-  shell: ". ~/.bash_profile; kill {{ item }}"
+  shell: ". ~/.bash_profile; kill -9 {{ item }}"
   with_items: "{{ result.stdout_lines }}"
   when: inventory_hostname in backup_master_hosts and result.stdout_lines|count > 0
 
@@ -43,7 +43,7 @@
   when: inventory_hostname in regionserver_hosts
 
 - name: Kill HRegionServer processes
-  shell: ". ~/.bash_profile; kill {{ item }}"
+  shell: ". ~/.bash_profile; kill -9 {{ item }}"
   with_items: "{{ result.stdout_lines }}"
   when: (inventory_hostname in regionserver_hosts) and (result.stdout_lines|count > 0)
 

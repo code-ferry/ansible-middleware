@@ -1,0 +1,25 @@
+# install hive
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# start spark2.x
+- import_tasks: start.yaml
+  tags: [ 'never', 'start' ]
+
+# stop spark2.x
+- import_tasks: stop.yaml
+  tags: [ 'never', 'stop' ]
+
+# restart spark2.x
+- import_tasks: stop.yaml
+  tags: [ 'never', 'restart' ]
+- import_tasks: start.yaml
+  tags: [ 'never', 'restart' ]
+
+# upgrade spark2.x
+- import_tasks: stop.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: install.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: start.yaml
+  tags: [ 'never', 'upgrade' ]

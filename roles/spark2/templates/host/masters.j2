@@ -1,0 +1,8 @@
+{# 计算中master的服务地址 #}
+{% set masters = [] %}
+{% for host in groups['spark2'] %}
+{% if hostvars[host].master is defined and hostvars[host].master == "yes" %}
+{{ masters.append(host) -}}
+{% endif %}
+{% endfor %}
+{{ masters }}

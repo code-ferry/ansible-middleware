@@ -1,0 +1,10 @@
+master_hosts: "{{ lookup('template', 'host/masters.j2') }}"
+master_count: "{{ master_hosts|count }}"
+
+slave_hosts: "{{ lookup('template', 'host/slaves.j2') }}"
+slave_count: "{{ slave_hosts|count }}"
+
+vhostipv4: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+vhostipv6: "{{ hostvars[inventory_hostname].ansible_all_ipv6_addresses[0] }}"
+vhostname: "{{ hostvars[inventory_hostname].ansible_hostname }}"
+vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"

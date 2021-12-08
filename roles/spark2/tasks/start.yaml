@@ -1,0 +1,45 @@
+#- name: Get zookeeper pid
+#  shell: ". ~/.bash_profile; if [ -f {{ zk_home }}/data/zookeeper_server.pid ]; then cat {{ zk_home }}/data/zookeeper_server.pid; fi"
+#  args:
+#    executable: /bin/bash
+#  register: result
+#
+#- name: Check zookeeper pid
+#  fail:
+#   msg: "Zookeeper already start, pid {{ result.stdout }}"
+#  when: result.stdout != ""
+
+- name: Start spark
+  shell: "if [ -f ~/.bash_profile ]; then source ~/.bash_profile; fi; if [ -f ~/.profile ]; then source ~/.profile; fi; ./start-all.sh"
+  environment:
+    SPARK_HOME: "{{ spark2_home }}"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ spark2_home }}/sbin"
+  register: result
+
+- name: Check spark 2.x started status
+  async_status:
+    jid: "{{ result.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 5        # 检查次数为5次, 间隔5秒
+
+- name: Recheck spark 2.x master port
+  wait_for:
+    port: "{{ item }}"
+    state: started
+    timeout: 20
+  with_items:
+   # - "{{ spark_master_port }}"
+    - "{{ spark_master_webui_port }}"
+  when: inventory_hostname in master_hosts
+
+- name: Recheck spark 2.x worker port
+  wait_for:
+    port: "{{ spark_worker_webui_port }}"
+    state: started
+    timeout: 20
+  when: inventory_hostname in slave_hosts

@@ -28,3 +28,4 @@ install_home="/home/bduser/deploy"
 java_home=/usr/local/java/jdk1.8.0_201
 # jdk_install_home=/usr/local/java
 jdk_file=jdk-8u201-linux-x64.tar.gz
+scala_home=/usr/local/scala/scala-2.13.7

@@ -1,0 +1,33 @@
+- name: Create the installation directory
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: Unarchive spark2 package
+  unarchive:
+    src: "{{ software_home }}/{{ spark2_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ spark2_home }}"
+
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ spark2_logs_dir }}"
+  - "{{ spark2_pids_dir }}"
+
+- name: Check master size should be 1
+  when: master_count == 1
+  fail:
+    msg: "Master size should be 1."
+
+- name: Create spark configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'conf/spark-env.shj2', dest: '{{ spark2_home }}/conf/spark-env.sh', mode: '755' }
+  - { src: 'host/slave-output.j2', dest: '{{ spark2_home }}/conf/slaves', mode: '644' }

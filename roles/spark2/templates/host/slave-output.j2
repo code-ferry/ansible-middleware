@@ -1,0 +1,6 @@
+{# 计算中spark2.x的服务地址，用于输出到文件 #}
+{% for host in groups['spark2'] %}
+{% if hostvars[host].slave is defined and hostvars[host].slave == "yes" %}
+{{ host }}
+{% endif %}
+{% endfor %}

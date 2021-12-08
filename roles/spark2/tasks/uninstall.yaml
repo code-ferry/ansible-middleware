@@ -1,0 +1,10 @@
+- import_tasks: stop.yaml
+
+- name: Delete spark2.x directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ spark_home }}"
+
+

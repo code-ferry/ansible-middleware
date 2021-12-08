@@ -152,4 +152,14 @@
     </property>
     {% endif %}
 
+    <!-- 实验oldWALs目录下的文件是否会被清理 -->
+    <property>
+        <name>hbase.replication</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>hbase.backup.enable</name>
+        <value>false</value>
+    </property>
+
 </configuration>

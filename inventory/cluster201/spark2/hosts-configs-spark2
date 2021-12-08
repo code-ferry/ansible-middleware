@@ -1,0 +1,30 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[spark2]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' master='yes' slave='yes'
+
+[spark2:vars]
+# default 7077
+spark_master_port = 7077
+# default 8080
+spark_master_webui_port = 8080
+# default 8081
+spark_worker_webui_port = 8081
+
+[spark2:vars]
+spark2_version = 2.4.4
+spark2_file = "spark-{{ spark2_version }}-bin-without-hadoop.tgz"
+spark2_folder = "spark-{{ spark2_version }}-bin-without-hadoop"
+spark2_home = "{{ install_home }}/{{ spark2_folder }}"
+
+spark2_conf_dir = "{{ spark2_home }}/conf"
+spark2_logs_dir = "{{ spark2_home }}/logs"
+spark2_pids_dir = "{{ spark2_home }}/pids"
+
+[spark2:vars]
+spark_working_memory = 512m
+
+# spark运行需要依赖hadoop
+[spark2:vars]
+hadoop_home = "/home/bduser/deploy/hadoop-2.8.5"
