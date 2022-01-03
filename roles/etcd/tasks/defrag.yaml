@@ -1,0 +1,31 @@
+- name: 获取Etcd服务的进程
+  shell: ". ~/.bash_profile; ps -ef | grep {{ etcd_home }} | grep -v 'grep' | grep -v 'proxy' | awk '{print $2}'"
+  async: 10         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+  ignore_errors: yes
+  register: pid
+
+- name: 打印Etcd服务的进程
+  debug:
+    msg: "{{ pid.stdout }}"
+
+- name: 碎片整理文件(在线)
+  shell: ". ~/.bash_profile; export ETCDCTL_API=3; {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} --command-timeout=120s defrag"
+  async: 150        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+  when: pid.stdout != ""
+
+- name: 碎片整理文件(离线)
+  shell: ". ~/.bash_profile; export ETCDCTL_API=3; {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} --data-dir {{ etcd_data_dir }} --command-timeout=120s defrag"
+  async: 150        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+  when: pid.stdout == ""

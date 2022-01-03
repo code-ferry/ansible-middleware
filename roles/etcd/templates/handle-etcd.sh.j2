@@ -9,7 +9,7 @@ list() {
 }
 
 start() {
-    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    ts=`date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- start ----------- ${ts}"
 
     pid=`ps -ef | grep "name={{ etcd_name }}" |  grep "{{ etcd_home }}" | grep -v "grep" | grep -v "proxy" | awk '{print $2}'`
@@ -30,7 +30,7 @@ start() {
 }
 
 stop() {
-    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    ts=`date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- stop ----------- ${ts}"
 
     pid=`ps -ef | grep "name={{ etcd_name }}" |  grep "{{ etcd_home }}" | grep -v "grep" | grep -v "proxy" | awk '{print $2}'`
@@ -50,7 +50,7 @@ stop() {
 }
 
 start-proxy() {
-    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    ts=`date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- start ----------- ${ts}"
 
     pid=`ps -ef | grep "{{ etcd_home }}" | grep -v "grep" | grep "proxy" | awk '{print $2}'`
@@ -71,7 +71,7 @@ start-proxy() {
 }
 
 stop-proxy() {
-    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    ts=`date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- stop ----------- ${ts}"
 
     pid=`ps -ef |  grep "{{ etcd_home }}" | grep -v "grep" | grep "proxy" | awk '{print $2}'`
@@ -91,12 +91,12 @@ stop-proxy() {
 }
 
 compact() {
-    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    ts=`date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- compact ----------- ${ts}"
 
     {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm list
     count=1
-    while [ $count -lt 10 ]
+    while [ $count -lt 3 ]
     do
        echo -e "\ncompact db count: $count"
        count=`expr $count + 1`
@@ -115,9 +115,19 @@ compact() {
              break
            fi
 
+           # 打印开始时间
+           ts_start=`date "+%Y-%m-%d_%H:%M:%S"`
+           echo "compact start at ${ts_start}"
+
            echo "etcd compact, rev=${rev}"
-           compactInfo=$({{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} compact ${rev} 2>&1)
+           compactInfo=$({{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} --command-timeout=60s compact ${rev} 2>&1)
            compactResult=$?
+
+           # 打印结束时间
+           ts_end=`date "+%Y-%m-%d_%H:%M:%S"`
+           echo "compact end at ${ts_end}"
+           echo "${ts_start} -> ${ts_end}" > {{ etcd_home }}/compact.info
+
            # 打印压缩的情况
            echo "Execute 'etcdctl compact rev' result: ${compactResult}"
            echo "Execute 'etcdctl compact rev' info: '${compactInfo}'"
@@ -141,17 +151,27 @@ compact() {
 }
 
 defrag() {
-    ts=` date "+%Y-%m-%d_%H:%M:%S"`
+    ts=`date "+%Y-%m-%d_%H:%M:%S"`
     echo -e "\n----------- defrag ----------- ${ts}"
 
     count=1
-    while [ $count -lt 10 ]
+    while [ $count -lt 3 ]
     do
        echo -e "\ndefrag db count: ${count}"
        count=`expr $count + 1`
 
-       {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} defrag
+       # 打印开始时间
+       ts_start=`date "+%Y-%m-%d_%H:%M:%S"`
+       echo "defrag start at ${ts_start}"
+
+       {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} --command-timeout=120s defrag
        defragResult=$?
+
+       # 打印结束时间
+       ts_end=`date "+%Y-%m-%d_%H:%M:%S"`
+       echo "defrag end at ${ts_end}"
+       echo "${ts_start} -> ${ts_end}" > {{ etcd_home }}/defrag.info
+
        # 打印碎片整理的情况
        echo "Execute 'etcdctl defrag' result: ${defragResult}"
 
@@ -164,6 +184,14 @@ defrag() {
     done
 
     return 1
+}
+
+disarm() {
+    ts=`date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- disarm ----------- ${ts}"
+
+    {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm disarm
+    return 0
 }
 
 # 查看绑定的lease的关联keys
@@ -203,6 +231,8 @@ restore() {
 ########################################
 ################执行命令################
 ########################################
+export ETCDCTL_API=3
+
 result=0
 if [ "$1" == "start" ]; then
     start
@@ -250,6 +280,9 @@ elif [ "$1" == "compact" ]; then
     result=$?
 elif [ "$1" == "defrag" ]; then
     defrag
+    result=$?
+elif [ "$1" == "disarm" ]; then
+    disarm
     result=$?
 elif [ X"$1" == X"" ]; then
     echo "etcd command is empty!"

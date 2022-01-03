@@ -1,0 +1,12 @@
+- name: 获取告警信息
+  shell: ". ~/.bash_profile; {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm list"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+  register: info
+
+- name: 展示告警信息
+  debug:
+    msg: "{{ info.stdout }}"

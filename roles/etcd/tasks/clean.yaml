@@ -1,0 +1,8 @@
+- name: 清理日志
+  shell: ". ~/.bash_profile; cat /dev/null > run.log; cat /dev/null > compact.log"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+  ignore_errors: yes

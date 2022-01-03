@@ -1,4 +1,4 @@
-- name: 压缩etcd
+- name: 压缩
   shell: ". ~/.bash_profile; ./handle-etcd.sh compact >> compact.log 2>&1"
   async: 100        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
@@ -8,10 +8,54 @@
   run_once: true
   ignore_errors: yes
 
-- name: 碎片整理etcd
-  shell: ". ~/.bash_profile; ./handle-etcd.sh defrag >> compact.log 2>&1"
-  async: 100        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+- name: 获取压缩时长信息
+  shell: ". ~/.bash_profile; cat compact.info"
+  async: 10         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
   args:
     executable: /bin/bash
     chdir: "{{ etcd_home }}"
+  run_once: true
+  ignore_errors: yes
+  register: compact_info
+
+- name: 打印压缩时长信息
+  debug:
+    msg: "{{ compact_info.stdout }}"
+  run_once: true
+
+- name: 压缩后休眠15s
+  shell: ". ~/.bash_profile; sleep 5"
+  async: 60         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+
+- name: 碎片整理
+  shell: ". ~/.bash_profile; ./handle-etcd.sh defrag >> compact.log 2>&1"
+  async: 150        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+
+- name: 获取碎片整理时长信息
+  shell: ". ~/.bash_profile; cat defrag.info"
+  async: 10         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+  ignore_errors: yes
+  register: defrag_info
+
+- name: 打印碎片整理时长信息
+  debug:
+    msg: "{{ defrag_info.stdout }}"
+
+- name: 取消告警
+  shell: ". ~/.bash_profile; ./handle-etcd.sh disarm >> compact.log 2>&1"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ etcd_home }}"
+  ignore_errors: true
