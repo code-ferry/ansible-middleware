@@ -96,7 +96,7 @@ compact() {
 
     {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} alarm list
     count=1
-    while [ $count -lt 3 ]
+    while [ $count -lt 2 ]
     do
        echo -e "\ncompact db count: $count"
        count=`expr $count + 1`
@@ -155,7 +155,7 @@ defrag() {
     echo -e "\n----------- defrag ----------- ${ts}"
 
     count=1
-    while [ $count -lt 3 ]
+    while [ $count -lt 2 ]
     do
        echo -e "\ndefrag db count: ${count}"
        count=`expr $count + 1`
@@ -164,7 +164,7 @@ defrag() {
        ts_start=`date "+%Y-%m-%d_%H:%M:%S"`
        echo "defrag start at ${ts_start}"
 
-       {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} --command-timeout=120s defrag
+       {{ etcd_home }}/etcdctl --endpoints={{ etcd_endpoints }} --command-timeout=300s defrag
        defragResult=$?
 
        # 打印结束时间
