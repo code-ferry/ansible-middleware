@@ -10,7 +10,7 @@ host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [pulsar:vars]
 ## 通常不需要变更的变量
-pulsar_version = 2.7.2
+pulsar_version = 2.8.1
 pulsar_file = "apache-pulsar-{{ pulsar_version }}-bin.tar.gz"
 pulsar_folder = "apache-pulsar-{{ pulsar_version }}"
 pulsar_home = "{{ install_home }}/{{ pulsar_folder }}"
@@ -25,6 +25,7 @@ pulsar_data_dir = "{{ pulsar_home }}/data"
 ##########################
 [pulsar:vars]
 zk_client_port = 2184
+zk_stat_port = 8010
 
 zk_tick_time = 2000
 zk_init_limit = 20
@@ -38,6 +39,7 @@ zk_max_client_cnxns = 500
 
 pulsar_zk_data_dir = "{{ pulsar_data_dir }}/zookeeper/data"
 pulsar_zk_datalog_dir = "{{ pulsar_data_dir }}/zookeeper/datalogs"
+pulsar_zk_metrics_provider_http_port = 18000
 
 ##########################
 ## for bookkeeper config

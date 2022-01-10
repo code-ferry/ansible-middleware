@@ -1,0 +1,87 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+# The number of milliseconds of each tick
+tickTime={{ zk_tick_time }}
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit={{ zk_init_limit }}
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit={{ zk_sync_limit }}
+# the directory where the snapshot is stored.
+dataDir={{ pulsar_zk_data_dir }}
+# the port at which the clients will connect
+clientPort={{ zk_client_port }}
+
+# the port at which the admin will listen
+admin.enableServer=true
+admin.serverPort=9991
+
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+maxClientCnxns={{ zk_max_client_cnxns }}
+#
+# Be sure to read the maintenance section of the
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+autopurge.snapRetainCount={{ zk_snap_retain_count }}
+# Purge task interval in hours
+# Set to "0" to disable auto purge feature
+autopurge.purgeInterval=1
+
+# Requires updates to be synced to media of the transaction log before finishing
+# processing the update. If this option is set to 'no', ZooKeeper will not require
+# updates to be synced to the media.
+# WARNING: it's not recommended to run a production ZK cluster with forceSync disabled.
+forceSync=yes
+
+# Enable Quorum TLS on each node.
+# To Transition from nontls to tls without downtime: the system needs to be restarted several times.
+# First, Restart zookeepers with portUnification: true.
+# Next,  Restart zookeepers with sslQuorum: true
+# Finally, Restart zookeepers with portUnification: false
+# Default: false
+sslQuorum=false
+
+# Specifies that the client port should accept SSL connections
+# (using the same configuration as the secure client port).
+# Default: false
+portUnification=false
+
+## Metrics Providers
+#
+# https://prometheus.io Metrics Exporter
+metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider
+metricsProvider.httpPort={{ pulsar_zk_metrics_provider_http_port }}
+metricsProvider.exportJvmInfo=true
+
+# Custom
+dataLogDir={{ pulsar_zk_datalog_dir }}
+
+# zookeeper cluster, example:
+# server.1=192.168.0.1:2988:3988
+# server.2=192.168.0.2:2988:3988
+# server.3=192.168.0.3:2988:3988
+{% for host in zookeeper_hosts -%}
+    server.{{ loop.index }}={{ host }}:2988:3988
+{% endfor %}
