@@ -1,6 +1,0 @@
-{# 计算中regionserver的服务地址 #}
-{% for host in groups['hbase'] %}
-{% if hostvars[host].regionserver is defined and hostvars[host].regionserver == "yes" %}
-{{ host }}
-{% endif %}
-{% endfor %}

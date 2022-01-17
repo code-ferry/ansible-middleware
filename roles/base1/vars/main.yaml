@@ -1,5 +1,0 @@
-master_hosts: "{{ lookup('template', 'host/backup-masters.j2') }}"
-regionserver_hosts: "{{ lookup('template', 'host/regionservers.j2') }}"
-
-master_count: "{{ master_hosts|count }}"
-regionserver_count: "{{ regionserver_hosts|count }}"
