@@ -1,0 +1,7 @@
+# install flume
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# uninstall flume
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]

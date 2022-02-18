@@ -1,0 +1,4 @@
+- hosts: flume
+  gather_facts: yes
+  roles:
+  - flume

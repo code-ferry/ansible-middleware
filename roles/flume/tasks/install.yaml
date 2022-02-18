@@ -1,0 +1,14 @@
+- name: Create install directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: unzip flume
+  unarchive:
+    src: "{{ software_home }}/{{ flume_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ flume_home }}"
+

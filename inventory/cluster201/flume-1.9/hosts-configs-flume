@@ -1,0 +1,12 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[flume]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[flume:vars]
+flume_version = 1.9.0
+flume_file = "apache-flume-{{ flume_version }}-bin.tar.gz"
+flume_folder = "apache-flume-{{ flume_version }}-bin"
+flume_home = "{{ install_home }}/{{ flume_folder }}"

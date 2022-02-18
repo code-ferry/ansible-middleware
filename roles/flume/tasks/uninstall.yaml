@@ -1,0 +1,4 @@
+- name: uninstall flume
+  file: name={{ item }} state=absent
+  with_items:
+  - "{{ flume_home }}"
