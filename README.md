@@ -369,6 +369,11 @@ ansible-playbook 03.clickhouse.yaml -t start -b
 ansible-playbook 03.clickhouse.yaml -t stop -b
 ```
 
+## tez安装
+> tez的安装，包括环境变量的设置，包上传hdfs。
+```
+./bin/role-tez.sh -t install
+```
 
 # 待改进的内容
 > 01. hadoop中namenode, resourcemanager为空的校验  
