@@ -43,3 +43,6 @@
 
 - import_tasks: list-princ.yaml
   tags: [ 'never', 'list-princ' ]
+
+- import_tasks: delete-princ.yaml
+  tags: [ 'never', 'delete-princ' ]
