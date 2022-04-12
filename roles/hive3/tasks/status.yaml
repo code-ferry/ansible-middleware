@@ -1,0 +1,10 @@
+- name: Get hive3 port
+  shell: "netstat -nat | grep LISTEN | egrep '{{ hive3_metastore_port }}|{{ hive3_server2_port }}|{{ hive3_webui_port }}'"
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+  register: result
+
+- debug:
+    msg: "{{ result.stdout_lines }}"

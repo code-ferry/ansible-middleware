@@ -1,0 +1,26 @@
+- name: 'Run metastore and hiveserver2 script'
+  shell: '. ~/.bash_profile; {{ item }}'
+  environment:
+    HIVE_HOME: "{{ hive3_home }}"
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "{{ hive3_home }}"
+  with_items:
+  - "nohup {{ hive3_home }}/bin/hive --service metastore -p {{ hive3_metastore_port }} > {{ hive3_home }}/logs/metastore.log 2>&1 &"
+  - "nohup {{ hive3_home }}/bin/hive --service hiveserver2 > {{ hive3_home }}/logs/hiveserver2.log 2>&1 &"
+
+- name: 再确认hive metastore的端口
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ hive3_metastore_port }}"
+    state: started
+    timeout: 25
+
+- name: 再确认hiveserver2的端口
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ hive3_server2_port }}"
+    state: started
+    timeout: 60

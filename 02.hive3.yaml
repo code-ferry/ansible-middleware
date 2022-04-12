@@ -1,0 +1,6 @@
+- hosts: hive3
+  gather_facts: yes
+  vars:
+    vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+  roles:
+  - hive3
