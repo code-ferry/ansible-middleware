@@ -13,11 +13,15 @@
 # restart hive
 - import_tasks: stop.yaml
   tags: [ 'never', 'restart' ]
+- import_tasks: clean.yaml
+  tags: [ 'never', 'restart' ]
 - import_tasks: start.yaml
   tags: [ 'never', 'restart' ]
 
-# restart hive
+# upgrade hive
 - import_tasks: stop.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: clean.yaml
   tags: [ 'never', 'upgrade' ]
 - import_tasks: install.yaml
   tags: [ 'never', 'upgrade' ]
@@ -28,6 +32,10 @@
 - import_tasks: init.yaml
   tags: [ 'never', 'init' ]
 
-# get hive port
+# get status
 - import_tasks: status.yaml
   tags: [ 'never', 'status' ]
+
+# clean log
+- import_tasks: clean.yaml
+  tags: [ 'never', 'clean' ]

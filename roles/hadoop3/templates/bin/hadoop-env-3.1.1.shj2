@@ -111,7 +111,7 @@ case ${HADOOP_OS_TYPE} in
   ;;
 esac
 
-export HADOOP_OPTS="${HADOOP_OPTS} -Djava.security.krb5.conf={{ krb5conf_path }} "
+export HADOOP_OPTS="${HADOOP_OPTS} -Djava.security.krb5.conf={{ krb5conf_path }}"
 
 # Extra Java runtime options for some Hadoop commands
 # and clients (i.e., hdfs dfs -blah).  These get appended to HADOOP_OPTS for
@@ -428,5 +428,3 @@ export HADOOP_OPTS="${HADOOP_OPTS} -Djava.security.krb5.conf={{ krb5conf_path }}
 export HADOOP_PID_DIR={{ hadoop_home }}/pids
 export HADOOP_SECURE_DN_PID_DIR={{ hadoop_home }}/pids
 export HADOOP_IDENT_STRING=$USER
-
-export KRB5_CONFIG={{ krb5conf_path }}

@@ -1,0 +1,2 @@
+#!/bin/bash
+rm -fr {{ hive3_log_dir }}/*
