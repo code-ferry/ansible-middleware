@@ -236,6 +236,7 @@ grant all privileges on hivedb.* to 'hiveuser'@'%' with grant option;
 ```
 
 ### 启动与停止等操作
+启动前需要hive的启动用户有操作hdfs上/tmp，/user目录的权限。
 ```
 ansible-playbook 02.hive.yaml -t start
 ansible-playbook 02.hive.yaml -t stop

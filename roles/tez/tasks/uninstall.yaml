@@ -14,4 +14,4 @@
   with_items:
   - 'export TEZ_CONF_DIR=$HADOOP_CONF_DIR'
   - 'export TEZ_JARS={{ tez_home }}/*:{{ tez_home }}/lib/*'
-  - 'export HADOOP_CLASSPATH=$TEZ_CONF_DIR:$TEZ_JARS:$HADOOP_CLASSPATH'
+  - 'export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$TEZ_CONF_DIR:$TEZ_JARS'

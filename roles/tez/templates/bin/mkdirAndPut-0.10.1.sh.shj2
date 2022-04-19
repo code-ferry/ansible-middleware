@@ -1,0 +1,10 @@
+#!/bin/bash
+
+KB_ENABLE={{ kb_enable }}
+
+if [ "$KB_ENABLE" == "true" ]; then
+kinit -kt {{ keytab }} {{ pricipal }}
+fi
+
+hdfs dfs -mkdir {{ tez_hdfs_path }}
+hdfs dfs -put -f ../tez-{{ tez_version }}.tar.gz {{ tez_hdfs_path }}

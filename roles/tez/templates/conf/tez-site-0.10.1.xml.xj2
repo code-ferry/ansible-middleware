@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property>
+        <name>tez.lib.uris</name>
+        <value>${fs.defaultFS}{{ tez_hdfs_path }}/tez-{{ tez_version }}.tar.gz</value>
+    </property>
+
+    <property>
+        <name>tez.container.max.java.heap.fraction</name>
+        <value>0.2</value>
+    </property>
+
+    <property>
+        <name>tez.use.cluster.hadoop-libs</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hive.tez.container.size</name>
+        <value>2048</value>
+    </property>
+
+    <property>
+        <name>tez.am.resource.memory.mb</name>
+        <value>2048</value>
+    </property>
+</configuration>
