@@ -1,0 +1,8 @@
+{# 计算中nacos的服务地址 #}
+{% set nacoses = [] -%}
+{% for host in groups['nacos'] -%}
+{{ nacoses.append("%s:%s" % (host, nacos_port)) -}}
+{% endfor -%}
+{% for i in nacoses -%}
+{{ i }}
+{% endfor -%}

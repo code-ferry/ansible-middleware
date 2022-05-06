@@ -1,0 +1,30 @@
+- name: Create install directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: Unarchive nacos package
+  unarchive:
+    src: "{{ software_home }}/{{ nacos_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ nacos_home }}"
+
+- name: Create logs directory
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ nacos_log_dir }}"
+
+- name: Create configuration file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'conf/application.properties.j2', dest: '{{ nacos_conf_dir }}/application.properties', mode: "0644" }
+  - { src: 'conf/cluster.conf.j2', dest: '{{ nacos_conf_dir }}/cluster.conf', mode: "0644" }
+  - { src: 'bin/startup.sh.j2', dest: '{{ nacos_home }}/bin/cluster.conf', mode: "0744" }

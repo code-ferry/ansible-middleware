@@ -1,0 +1,6 @@
+- name: delete nacos install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ nacos_home }}"

@@ -1,0 +1,40 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[nacos]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[nacos:vars]
+## 通常不需要变更的变量
+nacos_version = 2.1.0
+nacos_file = "nacos-server-{{ nacos_version }}.tar.gz"
+nacos_folder = "nacos"
+nacos_home = "{{ install_home }}/{{ nacos_folder }}"
+nacos_conf_dir = "{{ nacos_home }}/conf"
+nacos_log_dir = "{{ nacos_home }}/logs"
+
+##########################
+## application config
+##########################
+[nacos:vars]
+nacos_port = 8848
+nacos_context_path = /nacos
+
+##########################
+## db config
+##########################
+[nacos:vars]
+nacos_mysql_addr = 10.1.12.19
+nacos_mysql_port = 3306
+nacos_mysql_db = nacos
+nacos_jdbc_url = "jdbc:mysql://{{ nacos_mysql_addr }}:{{ nacos_mysql_port }}/{{ nacos_mysql_db }}?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC"
+nacos_jdbc_username = nacos
+nacos_jdbc_password = nacos123!
+
+##########################
+## other config
+##########################
+nacos_auth_enabled = true
+nacos_accesslog_enabled = false
