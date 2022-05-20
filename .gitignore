@@ -29,4 +29,4 @@ roles/test
 
 # business ignore
 roles/dolphin/templates/hadoop
-roles/dolphin/templates/hadoop.keytab
+roles/dolphin/files/hadoop.keytab
