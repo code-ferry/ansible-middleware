@@ -52,6 +52,10 @@
 - import_tasks: alarm.yaml
   tags: ['never','alarm']
 
-# 告警展示
+# 清理日志操作
 - import_tasks: clean.yaml
   tags: ['never','clean']
+
+# ionice操作
+- import_tasks: ionice.yaml
+  tags: ['never','ionice']

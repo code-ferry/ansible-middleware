@@ -19,8 +19,8 @@ etcd_peer_port = 42380
 etcd_proxy_port = 42381
 
 [etcd:vars]
-etcd_file = etcd-3.4.16.tar.gz
-etcd_folder = etcd-3.4.16
+etcd_file = etcd-3.5.1.tar.gz
+etcd_folder = etcd-3.5.1
 etcd_home = "{{ install_home }}/{{ etcd_folder }}"
 etcd_name = "{% for host in groups['etcd'] -%}{% if host == inventory_hostname %}etcd0{{ loop.index }}{% endif %}{% endfor %}"
 etcd_snapshot_home = "{{ install_home }}/etcd-snapshot"

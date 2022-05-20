@@ -228,6 +228,28 @@ restore() {
 	return 0
 }
 
+ionice() {
+    ts=`date "+%Y-%m-%d_%H:%M:%S"`
+    echo -e "\n----------- ionice ----------- ${ts}"
+
+    pid=`ps -ef | grep "name={{ etcd_name }}" |  grep "{{ etcd_home }}" | grep -v "grep" | awk '{print $2}'`
+    echo "pid="${pid}
+    if [ X"" = X"$pid" ]; then
+        echo "etcd member not run, name={{ etcd_name }}"
+        return 1
+    fi
+
+    echo "before ionice"
+    /usr/bin/ionice -c 2 -n 0 -p $pid
+    echo "after ionice"
+    if [ $? -ne 0 ]; then
+        echo "ionice etcd process fail, pid=$pid, name={{ etcd_name }}"
+        return
+    fi
+
+    return 0
+}
+
 ########################################
 ################执行命令################
 ########################################
@@ -283,6 +305,9 @@ elif [ "$1" == "defrag" ]; then
     result=$?
 elif [ "$1" == "disarm" ]; then
     disarm
+    result=$?
+elif [ "$1" == "ionice" ]; then
+    ionice
     result=$?
 elif [ X"$1" == X"" ]; then
     echo "etcd command is empty!"
