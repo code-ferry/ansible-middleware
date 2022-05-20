@@ -27,3 +27,6 @@ inventory/cluster-hw
 roles/test
 00.test.yaml
 
+# business ignore
+roles/dolphin/templates/hadoop
+roles/dolphin/templates/hadoop.keytab

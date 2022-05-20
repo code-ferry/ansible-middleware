@@ -1,0 +1,25 @@
+- name: Stop dolphin cluster
+  shell: ". ~/.bash_profile; ./stop-all.sh"
+  async: 120         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2            # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ dolphin_real_install_path }}/bin"
+  register: result
+  run_once: true
+  ignore_errors: true
+  delegate_to: "{{ hosts_first }}"
+
+- name: Check dolphin stopped status
+  async_status:
+    jid: "{{ result.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 10        # 检查次数为5次, 间隔5秒
+  run_once: true
+  delegate_to: "{{ hosts_first }}"
+
+- name: Print dolphin stopping info
+  debug: msg="{{ result.stdout_lines }}"
+  run_once: true
+  delegate_to: "{{ hosts_first }}"

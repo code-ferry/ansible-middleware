@@ -1,0 +1,56 @@
+- name: Create install directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+  run_once: true
+  delegate_to: "{{ hosts_first }}"
+
+- name: Unarchive dolphin package
+  unarchive:
+    src: "{{ software_home }}/{{ dolphin_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ dolphin_home }}"
+  run_once: true
+  delegate_to: "{{ hosts_first }}"
+
+- name: Create configuration file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: 'conf/install_config.conf', dest: '{{ dolphin_conf_dir }}/config/install_config.conf', mode: "0644" }
+    - { src: 'conf/dolphinscheduler_env.sh', dest: '{{ dolphin_conf_dir }}/env/dolphinscheduler_env.sh', mode: "0744" }
+    - { src: 'install.sh', dest: '{{ dolphin_home }}/install.sh', mode: "0744" }
+    - { src: 'hadoop/core-site.xml', dest: '{{ dolphin_conf_dir }}/core-site.xml', mode: "0644" }
+    - { src: 'hadoop/hdfs-site.xml', dest: '{{ dolphin_conf_dir }}/hdfs-site.xml', mode: "0644" }
+    - { src: 'hadoop/mapred-site.xml', dest: '{{ dolphin_conf_dir }}/mapred-site.xml', mode: "0644" }
+    - { src: 'hadoop/yarn-site.xml', dest: '{{ dolphin_conf_dir }}/yarn-site.xml', mode: "0644" }
+    - { src: 'hadoop/krb5.conf', dest: '{{ dolphin_conf_dir }}/krb5.conf', mode: "0644" }
+  run_once: true
+  delegate_to: "{{ hosts_first }}"
+
+- name: Copy keytab file
+  copy:
+    src: "{{ item.file }}"
+    dest: "{{ item.destpath }}"
+    force: yes
+  with_items:
+    - { file: "hadoop.keytab", destpath: "{{ dolphin_conf_dir }}" }
+    - { file: "mysql-connector-java-5.1.47.jar", destpath: "{{ dolphin_home }}/lib" }
+  run_once: true
+  delegate_to: "{{ hosts_first }}"
+
+#- name: Run install script
+#  shell: '. ~/.bash_profile; sh ./install.sh &'
+#  async: 20
+#  poll: 2
+-
+#  args:
+#    executable: /bin/bash
+#    chdir: "{{ dolphin_home }}"
+#  register: result
+#  run_once: true

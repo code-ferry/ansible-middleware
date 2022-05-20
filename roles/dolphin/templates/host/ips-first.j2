@@ -1,0 +1,6 @@
+{# 计算中hosts的服务地址,用字符串拼接 #}
+{% set hosts = [] -%}
+{% for host in groups['dolphin'] -%}
+{{ hosts.append(host) -}}
+{% endfor -%}
+{{ hosts|first -}}

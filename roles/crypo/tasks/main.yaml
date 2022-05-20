@@ -1,6 +1,6 @@
 # 生成密钥。
-#- import_tasks: create.yaml
-#  tags: [ 'never', 'create' ]
+- import_tasks: create.yaml
+  tags: [ 'never', 'create' ]
 
 # 删除密钥。
 - import_tasks: delete.yaml

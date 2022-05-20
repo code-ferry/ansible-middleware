@@ -1,0 +1,76 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[dolphin]
+192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+192.168.128.202 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[dolphin:vars]
+## 通常不需要变更的变量
+dolphin_version = 2.0.5
+dolphin_file = "apache-dolphinscheduler-{{ dolphin_version }}-bin.tar.gz"
+dolphin_folder = "apache-dolphinscheduler-{{ dolphin_version }}-bin"
+dolphin_home = "{{ install_home }}/{{ dolphin_folder }}"
+dolphin_conf_dir = "{{ dolphin_home }}/conf"
+dolphin_log_dir = "{{ dolphin_home }}/logs"
+
+##########################
+## application config
+##########################
+[dolphin:vars]
+dolphin_hosts = "{{ hosts_string }}"
+dolphin_masters = 192.168.128.201
+dolphin_workers = 192.168.128.201:default
+dolphin_alert_servers = 192.168.128.202
+dolphin_api_servers = 192.168.128.202
+
+dolphin_real_install_path = "/home/bduser/ds"
+dolphin_data_basedir_path = /tmp/ds
+
+##########################
+## apiserver config
+##########################
+dolphin_apiserver_port = 12345
+
+##########################
+## worker config
+##########################
+# resource storage type: HDFS, S3, NONE
+dolphin_resource_storage_type = HDFS
+dolphin_resource_upload_path = /ds
+
+##########################
+## db config
+##########################
+[dolphin:vars]
+dolphin_db_type = mysql
+dolphin_db_url = jdbc:mysql://192.168.128.1:3306/dolphinscheduler?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+dolphin_db_username = dolphin
+dolphin_db_password = dolphin123
+
+##########################
+## zookeeper config
+##########################
+[dolphin:vars]
+dolphin_zk_servers = 192.168.128.201:2181
+dolphin_zk_namespace = dolphinscheduler
+
+##########################
+## hadoop config
+##########################
+[dolphin:vars]
+dolphin_hdfs_defaultFS = hdfs://ns
+dolphin_rm_port = 8088
+dolphin_yarn_address = 10.1.8.1
+dolphin_hdfs_root_user = xxxx
+
+dolphin_hadoop_kb_enabled = true
+dolphin_hadoop_krb5_path = $installPath/conf/krb5.conf
+dolphin_hadoop_keytab_path = $installPath/conf/hadoop.keytab
+dolphin_hadoop_kb_principal = xxxx.com\\@XXXX.COM
+
+##########################
+## env config
+##########################
+dolphin_hadoop_home = /home/udapdev/deploy/hadoop-2.8.5
+dolphin_hadoop_conf = /home/udapdev/deploy/hadoop-2.8.5/etc/hadoop

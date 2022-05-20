@@ -1,0 +1,2 @@
+hosts_string: "{{ lookup('template', 'host/ips-string.j2')|trim }}"
+hosts_first: "{{ lookup('template', 'host/ips-first.j2')|trim }}"

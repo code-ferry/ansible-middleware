@@ -1,0 +1,14 @@
+- name: clean log and data directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ dolphin_log_dir }}"
+
+- name: Create data and logs directory
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ dolphin_log_dir }}"
+

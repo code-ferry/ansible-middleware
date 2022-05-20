@@ -1,0 +1,4 @@
+- hosts: dolphin
+  gather_facts: yes
+  roles:
+  - dolphin

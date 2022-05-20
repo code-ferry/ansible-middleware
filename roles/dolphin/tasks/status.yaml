@@ -1,0 +1,16 @@
+- name: Status dolphin cluster
+  shell: ". ~/.bash_profile; ./status-all.sh"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ dolphin_real_install_path }}/bin"
+  register: result
+  run_once: true
+  delegate_to: "{{ hosts_first }}"
+  ignore_errors: true
+
+- name: Print dolphin status
+  debug: msg="{{ result.stdout_lines }}"
+  run_once: true
+  delegate_to: "{{ hosts_first }}"

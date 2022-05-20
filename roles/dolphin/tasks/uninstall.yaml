@@ -1,0 +1,7 @@
+- name: delete dolphin install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ dolphin_home }}"
+  - "{{ dolphin_real_install_path }}"

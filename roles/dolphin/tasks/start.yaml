@@ -1,0 +1,23 @@
+- name: Start dolphin cluster
+  shell: '. ~/.bash_profile; ./start-all.sh'
+  async: 120
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "{{ dolphin_real_install_path }}/bin"
+  register: result
+  run_once: true
+  ignore_errors: true
+  delegate_to: "{{ hosts_first }}"
+
+- name: Check dolphin started status
+  async_status:
+    jid: "{{ result.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 10        # 检查次数为5次, 间隔5秒
+  run_once: true
+
+- name: Print dolphin starting info
+  debug: msg="{{ result.stdout_lines }}"
+  run_once: true
