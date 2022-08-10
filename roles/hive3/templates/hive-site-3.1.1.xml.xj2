@@ -3790,7 +3790,7 @@
   </property>
   <property>
     <name>hive.security.authorization.sqlstd.confwhitelist</name>
-    <value/>
+    <value>.*</value>
     <description>
       A Java regex. Configurations parameters that match this
       regex can be modified by user when SQL standard authorization is enabled.

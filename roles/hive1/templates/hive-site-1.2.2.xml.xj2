@@ -2840,7 +2840,7 @@
     </property>
     <property>
         <name>hive.security.authorization.sqlstd.confwhitelist</name>
-        <value/>
+        <value>.*</value>
         <description>
             List of comma separated Java regexes. Configurations parameters that match these
             regexes can be modified by user when SQL standard authorization is enabled.
