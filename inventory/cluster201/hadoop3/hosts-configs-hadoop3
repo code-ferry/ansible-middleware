@@ -70,10 +70,12 @@ log_aggr_dir = /var/container/logs
 
 # jobhistory
 jobhistory_enable = false
+jobhistory_host = host201.example.com
 jobhistory_port = 10020
 jobhistory_webapp_port = 19888
 jobhistory_intermediate_done_dir = /var/history/tmp
 jobhistory_done_dir = /var/history/done
+jobhistory_cache_size = 2000
 
 [hadoop:vars]
 ## 通常不需要变更的变量

@@ -7,11 +7,11 @@
     chdir: "{{ hadoop_home }}/sbin"
   register: result
   run_once: true
-  delegate_to: "{{ yarn_hosts[0] }}"
+  delegate_to: "{{ jobhistory_host }}"
 
 - name: 再确认job history的端口
   wait_for:
-    host: "{{ yarn_hosts[0] }}"
+    host: "{{ jobhistory_host }}"
     port: "{{ jobhistory_port }}"
     state: stopped
     timeout: 30

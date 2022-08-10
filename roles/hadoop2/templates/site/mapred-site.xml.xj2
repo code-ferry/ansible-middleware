@@ -32,13 +32,21 @@
     <!-- job history -->
     <property>
         <name>mapreduce.jobhistory.address</name>
-        <value>{{ yarn_hosts[0] }}:{{ jobhistory_port }}</value>
+        <value>{{ jobhistory_host }}:{{ jobhistory_port }}</value>
         <description>MapReduce JobHistory Server host:port</description>
     </property>
     <property>
         <name>mapreduce.jobhistory.webapp.address</name>
-        <value>{{ yarn_hosts[0] }}:{{ jobhistory_webapp_port }}</value>
+        <value>{{ jobhistory_host }}:{{ jobhistory_webapp_port }}</value>
     </property>
+<!--    <property>-->
+<!--        <name>mapreduce.jobhistory.webapp.https.address</name>-->
+<!--        <value>{{ yarn_hosts[0] }}:{{ jobhistory_webapp_https_port }}</value>-->
+<!--    </property>-->
+<!--    <property>-->
+<!--        <name>mapreduce.jobhistory.admin.address</name>-->
+<!--        <value>{{ yarn_hosts[0] }}:{{ jobhistory_admin_port }}</value>-->
+<!--    </property>-->
 
     <property>
         <name>mapreduce.jobhistory.intermediate-done-dir</name>
@@ -48,6 +56,10 @@
         <name>mapreduce.jobhistory.done-dir</name>
         <value>{{ jobhistory_done_dir }}</value>
     </property>
+    <property>
+        <name>mapreduce.jobhistory.joblist.cache.size</name>
+        <value>{{ jobhistory_cache_size }}</value>
+    </property>
 
     <property>
         <name>mapreduce.jobhistory.keytab</name>
@@ -55,7 +67,8 @@
     </property>
     <property>
         <name>mapreduce.jobhistory.principal</name>
-        <value>{{ hadoop_kerberos_principal_jhs }}</value>
+        <!-- <value>{{ hadoop_kerberos_principal_jhs }}</value> -->
+        <value>{{ hadoop_kerberos_principal }}</value>
     </property>
     {% endif %}
 
