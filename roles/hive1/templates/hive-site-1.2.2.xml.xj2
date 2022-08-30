@@ -49,7 +49,8 @@
     </property>
     <property>
         <name>hive.exec.stagingdir</name>
-        <value>.hive-staging</value>
+        <value>${hive.exec.scratchdir}/${user.name}/.staging</value>
+<!--        <value>.hive-staging</value>-->
         <description>Directory name that will be created inside table locations in order to support HDFS encryption. This is replaces
             ${hive.exec.scratchdir} for query results with the exception of read-only tables. In all cases ${hive.exec.scratchdir} is still used for
             other temporary files, such as job plans.
