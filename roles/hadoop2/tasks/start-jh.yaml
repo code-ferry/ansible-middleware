@@ -16,3 +16,4 @@
     state: started
     timeout: 30
   run_once: true
+  delegate_to: "{{ jobhistory_host }}"

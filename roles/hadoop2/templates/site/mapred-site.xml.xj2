@@ -39,14 +39,6 @@
         <name>mapreduce.jobhistory.webapp.address</name>
         <value>{{ jobhistory_host }}:{{ jobhistory_webapp_port }}</value>
     </property>
-<!--    <property>-->
-<!--        <name>mapreduce.jobhistory.webapp.https.address</name>-->
-<!--        <value>{{ yarn_hosts[0] }}:{{ jobhistory_webapp_https_port }}</value>-->
-<!--    </property>-->
-<!--    <property>-->
-<!--        <name>mapreduce.jobhistory.admin.address</name>-->
-<!--        <value>{{ yarn_hosts[0] }}:{{ jobhistory_admin_port }}</value>-->
-<!--    </property>-->
 
     <property>
         <name>mapreduce.jobhistory.intermediate-done-dir</name>
@@ -71,5 +63,4 @@
         <value>{{ hadoop_kerberos_principal }}</value>
     </property>
     {% endif %}
-
 </configuration>
