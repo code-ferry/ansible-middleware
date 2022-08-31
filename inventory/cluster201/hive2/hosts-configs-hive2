@@ -25,7 +25,7 @@ hive2_execution_engine = mr
 
 # hive2的版本中目录区分下
 hive2_warehouse_dir = "/user/hive2/warehouse"
-hive2_scratchdir = "/user/hive2/scratchdir"
+hive2_scratchdir = "/tmp/hive2"
 hive2_log_dir = "/user/hive2/logs"
 
 hive2_heapsize = 2048

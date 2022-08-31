@@ -21,7 +21,7 @@ hive1_local_scratchdir = "{{ hive1_home }}/scratchdir"
 hive1_local_tmp_dir = "{{ hive1_home }}/tmp"
 
 hive1_warehouse_dir = "/user/hive/warehouse"
-hive1_scratchdir = "/user/hive/scratchdir"
+hive1_scratchdir = "/tmp/hive"
 hive1_log_dir = "/user/hive/logs"
 
 hive1_heapsize = 2048
