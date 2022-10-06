@@ -41,12 +41,12 @@
     <!-- job history -->
     <property>
         <name>mapreduce.jobhistory.address</name>
-        <value>{{ yarn_hosts[0] }}:{{ jobhistory_port }}</value>
+        <value>{{ jobhistory_host }}:{{ jobhistory_port }}</value>
         <description>MapReduce JobHistory Server host:port</description>
     </property>
     <property>
         <name>mapreduce.jobhistory.webapp.address</name>
-        <value>{{ yarn_hosts[0] }}:{{ jobhistory_webapp_port }}</value>
+        <value>{{ jobhistory_host }}:{{ jobhistory_webapp_port }}</value>
     </property>
 <!--    <property>-->
 <!--        <name>mapreduce.jobhistory.webapp.https.address</name>-->

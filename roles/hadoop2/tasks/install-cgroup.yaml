@@ -6,6 +6,7 @@
     executable: /bin/bash
     chdir: "~/"
     creates: "{{ yarn_cgroup_mount_path }}/cpu{{ yarn_cgroup_hierarchy }}"
+  when: yarn_cgroup_enable == "true"
 
 - name: 修改控制组中子系统文件的属组
   shell: ". ~/.bash_profile; chown -R {{ yarn_lce_user }}:{{ yarn_lce_group }} {{ yarn_cgroup_mount_path }}{{ item }}{{ yarn_cgroup_hierarchy }}"
@@ -16,3 +17,4 @@
   - "/cpu"
   - "/cpuset"
   - "/memory"
+  when: yarn_cgroup_enable == "true"

@@ -379,7 +379,10 @@ ansible-playbook 03.clickhouse.yaml -t stop -b
 ## tez安装
 tez的安装，包括环境变量的设置，包上传hdfs。
 ```
+# 安装tez 0.9
 ./bin/role-tez.sh -t install
+# 安装tez 0.10
+./bin/role-tez-3.sh -t install
 ```
 
 ## dolphin2.0.x安装

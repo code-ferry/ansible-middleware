@@ -243,6 +243,11 @@
         <name>dfs.ha.fencing.ssh.private-key-files</name>
         <value>~/.ssh/id_rsa</value>
     </property>
+    <!-- 加大写Journalnode超时时间, 避免namenode容易出现挂掉的情况 -->
+    <property>
+        <name>dfs.qjournal.write-txns.timeout.ms</name>
+        <value>60000</value>
+    </property>
 {% endif %}
 
 {% if dfs_webhdfs_enabled|lower == "true" %}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
-    <!--指定namenode ha时，zookeeper地址-->
+    <!-- 指定namenode ha时，zookeeper地址 -->
     {% if namenode_ha_enable|lower == "true" %}
     <property>
         <name>fs.defaultFS</name>

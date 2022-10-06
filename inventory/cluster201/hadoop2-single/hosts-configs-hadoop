@@ -147,7 +147,7 @@ yarn_sc_max_vcore = 6
 
 # yarn cgroup
 yarn_cgroup_enable = false
-yarn_cgroup_hierarchy = /hadoop-yarn
+yarn_cgroup_hierarchy = /hadoop2-yarn
 yarn_cgroup_mount = false
 yarn_cgroup_mount_path = /sys/fs/cgroup
 yarn_cgroup_cpu_limit = 100

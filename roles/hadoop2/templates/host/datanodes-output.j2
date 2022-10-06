@@ -1,4 +1,4 @@
-{# 计算中datanode的服务地址 #}
+{# 计算中datanode的服务地址，用于输出到文件 #}
 {% for host in groups['hadoop'] %}
 {% if hostvars[host].datanode is defined and hostvars[host].datanode == "yes" %}
 {{ host }}

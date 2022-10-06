@@ -15,7 +15,7 @@ install_home="/home/hadoop3/deploy"
 
 [hadoop:vars]
 # ha开关配置
-namenode_ha_enable=false
+namenode_ha_enable=true
 yarn_ha_enable=false
 
 # ha相关配置
@@ -169,7 +169,7 @@ yarn_sc_max_vcore = 6
 
 # yarn cgroup
 yarn_cgroup_enable = false
-yarn_cgroup_hierarchy = /hadoop-yarn
+yarn_cgroup_hierarchy = /hadoop3-yarn
 yarn_cgroup_mount = false
 yarn_cgroup_mount_path = /sys/fs/cgroup
 yarn_cgroup_cpu_limit = 100

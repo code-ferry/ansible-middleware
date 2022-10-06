@@ -19,7 +19,6 @@ journal_server="{{ journal_hosts_string }}"
 
 [hadoop:vars]
 # namenode
-namenode_hosts = "{{ lookup('template', 'host/namenodes-output.j2').split(',')|list -}}"
 namenode_port = 9000
 namenode_http_port = 50070
 namenode_https_port = 50470
@@ -36,7 +35,6 @@ datanode_http_port = 61006
 datanode_https_port = 50476
 
 # yarn(yarn Resource Manager的服务器)
-yarn_hosts = "{{ lookup('template', 'host/yarns-output.j2').split(',')|list -}}"
 resourcemanager_port = 8032
 resourcemanager_scheduler_port = 8030
 resourcemanager_tracker_port = 8031
@@ -156,7 +154,7 @@ yarn_sc_max_vcore = 4
 
 # yarn cgroup
 yarn_cgroup_enable = false
-yarn_cgroup_hierarchy = /hadoop-yarn
+yarn_cgroup_hierarchy = /hadoop2-yarn
 yarn_cgroup_mount = false
 yarn_cgroup_mount_path = /sys/fs/cgroup
 yarn_cgroup_cpu_limit = 100

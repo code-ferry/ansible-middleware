@@ -139,3 +139,6 @@
 - import_tasks: init-ha.yaml
   tags: [ 'never', 'init-ha' ]
 
+# repair namenode ha
+- import_tasks: repair-ha.yaml
+  tags: [ 'never', 'repair-ha' ]

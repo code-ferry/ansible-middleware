@@ -23,4 +23,5 @@
     name: "{{ item }}"
     state: absent
   with_items:
+  - "{{ hadoop_tmp_dir }}"
   - "{{ hadoop_home }}"

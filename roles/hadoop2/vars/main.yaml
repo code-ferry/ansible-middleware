@@ -1,6 +1,16 @@
+namenode_hosts: "{{ lookup('template', 'host/namenodes.j2') }}"
+datanode_hosts: "{{ lookup('template', 'host/datanodes.j2') }}"
+yarn_hosts: "{{ lookup('template', 'host/yarns.j2') }}"
+
+namenode_count: "{{ namenode_hosts|count }}"
+datanode_count: "{{ datanode_hosts|count }}"
+yarn_count: "{{ yarn_hosts|count }}"
+
+vhostipv4: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+vhostipv6: "{{ hostvars[inventory_hostname].ansible_all_ipv6_addresses[0] }}"
+vhostname: "{{ hostvars[inventory_hostname].ansible_hostname }}"
+vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+
 journal_hosts: "{{ lookup('template', 'host/journals.j2') }}"
 journal_hosts_string: "{{ lookup('template', 'host/journals-string.j2')|trim }}"
 journal_count: "{{ journal_hosts|count }}"
-
-datanode_hosts: "{{ lookup('template', 'host/datanodes.j2') }}"
-namenode_hosts: "{{ lookup('template', 'host/namenodes.j2') }}"
