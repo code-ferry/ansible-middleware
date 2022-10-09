@@ -1,4 +1,4 @@
-- name: 停止job history
+- name: Stop jobhistory
   shell: ". ~/.bash_profile; mr-jobhistory-daemon.sh stop historyserver"
   async: 60         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
@@ -9,7 +9,26 @@
   run_once: true
   delegate_to: "{{ jobhistory_host }}"
 
-- name: 再确认job history的端口
+- debug:
+    msg: "{{ result }}"
+
+- name: Get jobhistory processes
+  shell: ". ~/.bash_profile; ps -ef | grep java | grep -v grep | grep {{ hadoop_home }} | grep 'historyserver' | awk '{print $2}'"
+  async: 20
+  poll: 2
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  register: presult
+  when: result.rc == 1
+
+- name: Kill jobhistory processes
+  shell: ". ~/.bash_profile; kill -9 {{ item }}"
+  with_items: "{{ presult.stdout_lines }}"
+  delegate_to: "{{ jobhistory_host }}"
+  when: result.rc == 1
+
+- name: Check jobhistory port again
   wait_for:
     host: "{{ jobhistory_host }}"
     port: "{{ jobhistory_port }}"

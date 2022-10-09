@@ -1,4 +1,4 @@
-- name: start journalnode
+- name: Start journalnode
   shell: ". ~/.bash_profile; hadoop-daemon.sh start journalnode"
   environment:
     HADOOP_HOME: "{{ hadoop_home }}"

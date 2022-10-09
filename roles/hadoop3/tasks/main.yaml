@@ -49,9 +49,6 @@
   tags: [ 'never', 'stop' ]
 - import_tasks: stop-yarn.yaml
   tags: [ 'never', 'stop' ]
-- import_tasks: stop-zkfc.yaml
-  tags: [ 'never', 'stop' ]
-  when: namenode_ha_enable|lower == "true"
 
 # ----------------------------------
 # 卸载hadoop

@@ -31,7 +31,7 @@
 ################################
 #### stop namenode #############
 ################################
-- name: stop master namenode(namenode ha)
+- name: Stop master namenode(namenode ha)
   shell: ". ~/.bash_profile; ./hadoop-daemon.sh stop namenode"
   async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
   poll: 2           # 设置为0时, 任务会立即返回
@@ -42,7 +42,7 @@
   run_once: true
   delegate_to: "{{ namenode_hosts[0] }}"
 
-- name: check master namenode port(namenode ha)
+- name: Check master namenode port(namenode ha)
   wait_for:
     host: "{{ namenode_hosts[0] }}"
     port: "{{ namenode_port }}"
@@ -51,7 +51,7 @@
   run_once: true
   delegate_to: "{{ namenode_hosts[0] }}"
 
-- name: stop standby namenode(namenode ha)
+- name: Stop standby namenode(namenode ha)
   shell: ". ~/.bash_profile; ./hadoop-daemon.sh stop namenode"
   async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
   poll: 2           # 设置为0时, 任务会立即返回
@@ -62,7 +62,7 @@
   run_once: true
   delegate_to: "{{ namenode_hosts[1] }}"
 
-- name: check standby namenode port(namenode ha)
+- name: Check standby namenode port(namenode ha)
   wait_for:
     host: "{{ namenode_hosts[1] }}"
     port: "{{ namenode_port }}"
@@ -74,7 +74,7 @@
 ################################
 #### stop zkfc #################
 ################################
-- name: stop zkfc
+- name: Stop zkfc
   shell: ". ~/.bash_profile; ./hadoop-daemon.sh stop zkfc"
   async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
   poll: 2           # 设置为0时, 任务会立即返回

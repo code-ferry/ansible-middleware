@@ -9,6 +9,9 @@
   run_once: true
   delegate_to: "{{ jobhistory_host }}"
 
+- debug:
+    msg: "{{ result.stdout }}"
+
 - name: 再确认job history的端口
   wait_for:
     host: "{{ jobhistory_host }}"

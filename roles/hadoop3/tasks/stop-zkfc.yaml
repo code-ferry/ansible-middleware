@@ -1,4 +1,4 @@
-- name: stop zkfc
+- name: Stop zkfc
   shell: ". ~/.bash_profile; ./hdfs --daemon stop zkfc"
   environment:
     HADOOP_HOME: "{{ hadoop_home }}"

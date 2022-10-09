@@ -1,4 +1,4 @@
-- name: 擦除环境变量$HADOOP_HOME等
+- name: Erase environment variable $HADOOP_HOME etc.
   lineinfile:
     dest: ~/.bash_profile
     state: absent
@@ -18,7 +18,7 @@
   - 'export HADOOP_CLASSPATH=`$HADOOP_HOME/bin/hadoop classpath`'
   - 'export JSVC_HOME=$HADOOP_HOME/libexec'
 
-- name: 卸载hadoop
+- name: Delete hadoop directory
   file:
     name: "{{ item }}"
     state: absent
