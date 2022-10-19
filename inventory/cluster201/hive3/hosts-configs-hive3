@@ -1,0 +1,71 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[hive3]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[hive3:vars]
+# default 10000
+hive3_server2_port = 10311
+# default 9083
+hive3_metastore_port = 9086
+# default 10002, after hive 3.x
+hive3_webui_port = 10003
+
+[hive3:vars]
+hive3_version = 3.1.1
+hive3_file = "apache-hive-{{ hive3_version }}-bin.tar.gz"
+hive3_folder = "apache-hive-{{ hive3_version }}-bin"
+hive3_home = "{{ install_home }}/{{ hive3_folder }}"
+
+hive3_conf_dir = "{{ hive3_home }}/conf"
+hive3_local_scratchdir = "{{ hive3_home }}/scratchdir"
+hive3_local_tmp_dir = "{{ hive3_home }}/tmp"
+hive3_execution_engine = tez
+
+# hive 3的版本中目录区分下
+hive3_warehouse_dir = "/user/hive3/warehouse"
+hive3_scratchdir = "/user/hive3/scratchdir"
+hive3_log_dir = "/user/hive3/logs"
+
+hive3_heapsize = 2048
+
+# hive ha的相关配置
+hive3_ha_enable = false
+hive3_dynamic_discovery = true
+hive3_zk_namespace = hivezk3
+hive3_zk_quorum = edc03.com:21811
+hive3_zk_port = 21811
+
+[hive3:vars]
+hive3_mysql_addr = 10.1.12.19
+hive3_mysql_port = 3306
+hive3_mysql_db = hive3
+hive3_jdbc_url = "jdbc:mysql://{{ hive3_mysql_addr }}:{{ hive3_mysql_port }}/{{ hive3_mysql_db }}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false"
+hive3_jdbc_driver = com.mysql.jdbc.Driver
+hive3_jdbc_username = hive3
+hive3_jdbc_password = hive3
+
+[hive3:vars]
+# NONE, KERBEROS, LDAP
+hive3_server2_authentication = KERBEROS
+hive3_server2_kerberos_fqdn = /_HOST
+hive3_server2_kerberos_principal = {{ install_user }}{{ hive3_server2_kerberos_fqdn }}@NEWLAND.COM
+hive3_server2_kerberos_keytab = /etc/newland/kerberos/hadoop3.keytab
+
+hive3_metastore_sasl_enabled = true
+hive3_metastore_kerberos_fqdn = /_HOST
+hive3_metastore_kerberos_principal = {{ install_user }}{{ hive3_server2_kerberos_fqdn }}@NEWLAND.COM
+hive3_metastore_kerberos_keytab = /etc/newland/kerberos/hadoop3.keytab
+
+hive3_http_kerberos_fqdn = /_HOST
+hive3_http_kerberos_principal = HTTP{{ hive3_metastore_kerberos_fqdn }}@NEWLAND.COM
+hive3_http_kerberos_keytab = /etc/newland/kerberos/hadoop3.keytab
+
+[hive3:vars]
+# authorization
+hive3_authorization_enabled = true
+hive3_admin_users = {{ install_user }}
+
+# stat
+hive3_stats_autogather_enable = false

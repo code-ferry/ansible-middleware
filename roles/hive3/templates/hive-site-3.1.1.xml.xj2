@@ -2873,7 +2873,7 @@
   </property>
   <property>
     <name>hive.stats.autogather</name>
-    <value>true</value>
+    <value>{{ hive3_stats_autogather_enable }}</value>
     <description>A flag to gather statistics (only basic) automatically during the INSERT OVERWRITE command.</description>
   </property>
   <property>
