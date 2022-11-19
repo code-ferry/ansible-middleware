@@ -214,6 +214,10 @@
     {% endif %}
 
     <property>
+        <name>yarn.nodemanager.log.retain-seconds</name>
+        <value>{{ nodemanager_log_retain_seconds }}</value>
+    </property>
+    <property>
         <name>yarn.nodemanager.delete.debug-delay-sec</name>
         <value>{{ nodemanager_delete_debug_delay_sec }}</value>
     </property>
