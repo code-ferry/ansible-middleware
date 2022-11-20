@@ -14,8 +14,5 @@
     host: "{{ yarn_hosts[0] }}"
     port: "{{ resourcemanager_port }}"
     state: started
-    timeout: 30
+    timeout: 120
   run_once: true
-
-- import_tasks: start-jh.yaml
-  when: jobhistory_enable|lower == "true"

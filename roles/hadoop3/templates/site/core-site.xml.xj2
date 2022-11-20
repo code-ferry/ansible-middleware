@@ -113,4 +113,15 @@
         <description>设置一个edits文件大小的阈值，达到这个阈值，就强制执行一此checkpoint（即使此时没有达到period的时限），默认为64MB。</description>
     </property>
 
+    <!-- 修改core-site.xml中的ipc参数, 防止出现连接journalnode服务ConnectException -->
+    <property>
+        <name>ipc.client.connect.max.retries</name>
+        <value>100</value>
+        <description>Indicates the number of retries a client will make to establish a server connection.</description>
+    </property>
+    <property>
+        <name>ipc.client.connect.retry.interval</name>
+        <value>10000</value>
+        <description>Indicates the number of milliseconds a client will wait for before retrying to establish a server connection.</description>
+    </property>
 </configuration>

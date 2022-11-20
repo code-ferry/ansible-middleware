@@ -6,20 +6,15 @@
 # 启动hdfs
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'start-dfs' ]
-
 # 启动yarn
 - import_tasks: start-yarn.yaml
   tags: [ 'never', 'start-yarn' ]
-
 # 启动job history
 - import_tasks: start-jh.yaml
   tags: [ 'never', 'start-jh' ]
-
 # 启动job journal
 - import_tasks: start-jn.yaml
   tags: [ 'never', 'start-jn' ]
-  when: inventory_hostname in journal_hosts
-
 # 启动hdfs, yarn
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'start' ]
@@ -30,20 +25,15 @@
 # 停止hdfs
 - import_tasks: stop-dfs.yaml
   tags: [ 'never', 'stop-dfs' ]
-
 # 停止yarn
 - import_tasks: stop-yarn.yaml
   tags: [ 'never', 'stop-yarn' ]
-
 # 停止job history
 - import_tasks: stop-jh.yaml
   tags: [ 'never', 'stop-jh' ]
-
 # 停止job journal
 - import_tasks: stop-jn.yaml
   tags: [ 'never', 'stop-jn' ]
-  when: inventory_hostname in journal_hosts
-
 # 停止hdfs, yarn
 - import_tasks: stop-dfs.yaml
   tags: [ 'never', 'stop' ]
@@ -65,11 +55,27 @@
   tags: [ 'never', 'restart' ]
 - import_tasks: stop-yarn.yaml
   tags: [ 'never', 'restart' ]
+- import_tasks: stop-jn.yaml
+  tags: [ 'never', 'restart' ]
+  when: namenode_ha_enable|lower != "true"
+- import_tasks: stop-jh.yaml
+  tags: [ 'never', 'restart' ]
+- import_tasks: stop-zkfc.yaml
+  tags: [ 'never', 'restart' ]
+  when: namenode_ha_enable|lower != "true"
 - import_tasks: clean.yaml
   tags: [ 'never', 'restart' ]
+- import_tasks: start-jn.yaml
+  tags: [ 'never', 'restart' ]
+  when: namenode_ha_enable|lower != "true"
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'restart' ]
 - import_tasks: start-yarn.yaml
+  tags: [ 'never', 'restart' ]
+- import_tasks: start-zkfc.yaml
+  tags: [ 'never', 'restart' ]
+  when: namenode_ha_enable|lower != "true"
+- import_tasks: start-jh.yaml
   tags: [ 'never', 'restart' ]
 
 # ----------------------------------
@@ -78,13 +84,29 @@
   tags: [ 'never', 'upgrade' ]
 - import_tasks: stop-yarn.yaml
   tags: [ 'never', 'upgrade' ]
+- import_tasks: stop-jn.yaml
+  tags: [ 'never', 'upgrade' ]
+  when: namenode_ha_enable|lower != "true"
+- import_tasks: stop-jh.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: stop-zkfc.yaml
+  tags: [ 'never', 'upgrade' ]
+  when: namenode_ha_enable|lower != "true"
 - import_tasks: clean.yaml
   tags: [ 'never', 'upgrade' ]
 - import_tasks: install.yaml
   tags: [ 'never', 'upgrade' ]
+- import_tasks: start-jn.yaml
+  tags: [ 'never', 'upgrade' ]
+  when: namenode_ha_enable|lower != "true"
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'upgrade' ]
 - import_tasks: start-yarn.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: start-zkfc.yaml
+  tags: [ 'never', 'upgrade' ]
+  when: namenode_ha_enable|lower != "true"
+- import_tasks: start-jh.yaml
   tags: [ 'never', 'upgrade' ]
 
 # ----------------------------------

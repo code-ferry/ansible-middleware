@@ -14,6 +14,6 @@
     host: "{{ jobhistory_host }}"
     port: "{{ jobhistory_port }}"
     state: started
-    timeout: 30
+    timeout: 500
   run_once: true
   delegate_to: "{{ jobhistory_host }}"

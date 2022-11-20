@@ -1,4 +1,7 @@
-- name: Judge namenode status
+################################
+#### namenode status ###########
+################################
+- name: Judge namenode status(none ha)
   shell: ". ~/.bash_profile; curl http://{{ namenode_host }}:50070/jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus"
   async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
@@ -6,8 +9,70 @@
     executable: /bin/bash
     chdir: "{{ hadoop_home }}/bin"
   register: result
+  ignore_errors: true
+  run_once: true
+  delegate_to: "{{ namenode_hosts[0] }}"
+  when: namenode_ha_enable|lower != "true"
+
+- debug:
+    msg: "{{ result.stdout }}"
+  ignore_errors: true
+  when: namenode_ha_enable|lower != "true"
+
+- name: Judge namenode status(namenode ha nn1)
+  shell: ". ~/.bash_profile; curl -k https://{{ namenode_hosts[0] }}:{{ namenode_https_port }}/jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/bin"
+  register: result
+  ignore_errors: true
+  run_once: true
+  delegate_to: "{{ namenode_hosts[0] }}"
+  when: namenode_ha_enable|lower == "true"
+
+- debug:
+    msg: "{{ result.stdout }}"
+  ignore_errors: true
+  run_once: true
+  when: namenode_ha_enable|lower == "true"
+
+- name: Judge namenode status(namenode ha nn2)
+  shell: ". ~/.bash_profile; curl -k https://{{ namenode_hosts[1] }}:{{ namenode_https_port }}/jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/bin"
+  register: result
+  ignore_errors: true
+  run_once: true
+  delegate_to: "{{ namenode_hosts[1] }}"
+  when: namenode_ha_enable|lower == "true"
+
+- debug:
+    msg: "{{ result.stdout }}"
+  ignore_errors: true
+  run_once: true
+  when: namenode_ha_enable|lower == "true"
+
+################################
+#### hadoop safe mode ##########
+################################
+- name: Get hadoop safe mode
+  shell: ". ~/.bash_profile; kinit -kt {{ hadoop_keytab_file }} nn/{{ namenode_hosts[0] }}@{{ kerberos_realm_name }}; hdfs dfsadmin -safemode get"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/bin"
+  register: result
+  ignore_errors: true
   run_once: true
   delegate_to: "{{ namenode_hosts[0] }}"
 
 - debug:
-    msg: "{{ result.stdout }}"
+    msg: "{{ result.stdout_lines }}"
+  ignore_errors: true
+  run_once: true

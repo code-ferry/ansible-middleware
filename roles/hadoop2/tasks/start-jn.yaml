@@ -2,22 +2,25 @@
   shell: ". ~/.bash_profile; hadoop-daemon.sh start journalnode"
   environment:
     HADOOP_HOME: "{{ hadoop_home }}"
-  async: 60         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  async: 120        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
   args:
     executable: /bin/bash
     chdir: "{{ hadoop_home }}/sbin"
+  when: inventory_hostname in journal_hosts
 
 - name: Check journalnode port
   wait_for:
     host: "{{ inventory_hostname }}"
-    port: "{{ journal_http_port }}"
+    port: "{{ journal_port }}"
     state: started
-    timeout: 25
+    timeout: 120
+  when: inventory_hostname in journal_hosts
 
 - name: Check journalnode https port
   wait_for:
     host: "{{ inventory_hostname }}"
     port: "{{ journal_https_port }}"
     state: started
-    timeout: 25
+    timeout: 120
+  when: inventory_hostname in journal_hosts

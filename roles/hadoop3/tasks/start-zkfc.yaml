@@ -1,0 +1,9 @@
+- name: Start zkfc
+  shell: ". ~/.bash_profile; ./hadoop-daemon.sh start zkfc"
+  async: 120        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是120秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+  register: result
+  when: inventory_hostname in namenode_hosts

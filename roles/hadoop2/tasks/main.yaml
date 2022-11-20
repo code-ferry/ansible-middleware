@@ -25,6 +25,9 @@
   tags: [ 'never', 'start' ]
 - import_tasks: start-yarn.yaml
   tags: [ 'never', 'start' ]
+- import_tasks: stop-zkfc.yaml
+  tags: [ 'never', 'start' ]
+  when: namenode_ha_enable|lower == "true"
 
 # ----------------------------------
 # 停止hdfs
@@ -68,7 +71,11 @@
   tags: [ 'never', 'restart' ]
 - import_tasks: stop-yarn.yaml
   tags: [ 'never', 'restart' ]
+- import_tasks: stop-jn.yaml
+  tags: [ 'never', 'restart' ]
 - import_tasks: clean.yaml
+  tags: [ 'never', 'restart' ]
+- import_tasks: start-jn.yaml
   tags: [ 'never', 'restart' ]
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'restart' ]
