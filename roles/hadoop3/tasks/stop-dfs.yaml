@@ -36,6 +36,19 @@
     timeout: 60
   when: (namenode_ha_enable|lower == "true") and (inventory_hostname in namenode_hosts)
 
+#################################
+##### stop datanode #############
+#################################
+- name: Start datanode(namenode ha)
+  shell: ". ~/.bash_profile; ./hadoop-daemon.sh stop datanode"
+  async: 120        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是20秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ hadoop_home }}/sbin"
+  register: result
+  when: namenode_ha_enable|lower == "true"
+
 #- name: 停止datanode
 #  shell: ". ~/.bash_profile; HADOOP_DATANODE_USER=bduser sudo -E {{ hadoop_home }}/sbin/stop-secure-dns.sh"
 #  async: 60         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟

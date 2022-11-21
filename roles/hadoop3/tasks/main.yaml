@@ -57,24 +57,24 @@
   tags: [ 'never', 'restart' ]
 - import_tasks: stop-jn.yaml
   tags: [ 'never', 'restart' ]
-  when: namenode_ha_enable|lower != "true"
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: stop-jh.yaml
   tags: [ 'never', 'restart' ]
 - import_tasks: stop-zkfc.yaml
   tags: [ 'never', 'restart' ]
-  when: namenode_ha_enable|lower != "true"
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: clean.yaml
   tags: [ 'never', 'restart' ]
 - import_tasks: start-jn.yaml
   tags: [ 'never', 'restart' ]
-  when: namenode_ha_enable|lower != "true"
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'restart' ]
 - import_tasks: start-yarn.yaml
   tags: [ 'never', 'restart' ]
 - import_tasks: start-zkfc.yaml
   tags: [ 'never', 'restart' ]
-  when: namenode_ha_enable|lower != "true"
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: start-jh.yaml
   tags: [ 'never', 'restart' ]
 
@@ -86,26 +86,26 @@
   tags: [ 'never', 'upgrade' ]
 - import_tasks: stop-jn.yaml
   tags: [ 'never', 'upgrade' ]
-  when: namenode_ha_enable|lower != "true"
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: stop-jh.yaml
   tags: [ 'never', 'upgrade' ]
 - import_tasks: stop-zkfc.yaml
   tags: [ 'never', 'upgrade' ]
-  when: namenode_ha_enable|lower != "true"
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: clean.yaml
   tags: [ 'never', 'upgrade' ]
 - import_tasks: install.yaml
   tags: [ 'never', 'upgrade' ]
 - import_tasks: start-jn.yaml
   tags: [ 'never', 'upgrade' ]
-  when: namenode_ha_enable|lower != "true"
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'upgrade' ]
 - import_tasks: start-yarn.yaml
   tags: [ 'never', 'upgrade' ]
 - import_tasks: start-zkfc.yaml
   tags: [ 'never', 'upgrade' ]
-  when: namenode_ha_enable|lower != "true"
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: start-jh.yaml
   tags: [ 'never', 'upgrade' ]
 
