@@ -3,7 +3,7 @@ host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [redis]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [redis:vars]
 ## 通常不需要变更的变量
@@ -20,10 +20,10 @@ cluster_enabled = yes
 
 ## network
 # 一台服务器可以有多个实例
-redis_ports = 46379,46380
+redis_ports = 46379,46380,46381
 
 ## memory
-redis_maxmemory = 4g
+redis_maxmemory = 2g
 
 ## thread
 redis_daemonize = yes
