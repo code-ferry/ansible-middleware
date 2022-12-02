@@ -1,5 +1,5 @@
 # 概述
-> 学习与工作中经常要安装一些中间件以及应用软件，以及一些环境的准备。  
+> 学习与工作中经常要安装一些中间件、应用软件，同时也要配置好操作系统的环境。对于开发人员来说，这些过程的往往要投入不少的时间。  
 > 通过ansible可以实现快速的安装，开发过程可以有更关注于代码实现、源代码分析、业务逻辑理解等更重要的工作。
 
 # ansible脚本的配置
@@ -324,23 +324,24 @@ ansible-playbook 03.etcd.yaml -t start
 
 ## redis安装
 本安装主要适用于Redis cluster的安装。暂不支持单机与哨兵模式的安装。  
-如果一台服务器要用多个实例，则redis_ports可以用英文逗号多个实例端口。
+如果一台服务器要用多个实例，则redis_ports可以用英文逗号多个实例端口。  
+注意：集群安装时至少3个实例。
 ```
 # 安装 
 ansible-playbook 03.redis.yaml -t install
-# 启动集群
+# 启动
+ansible-playbook 03.redis.yaml -t start
+# 创建集群
 ansible-playbook 03.redis.yaml -t create-cluster
 # 查看集群信息
 ansible-playbook 03.redis.yaml -t cluster-info
-# 启动
-ansible-playbook 03.redis.yaml -t start
 # 停止
 ansible-playbook 03.redis.yaml -t stop
 # 卸载
 ansible-playbook 03.redis.yaml -t uninstall
 ```
 
-## Pulsar安装
+## pulsar安装
 本安装主要适用于Pulsar cluster的安装。暂不支持单机与哨兵模式的安装。  
 如果一台服务器要用多个实例，则redis_ports可以用英文逗号多个实例端口。  
 ```
