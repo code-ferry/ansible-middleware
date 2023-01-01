@@ -1,0 +1,34 @@
+- name: Create install directory
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+# oracleclient安装文件集中到oracleclient目录下
+- name: Unarchive oracle client package
+  unarchive:
+    src: "{{ software_home }}/oracleclient/{{ rlwrap_folder }}.zip"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ rlwrap_home }}"
+
+- name: Make and install rlwrap
+  shell: '. ~/.bash_profile; ./configure && make && make install'
+  async: 300
+  poll: 2
+  args:
+    executable: /bin/bash
+    chdir: "{{ rlwrap_home }}"
+  register: result
+
+- name: print result
+  debug:
+    msg: "{{ result.stdout_lines }}"
+  run_once: true
+
+- name: Write alias
+  lineinfile:
+    dest: /home/{{ install_user }}/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - "alias sqlplus='rlwrap sqlplus'"

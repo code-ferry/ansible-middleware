@@ -1,0 +1,20 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[oracle_client]
+192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[oracle_client:vars]
+## 通常不需要变更的变量
+oracle_client_version = 12.2.0.1.0
+oracle_client_os = linux.x64
+oracle_client_folder = "instantclient_12_2"
+oracle_client_home = "{{ install_home }}/{{ oracle_client_folder }}"
+
+##########################
+## for rlwrap
+##########################
+[oracle_client:vars]
+rlwrap_folder = "rlwrap-0.46.1"
+rlwrap_home = "{{ install_home }}/{{ rlwrap_folder }}"
+

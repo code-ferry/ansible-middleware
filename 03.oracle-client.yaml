@@ -1,0 +1,5 @@
+- hosts: oracle_client
+  become_user: root
+  gather_facts: yes
+  roles:
+  - oracle-client

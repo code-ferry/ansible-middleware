@@ -409,4 +409,15 @@ roles/dolphin/templates/hadoop目录中加入如下文件：
 roles/dolphin/files目录中加入如下文件：
 * xxxx.keytab (如果启用kb)  
 
+## oracle客户端安装
+基于instantclient安装客户端，包括instantclient-basic、instantclient-jdbc、instantclient-sqlplus、instantclient-tools等。
+```
+# 安装instantclient
+./bin/role-oracle-client.sh -t install
+# 安装rlwrap。注意需要加上-b参数，用于编译rlwrap安装包。
+./bin/role-oracle-client.sh -t install-rlwrap -b
+# 卸载instantclient
+./bin/role-oracle-client.sh -t uninstall
+```
+
 # 说明

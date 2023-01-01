@@ -1,0 +1,20 @@
+- name: Delete oracle client install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ oracle_client_home }}"
+
+- name: Clean environment variable ORACLE_HOME etc
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - "# Oracle Instant client"
+  - "export NLS_LANG='SIMPLIFIED CHINESE_CHINA'.ZHS16GBK"
+  - "export ORACLE_HOME={{ oracle_client_home }}"
+  - "export TNS_ADMIN=$ORACLE_HOME"
+  - "export PATH=$PATH:$HOME/bin:$ORACLE_HOME"
+  - "export LD_LIBRARY_PATH=$ORACLE_HOME"
+  - "alias sqlplus='rlwrap sqlplus'"

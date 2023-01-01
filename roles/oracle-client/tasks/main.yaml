@@ -1,0 +1,9 @@
+# ---------------------------------------------
+- import_tasks: install.yaml
+  tags: ['never','install']
+
+- import_tasks: install-rlwrap.yaml
+  tags: ['never','install-rlwrap']
+
+- import_tasks: uninstall.yaml
+  tags: ['never','uninstall']

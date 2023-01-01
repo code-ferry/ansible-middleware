@@ -1,0 +1,49 @@
+- name: Create install directory
+  file: path={{ item }} state=directory
+  with_items:
+  - "{{ install_home }}"
+
+# oracleclient安装文件集中到oracleclient目录下
+- name: Unarchive oracle client package
+  unarchive:
+    src: "{{ software_home }}/oracleclient/instantclient-{{ item }}-{{ oracle_client_os }}-{{ oracle_client_version }}.zip"
+    dest: "{{ install_home }}"
+    copy: yes
+  with_items:
+  - "basic"
+  - "jdbc"
+  - "sqlplus"
+  - "tools"
+
+- name: Delete readme file
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ oracle_client_home }}/BASIC_README"
+  - "{{ oracle_client_home }}/JDBC_README"
+  - "{{ oracle_client_home }}/SQLPLUS_README"
+  - "{{ oracle_client_home }}/TOOLS_README"
+
+- name: Create two files named tnsnames.ora and sqlnet.ora
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+  - { src: 'tnsnames.ora', dest: '{{ oracle_client_home }}/tnsnames.ora'}
+  - { src: 'sqlnet.ora', dest: '{{ oracle_client_home }}/sqlnet.ora'}
+
+# NLS_LANG=American_America.AL32UTF8
+# NLS_LANG='SIMPLIFIED CHINESE_CHINA'.ZHS16GBK
+- name: Write environment variable ORACLE_HOME etc
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - "# Oracle Instant client"
+  - "export NLS_LANG='SIMPLIFIED CHINESE_CHINA'.ZHS16GBK"
+  - "export ORACLE_HOME={{ oracle_client_home }}"
+  - "export TNS_ADMIN=$ORACLE_HOME"
+  - "export PATH=$PATH:$HOME/bin:$ORACLE_HOME"
+  - "export LD_LIBRARY_PATH=$ORACLE_HOME"

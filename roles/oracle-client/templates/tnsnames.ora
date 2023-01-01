@@ -1,0 +1,20 @@
+# sample file
+
+TESTDB =
+  (DESCRIPTION =
+    (ADDRESS_LIST=
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = TestName)
+    )
+  )
+
+PDBORCL =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.128.1)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = pdborcl.lan)
+    )
+  )
