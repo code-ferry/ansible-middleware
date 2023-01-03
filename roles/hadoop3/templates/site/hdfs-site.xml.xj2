@@ -21,6 +21,10 @@
         <name>dfs.namenode.http-address.ns.nn1</name>
         <value>{{ namenode_hosts[0] }}:{{ namenode_http_port }}</value>
     </property>
+    <property>
+        <name>dfs.namenode.https-address.ns.nn1</name>
+        <value>{{ namenode_hosts[0] }}:{{ namenode_https_port }}</value>
+    </property>
     <!-- nn2的rpc, http, https -->
     <property>
         <name>dfs.namenode.rpc-address.ns.nn2</name>
@@ -29,6 +33,10 @@
     <property>
         <name>dfs.namenode.http-address.ns.nn2</name>
         <value>{{ namenode_hosts[1] }}:{{ namenode_http_port }}</value>
+    </property>
+    <property>
+        <name>dfs.namenode.https-address.ns.nn2</name>
+        <value>{{ namenode_hosts[1] }}:{{ namenode_https_port }}</value>
     </property>
 {% endif %}
 

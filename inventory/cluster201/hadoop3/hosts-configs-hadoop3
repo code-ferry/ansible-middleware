@@ -31,7 +31,7 @@ namenode_port = 8920
 # hadoop2.x时默认是50070
 namenode_http_port = 9870
 # hadoop2.x时默认是50470
-namenode_https_port = 9871
+namenode_https_port = 9874
 # hadoop2.x时默认是50090
 namenode_second_http_port = 9868
 # hadoop2.x时默认是50091
