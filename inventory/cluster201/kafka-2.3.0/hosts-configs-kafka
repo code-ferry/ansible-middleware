@@ -28,6 +28,7 @@ kafka_data_dir = "{{ kafka_home }}/data"
 
 [kafka:vars]
 kafka_zk_root = /kafka230
+replication_size = 1
 # kafka topics, replications, partitions separated by ','. Each size should be equal.
 kafka_topic = ['bigdata','test','mytest']
 kafka_replication = [1,1,1]
