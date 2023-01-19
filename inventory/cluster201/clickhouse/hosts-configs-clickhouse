@@ -18,6 +18,8 @@ clickhouse_display_name = "production"
 clickhouse_tcp_port = 9005
 clickhouse_http_port = 8123
 clickhouse_mysql_port = 9004
+# default 9009
+clickhouse_interserver_http_port = 9009
 
 clickhouse_data_dir = "{{ clickhouse_home }}/data/"
 clickhouse_tmp_dir = "{{ clickhouse_data_dir }}/tmp/"
