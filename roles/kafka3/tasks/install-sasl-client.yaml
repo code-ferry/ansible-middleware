@@ -1,0 +1,53 @@
+- name: Create customer shell
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items:
+    - { src: 'bin/stopics-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/stopics-gssapi.sh'}
+    - { src: 'bin/sproducer-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sproducer-gssapi.sh'}
+    - { src: 'bin/sconsumer-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer-gssapi.sh'}
+    - { src: 'bin/sconsumer-group-gssapi.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer-group-gssapi.sh'}
+    - { src: 'bin/stopics-plain.sh.shj2', dest: '{{ kafka_home }}/bin/stopics-gssapi.sh'}
+
+- name: Create common property
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'conf/kafka-server-jaas.conf', dest: '{{ kafka_home }}/config/kafka-server-jaas.conf' }
+    - { src: 'conf/producer.properties.j2', dest: '{{ kafka_home }}/config/producer.properties' }
+    - { src: 'conf/consumer.properties.j2', dest: '{{ kafka_home }}/config/consumer.properties' }
+
+- name: Create plain sasl property
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'conf/producer-plain.properties.j2', dest: '{{ kafka_home }}/config/producer-plain.properties' }
+    - { src: 'conf/consumer-plain.properties.j2', dest: '{{ kafka_home }}/config/consumer-plain.properties' }
+    - { src: 'conf/command-plain.properties.j2', dest: '{{ kafka_home }}/config/command-plain.properties' }
+    - { src: 'conf/kafka-client-jaas-plain.conf', dest: '{{ kafka_home }}/config/kafka-client-jaas-plain.conf' }
+  when: kafka_sasl_plain_enable|lower == "true"
+
+- name: Create plain gssapi property
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'conf/producer-gssapi.properties.j2', dest: '{{ kafka_home }}/config/producer-gssapi.properties' }
+    - { src: 'conf/consumer-gssapi.properties.j2', dest: '{{ kafka_home }}/config/consumer-gssapi.properties' }
+    - { src: 'conf/command-gssapi.properties.j2', dest: '{{ kafka_home }}/config/command-gssapi.properties' }
+    - { src: 'conf/kafka-client-jaas-gssapi.conf', dest: '{{ kafka_home }}/config/kafka-client-jaas-gssapi.conf' }
+  when: kafka_sasl_gssapi_enable|lower == "true"
+
+- name: Create executor file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items:
+    - { src: 'bin/kafka-consumer-groups.sh.shj2', dest: '{{ kafka_home }}/bin/kafka-consumer-groups.sh' }
+    - { src: 'bin/kafka-console-consumer.sh.shj2', dest: '{{ kafka_home }}/bin/kafka-console-consumer.sh' }
+    - { src: 'bin/kafka-console-producer.sh.shj2', dest: '{{ kafka_home }}/bin/kafka-console-producer.sh' }
+    - { src: 'bin/kafka-server-start.sh.shj2', dest: '{{ kafka_home }}/bin/kafka-server-start.sh' }

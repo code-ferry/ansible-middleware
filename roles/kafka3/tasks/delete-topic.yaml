@@ -1,0 +1,6 @@
+- name: delete kafka topic
+  shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --delete --bootstrap-server {{ broker_hosts_string }} --topic {{ item[0] }}"
+  run_once: true
+  with_together:
+  - "{{ kafka_topic }}"
+  ignore_errors: true

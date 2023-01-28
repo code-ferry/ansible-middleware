@@ -1,0 +1,4 @@
+- hosts: kafka3
+  gather_facts: yes
+  roles:
+  - kafka3

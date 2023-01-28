@@ -1,0 +1,8 @@
+{# 计算中controller的服务地址，用字符串拼接 #}
+{% set controller = [] -%}
+{% for host in groups['kafka3'] -%}
+{% if hostvars[host].controller is defined and hostvars[host].controller == "yes" -%}
+{{ controller.append("%s@%s:%s" % (loop.index, host, kafka_controller_port)) -}}
+{% endif -%}
+{% endfor -%}
+{{ controller|join(",") -}}

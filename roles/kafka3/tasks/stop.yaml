@@ -1,0 +1,33 @@
+- name: get kafka pid
+  shell: ". ~/.bash_profile; OSUSER=$(id -nu); ps -ef | grep -i 'kafka.Kafka' | grep java | grep {{ kafka_home }} | grep $OSUSER | grep -v grep | grep -v 'kafka.tools.ConsoleConsumer' | grep -v 'kafka.tools.ConsoleProducer' | awk '{print $2}'"
+  args:
+    executable: /bin/bash
+  register: v_pid
+  ignore_errors: true
+
+- name: print kafka pid
+  debug:
+    msg: "kafka pid: '{{ v_pid.stdout }}'"
+
+- name: stop kafka
+  shell: ". ~/.bash_profile; kill -9 {{ v_pid.stdout }}"
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  when: v_pid.stdout != ""
+
+- name: check kafka port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ kafka_port }}"
+    state: stopped
+    timeout: 20
+  when: v_pid.stdout != ""
+
+- name: check kafka secure port
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ kafka_port }}"
+    state: stopped
+    timeout: 20
+  when: kafka_ssl_enable|lower == "true"

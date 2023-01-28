@@ -1,0 +1,6 @@
+#!/bin/bash
+
+FWDIR="$(cd `dirname $0`/..; pwd)"
+cd $FWDIR
+
+bin/kafka-console-producer.sh --bootstrap-server {{ broker_hosts_sasl_string }} --producer.config config/producer-gssapi.properties $*

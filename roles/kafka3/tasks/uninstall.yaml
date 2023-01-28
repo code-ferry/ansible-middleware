@@ -1,0 +1,16 @@
+- name: delete kafka install direction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ kafka_home }}"
+  - "{{ kafka_data_dir.split(',')|list }}"
+
+- name: clean environment variable KAFKA_HOME etc
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export KAFKA_HOME={{ kafka_home }}'
+  - 'export PATH=$PATH:$KAFKA_HOME/bin'

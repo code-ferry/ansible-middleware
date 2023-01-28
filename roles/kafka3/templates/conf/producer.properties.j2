@@ -12,31 +12,40 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# see org.apache.kafka.clients.consumer.ConsumerConfig for more details
+# see org.apache.kafka.clients.producer.ProducerConfig for more details
+
+############################# Producer Basics #############################
 
 # list of brokers used for bootstrapping knowledge about the rest of the cluster
 # format: host1:port1,host2:port2 ...
 bootstrap.servers=localhost:9092
 
-# consumer group id
-# group.id=test-consumer-group
+# specify the compression codec for all data generated: none, gzip, snappy, lz4, zstd
+compression.type=none
 
-# What to do when there is no initial offset in Kafka or if the current
-# offset does not exist any more on the server: latest, earliest, none
-#auto.offset.reset=
+# name of the partitioner class for partitioning events; default partition spreads data randomly
+#partitioner.class=
 
-{% if (kafka_sasl_plain_enable|lower == "true") and (kafka_ssl_enable|lower == "true") %}
-security.protocol=SASL_SSL
-{% else %}
-security.protocol=SASL_PLAINTEXT
-{% endif %}
+# the maximum amount of time the client will wait for the response of a request
+#request.timeout.ms=
 
-{% if kafka_sasl_plain_enable|lower == "true" %}
-sasl.mechanism=PLAIN
-sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="admin";
-{% endif %}
+# how long `KafkaProducer.send` and `KafkaProducer.partitionsFor` will block for
+#max.block.ms=
+
+# the producer will wait for up to the given delay to allow other records to be sent so that the sends can be batched together
+#linger.ms=
+
+# the maximum size of a request in bytes
+#max.request.size=
+
+# the default batch size in bytes when batching multiple records sent to a partition
+#batch.size=
+
+# the total bytes of memory the producer can use to buffer records waiting to be sent to the server
+#buffer.memory=
 
 {% if kafka_ssl_enable|lower == "true" %}
+security.protocol=SSL
 ssl.truststore.location={{ ssl_path }}/{{ ssl_client_ts }}
 ssl.truststore.password={{ ssl_client_ts_password }}
 ssl.keystore.location={{ ssl_path }}/{{ ssl_client_ks }}

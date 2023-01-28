@@ -1,0 +1,19 @@
+{% if (kafka_sasl_gssapi_enable|lower == "true") and (kafka_ssl_enable|lower == "true") %}
+security.protocol=SASL_SSL
+{% else %}
+security.protocol=SASL_PLAINTEXT
+{% endif %}
+
+{% if kafka_sasl_gssapi_enable|lower == "true" %}
+sasl.mechanism=GSSAPI
+sasl.kerberos.service.name={{ kafka_kerberos_service }}
+sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab="{{ kafka_kerberos_path }}/{{ kafka_kerberos_file }}" principal="{{ kafka_kerberos_principal }}";
+{% endif %}
+
+{% if kafka_ssl_enable|lower == "true" %}
+ssl.truststore.location={{ ssl_path }}/{{ ssl_client_ts }}
+ssl.truststore.password={{ ssl_client_ts_password }}
+ssl.keystore.location={{ ssl_path }}/{{ ssl_client_ks }}
+ssl.keystore.password={{ ssl_client_ks_password }}
+ssl.key.password={{ ssl_client_key_password }}
+{% endif %}

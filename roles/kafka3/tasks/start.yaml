@@ -1,0 +1,41 @@
+- name: Get kafka pid
+  shell: ". ~/.bash_profile; OSUSER=$(id -nu); ps -ef | grep -i 'kafka.Kafka' | grep java | grep {{ kafka_home }} | grep $OSUSER | grep -v grep | grep -v 'kafka.tools.ConsoleConsumer' | grep -v 'kafka.tools.ConsoleProducer' | awk '{print $2}'"
+  args:
+    executable: /bin/bash
+  register: v_pid
+  ignore_errors: true
+
+- name: Print kafka pid
+  debug:
+    msg: "kafka pid: '{{ v_pid.stdout }}', kafka home: {{ kafka_home }}"
+
+- name: Start kafka
+  shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-server-start.sh -daemon {{ kafka_home }}/config/kraft/server.properties"
+  environment:
+    KAFKA_HOME: "{{ kafka_home }}"
+  async: 30         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ kafka_home }}/bin"
+  when: v_pid.stdout == ""
+
+- name: "Check kafka port {{ kafka_port }}"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ kafka_port }}"
+    delay: 5
+    state: started
+    timeout: 120
+
+- name: Print kafka status
+  shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --list --bootstrap-server {{ broker_hosts_string }}"
+  environment:
+    KAFKA_HOME: "{{ kafka_home }}"
+  register: result
+  run_once: true
+
+- name: List kafka topic
+  debug:
+    msg: "{{ result.stdout_lines }}"
+  run_once: true

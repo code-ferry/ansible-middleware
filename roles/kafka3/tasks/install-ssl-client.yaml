@@ -1,0 +1,8 @@
+- name: create property and config file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'conf/producer.properties.j2', dest: '{{ kafka_home }}/config/producer.properties'}
+    - { src: 'conf/consumer.properties.j2', dest: '{{ kafka_home }}/config/consumer.properties'}
+    - { src: 'conf/command.properties.j2', dest: '{{ kafka_home }}/config/command.properties'}

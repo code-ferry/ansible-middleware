@@ -1,0 +1,10 @@
+{# 计算kafka3中controller的服务地址 #}
+{% for host in groups['kafka3'] %}
+{% if host == inventory_hostname %}
+{% if hostvars[host].controller is defined and hostvars[host].controller == "yes" %}
+process.roles=broker,controller
+{% else %}
+process.roles=broker
+{% endif %}
+{% endif %}
+{% endfor %}

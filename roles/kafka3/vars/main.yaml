@@ -1,0 +1,11 @@
+kafka_versions: "{{ kafka_version.split('.') }}"
+kafka_major_version: "{{ kafka_versions[0] + '.' + kafka_versions[1] }}"
+
+vhostipv4: "{{ hostvars[inventory_hostname].ansible_all_ipv4_addresses[0] }}"
+vhostfqdn: "{{ hostvars[inventory_hostname].ansible_fqdn }}"
+
+broker_hosts_string: "{{ lookup('template', 'host/broker-string.j2')|trim }}"
+controller_hosts_string: "{{ lookup('template', 'host/controller-string.j2')|trim }}"
+broker_hosts_sasl_string: "{{ lookup('template', 'host/broker-sasl-string.j2')|trim }}"
+# deprecate
+kafka_hosts: "{{ lookup('template', 'host/kafka.j2')|trim }}"

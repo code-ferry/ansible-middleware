@@ -1,0 +1,6 @@
+{# 计算中controller的服务地址，用字符串拼接 #}
+{% set broker = [] -%}
+{% for host in groups['kafka3'] -%}
+{{ broker.append("%s:%s" % (host, kafka_port)) -}}
+{% endfor -%}
+{{ broker|join(",") -}}

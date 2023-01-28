@@ -1,0 +1,7 @@
+- name: create data and log directory
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ kafka_data_dir.split(',')|list }}"
+
