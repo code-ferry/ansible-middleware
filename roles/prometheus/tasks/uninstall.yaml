@@ -1,0 +1,17 @@
+- name: Clean environment $PROMETHEUS_HOME and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export PROMETHEUS_HOME={{ prom_home }}'
+  - 'export PATH=$PATH:PROMETHEUS_HOME'
+
+- name: Uninstall prometheus
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ prom_log_dir }}"
+  - "{{ prom_data_dir }}"
+  - "{{ prom_home }}"

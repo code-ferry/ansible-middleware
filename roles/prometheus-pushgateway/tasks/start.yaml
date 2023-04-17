@@ -1,0 +1,14 @@
+- name: Run prometheus pushgateway
+  shell: '. ~/.bash_profile; nohup ./startup.sh >{{ pgw_log_dir }}/pushgateway.log 2>&1 &'
+  async: 30
+  poll: 5
+  args:
+    executable: /bin/bash
+    chdir: "{{ pgw_home }}"
+
+- name: "Wait port {{ pgw_port }} opened"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ pgw_port }}"
+    state: started
+    timeout: 60

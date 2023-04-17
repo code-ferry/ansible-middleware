@@ -1,0 +1,47 @@
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: Unarchive prometheus pushgateway package
+  unarchive:
+    src: "{{ software_home }}/{{ pgw_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ pgw_home }}"
+
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ pgw_log_dir }}"
+  - "{{ pgw_data_dir }}"
+
+- name: Delete unnecessary files
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ pgw_home }}/NOTICE"
+    - "{{ pgw_home }}/LICENSE"
+
+- name: Create prometheus configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'bin/startup.sh.j2', dest: '{{ pgw_home }}/startup.sh', mode: "0744" }
+#  - { src: 'conf/prometheus.yml.j2', dest: '{{ prom_home }}/prometheus.yml', mode: "0644" }
+
+- name: Write the environment variable $PROMETHEUS_HOME, and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export PGW_HOME={{ pgw_home }}'
+  - 'export PATH=$PATH:PGW_HOME'

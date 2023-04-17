@@ -1,0 +1,31 @@
+# install prometheus pushgateway
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# uninstall prometheus pushgateway
+- import_tasks: stop.yaml
+  tags: [ 'never', 'uninstall' ]
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]
+
+# start prometheus pushgateway
+- import_tasks: start.yaml
+  tags: [ 'never', 'start' ]
+
+# stop prometheus pushgateway
+- import_tasks: stop.yaml
+  tags: [ 'never', 'stop' ]
+
+# restart prometheus pushgateway
+- import_tasks: restart.yaml
+  tags: [ 'never', 'restart' ]
+
+# upgrade prometheus pushgateway
+- import_tasks: install.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: restart.yaml
+  tags: [ 'never', 'upgrade' ]
+
+# clean prometheus pushgateway log
+- import_tasks: clean.yaml
+  tags: [ 'never', 'clean' ]

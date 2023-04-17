@@ -1,0 +1,5 @@
+- hosts: prometheus
+  become_user: root
+  gather_facts: yes
+  roles:
+    - prometheus

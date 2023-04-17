@@ -1,0 +1,51 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+###############################
+##########Prometheus###########
+###############################
+[prometheus]
+192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# 192.168.128.202 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[prometheus:vars]
+## 通常不需要变更的变量
+prom_version = 2.37.6
+prom_file = "prometheus-{{ prom_version }}.linux-amd64.tar.gz"
+prom_folder = "prometheus-{{ prom_version }}.linux-amd64"
+prom_home = "{{ install_home }}/{{ prom_folder }}"
+prom_log_dir = "{{ prom_home }}/logs"
+prom_data_dir = "{{ prom_home }}/data"
+
+[prometheus:vars]
+prom_port = 9090
+prom_retention_time = 15d
+
+[prometheus:vars]
+prom_global_scrape_interval = 1m
+prom_global_scrape_timeout = 10s
+prom_global_evaluation_interval = 15s
+
+# scrape_configs
+pgw_port = 9091
+
+###############################
+##########Pushgateway##########
+###############################
+[prometheus_pushgateway]
+192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[prometheus_pushgateway:vars]
+pgw_version = 1.5.1
+pgw_file = "pushgateway-{{ pgw_version }}.linux-amd64.tar.gz"
+pgw_folder = "pushgateway-{{ pgw_version }}.linux-amd64"
+pgw_home = "{{ install_home }}/{{ pgw_folder }}"
+pgw_log_dir = "{{ pgw_home }}/logs"
+pgw_data_dir = "{{ pgw_home }}/data"
+
+[prometheus_pushgateway:vars]
+# 启动脚本参数
+pgw_port = 9091
+pgw_info_level = info
+pgw_persistence_file = {{ pgw_data_dir }}/pgw_persist_file
+pgw_interval = 5m

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+./pushgateway \
+--web.listen-address=:{{ pgw_port }} \
+--web.enable-lifecycle \
+--web.enable-admin-api \
+--persistence.file={{ pgw_persistence_file }} \
+--persistence.interval={{ pgw_interval }} \
+--log.level="{{ pgw_info_level }}"

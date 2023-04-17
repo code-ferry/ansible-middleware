@@ -1,0 +1,11 @@
+#!/bin/bash
+
+./prometheus \
+--storage.tsdb.path={{ prom_data_dir }} \
+--storage.tsdb.retention.time={{ prom_retention_time }} \
+--config.file=prometheus.yml \
+--web.listen-address=:{{ prom_port }} \
+--web.enable-lifecycle \
+--web.enable-admin-api \
+--web.console.templates={{ prom_home }}/consoles \
+--web.console.libraries={{ prom_home }}/console_libraries

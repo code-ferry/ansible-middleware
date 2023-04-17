@@ -1,0 +1,11 @@
+- name: Find log file
+  find:
+    paths: "{{ prom_log_dir }}"
+    patterns: "*.log"
+  register: files_to_delete
+
+- name: Delete log file
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ files_to_delete.files }}"

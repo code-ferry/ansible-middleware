@@ -1,0 +1,5 @@
+- hosts: prometheus_pushgateway
+  become_user: root
+  gather_facts: yes
+  roles:
+    - prometheus-pushgateway
