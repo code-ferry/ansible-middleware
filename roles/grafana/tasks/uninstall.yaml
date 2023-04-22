@@ -1,0 +1,17 @@
+- name: Clean environment $GRAFANA_HOME and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export GRAFANA_HOME={{ grafana_home }}'
+  - 'export PATH=$PATH:GRAFANA_HOME'
+
+- name: Uninstall grafana
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ grafana_log_dir }}"
+  - "{{ grafana_data_dir }}"
+  - "{{ grafana_home }}"

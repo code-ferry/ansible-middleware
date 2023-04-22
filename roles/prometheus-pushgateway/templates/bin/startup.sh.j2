@@ -1,9 +1,10 @@
 #!/bin/bash
 
 ./pushgateway \
+--web.telemetry-path="/metrics" \
 --web.listen-address=:{{ pgw_port }} \
 --web.enable-lifecycle \
 --web.enable-admin-api \
 --persistence.file={{ pgw_persistence_file }} \
---persistence.interval={{ pgw_interval }} \
+--persistence.interval={{ pgw_persistence_interval }} \
 --log.level="{{ pgw_info_level }}"

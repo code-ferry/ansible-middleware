@@ -1,0 +1,31 @@
+# install grafana
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# uninstall grafana
+- import_tasks: stop.yaml
+  tags: [ 'never', 'uninstall' ]
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]
+
+# start grafana
+- import_tasks: start.yaml
+  tags: [ 'never', 'start' ]
+
+# stop grafana
+- import_tasks: stop.yaml
+  tags: [ 'never', 'stop' ]
+
+# restart grafana
+- import_tasks: restart.yaml
+  tags: [ 'never', 'restart' ]
+
+# upgrade grafana
+- import_tasks: install.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: restart.yaml
+  tags: [ 'never', 'upgrade' ]
+
+# clean grafana log
+- import_tasks: clean.yaml
+  tags: [ 'never', 'clean' ]

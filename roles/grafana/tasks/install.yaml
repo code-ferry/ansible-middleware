@@ -1,0 +1,50 @@
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: Unarchive grafana package
+  unarchive:
+    src: "{{ software_home }}/{{ grafana_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ grafana_home }}"
+
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ grafana_log_dir }}"
+  - "{{ grafana_data_dir }}"
+  - "{{ grafana_conf_dir }}"
+
+- name: Delete unnecessary files
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ grafana_home }}/VERSION"
+    - "{{ grafana_home }}/LICENSE"
+    - "{{ grafana_home }}/NOTICE.md"
+    - "{{ grafana_home }}/README.md"
+
+- name: Create grafana configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'bin/startup.sh.j2', dest: '{{ grafana_home }}/bin/startup.sh', mode: "0744" }
+  - { src: 'conf/sample.ini.j2', dest: '{{ grafana_conf_dir }}/custom.ini', mode: "0644" }
+
+- name: Write the environment variable $GRAFANA_HOME, and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export GRAFANA_HOME={{ grafana_home }}'
+  - 'export PATH=$PATH:GRAFANA_HOME'

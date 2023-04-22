@@ -1,0 +1,14 @@
+- name: Run grafana
+  shell: '. ~/.bash_profile; ./startup.sh'
+  async: 30
+  poll: 5
+  args:
+    executable: /bin/bash
+    chdir: "{{ grafana_home }}/bin"
+
+- name: "Wait port {{ grafana_port }} opened"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ grafana_port }}"
+    state: started
+    timeout: 60

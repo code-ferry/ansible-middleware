@@ -1,0 +1,36 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+###############################
+##########Grafana##############
+###############################
+[grafana]
+192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# 192.168.128.202 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[grafana:vars]
+## 通常不需要变更的变量
+grafana_version = 9.4.7
+grafana_file = "grafana-enterprise-{{ grafana_version }}.linux-amd64.tar.gz"
+grafana_folder = "grafana-{{ grafana_version }}"
+grafana_home = "{{ install_home }}/{{ grafana_folder }}"
+grafana_log_dir = "{{ grafana_home }}/logs"
+grafana_data_dir = "{{ grafana_home }}/data"
+grafana_conf_dir = "{{ grafana_home }}/conf"
+
+[grafana:vars]
+grafana_port = 3000
+grafana_admin_user = admin
+grafana_admin_password = admin123!
+
+
+[grafana:vars]
+# 数据库部分的内容
+grafana_db_type = sqlite3
+grafana_db_host = 127.0.0.1:3306
+grafana_db_name = grafana
+grafana_db_user = grafana
+grafana_db_password = grafana123!
+
+
+

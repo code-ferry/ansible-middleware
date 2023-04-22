@@ -48,4 +48,4 @@ pgw_data_dir = "{{ pgw_home }}/data"
 pgw_port = 9091
 pgw_info_level = info
 pgw_persistence_file = {{ pgw_data_dir }}/pgw_persist_file
-pgw_interval = 5m
+pgw_persistence_interval = 5m
