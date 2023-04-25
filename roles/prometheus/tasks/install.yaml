@@ -34,8 +34,9 @@
     dest: "{{ item.dest }}"
     mode: "{{ item.mode }}"
   with_items:
-  - { src: 'bin/startup.sh.j2', dest: '{{ prom_home }}/startup.sh', mode: "0744" }
   - { src: 'conf/prometheus.yml.j2', dest: '{{ prom_home }}/prometheus.yml', mode: "0644" }
+  - { src: 'bin/startup.sh.j2', dest: '{{ prom_home }}/startup.sh', mode: "0744" }
+  - { src: 'bin/delete-metric.sh.j2', dest: '{{ prom_home }}/delete-metric.sh', mode: "0744" }
 
 - name: Write the environment variable $PROMETHEUS_HOME, and so on
   lineinfile:

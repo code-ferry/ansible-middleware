@@ -1,0 +1,8 @@
+#!/bin/bash
+
+[[ "X" == "X$1" ]] && echo "parameter 1 is empty." && exit 1;
+
+METRIC_NAME=$1
+curl -i -s -X POST -g "http://127.0.0.1:9090/api/v1/admin/tsdb/delete_series?end=$(date +%s)&&match[]=${METRIC_NAME}"
+
+curl -i -s -X POST http://127.0.0.1:9090/api/v1/admin/tsdb/clean_tombstones
