@@ -8,4 +8,17 @@
 --web.enable-lifecycle \
 --web.enable-admin-api \
 --web.console.templates={{ prom_home }}/consoles \
---web.console.libraries={{ prom_home }}/console_libraries
+--web.console.libraries={{ prom_home }}/console_libraries \
+--web.read-timeout={{ prom_read_timeout }} \
+--web.max-connections={{ prom_web_connection }} \
+--query.max-concurrency={{ prom_query_concurrency }} \
+--query.timeout={{ prom_query_timeout }}
+
+
+--web.read-timeout=5m #web读取超时时间
+
+--web.max-connnections=10 #web最大连接数
+
+--query.max-concurrency=20 #并发执行的最大查询数
+
+--query.timeout=2m #查询超时时间

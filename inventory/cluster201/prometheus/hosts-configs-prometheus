@@ -19,12 +19,18 @@ prom_data_dir = "{{ prom_home }}/data"
 
 [prometheus:vars]
 prom_port = 9090
-prom_retention_time = 15d
+prom_retention_time = 3d
 
 [prometheus:vars]
 prom_global_scrape_interval = 1m
 prom_global_scrape_timeout = 10s
 prom_global_evaluation_interval = 15s
+
+# connection and query
+prom_read_timeout = 5m
+prom_web_connection = 10
+prom_query_concurrency = 10
+prom_query_timeout = 2m
 
 # scrape_configs
 pgw_port = 9091
@@ -49,3 +55,13 @@ pgw_port = 9091
 pgw_info_level = info
 pgw_persistence_file = {{ pgw_data_dir }}/pgw_persist_file
 pgw_persistence_interval = 5m
+
+###############################
+##########Exporter#############
+###############################
+[prometheus_exporter]
+192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[prometheus_exporter:vars]
+
+[prometheus_exporter:vars]
