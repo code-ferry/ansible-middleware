@@ -1,5 +1,5 @@
 - name: Get prometheus node exporter pid
-  shell: ps -ef | grep node_exporter | grep {{ pne_version }} | grep {{ pne_port }} | grep -v grep | awk '{print $2}'
+  shell: ps -ef | grep node_exporter | grep {{ pne_port }} | grep -v grep | awk '{print $2}'
   register: pid
 
 - name: Kill prometheus node exporter
