@@ -1,0 +1,7 @@
+#!/bin/bash
+
+{% if prom_security_enable|lower == "true" %}
+curl -i -X POST --basic -u {{ prom_security_username }}:{{ prom_security_password }} http://localhost:{{ prom_port }}/-/reload
+{% else %}
+curl -i -X POST http://localhost:{{ prom_port }}/-/reload
+{% endif %}

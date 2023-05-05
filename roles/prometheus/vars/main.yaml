@@ -1,2 +1,2 @@
-pushgateway_hosts_string: "{{ lookup('template', 'host/gateway-string.j2')|trim }}"
+pushgateway_hosts_string: "{{ lookup('template', 'host/pushgateway-string.j2')|trim }}"
 pne_hosts_string: "{{ lookup('template', 'host/node-exporter-string.j2')|trim }}"

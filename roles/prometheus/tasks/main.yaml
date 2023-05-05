@@ -29,3 +29,7 @@
 # clean prometheus log
 - import_tasks: clean.yaml
   tags: [ 'never', 'clean' ]
+
+# reload prometheus log
+- import_tasks: reload.yaml
+  tags: [ 'never', 'reload' ]

@@ -95,3 +95,10 @@ pne_security_enable = true
 pne_security_username = newland
 pne_security_password = newland123!
 pne_security_encode_password = $2a$10$AtfofocvOK8sYt.YthyMyeiwJuLhDXzhmXJs3OhUVYzMF76Dw96dS
+
+###############################
+##########HttpGateway##########
+###############################
+[all:vars]
+# 多个用逗号分隔
+httpgateway_hosts_string = '10.1.8.1:15912'

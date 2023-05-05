@@ -36,6 +36,7 @@
   with_items:
   - { src: 'conf/prometheus.yml.j2', dest: '{{ prom_home }}/prometheus.yml', mode: "0644" }
   - { src: 'bin/startup.sh.j2', dest: '{{ prom_home }}/startup.sh', mode: "0744" }
+  - { src: 'bin/reload.sh.j2', dest: '{{ prom_home }}/reload.sh', mode: "0744" }
   - { src: 'bin/delete-metric.sh.j2', dest: '{{ prom_home }}/delete-metric.sh', mode: "0744" }
 
 - name: Create prometheus security configuration

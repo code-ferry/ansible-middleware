@@ -43,12 +43,12 @@ scrape_configs:
     static_configs:
     - targets: [ {{ pne_hosts_string }} ]
 
-  - job_name: 'http-simulator'
+  - job_name: 'http-gateway'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 1m
     scrape_timeout: 10s
     static_configs:
-    - targets: [ "192.168.128.1:8080" ]
+    - targets: [ {{ httpgateway_hosts_string }} ]
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
