@@ -102,3 +102,7 @@ pne_security_encode_password = $2a$10$AtfofocvOK8sYt.YthyMyeiwJuLhDXzhmXJs3OhUVY
 [all:vars]
 # 多个用逗号分隔
 httpgateway_hosts_string = '10.1.8.1:15912'
+
+hgw_security_enable = true
+hgw_security_username = admin
+hgw_security_password = admin123

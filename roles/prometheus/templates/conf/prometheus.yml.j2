@@ -47,6 +47,11 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     scrape_interval: 1m
     scrape_timeout: 10s
+{% if hgw_security_enable|lower == "true" %}
+    basic_auth:
+      username: {{ hgw_security_username }}
+      password: {{ hgw_security_password }}
+{% endif %}
     static_configs:
     - targets: [ {{ httpgateway_hosts_string }} ]
 
