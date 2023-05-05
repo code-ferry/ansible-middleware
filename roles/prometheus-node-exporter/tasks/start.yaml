@@ -1,0 +1,14 @@
+- name: Run prometheus node exporter
+  shell: '. ~/.bash_profile; nohup ./startup.sh >{{ pne_log_dir }}/node-exporter.log 2>&1 &'
+  async: 30
+  poll: 5
+  args:
+    executable: /bin/bash
+    chdir: "{{ pne_home }}"
+
+- name: "Wait port {{ pne_port }} opened"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ pne_port }}"
+    state: started
+    timeout: 60

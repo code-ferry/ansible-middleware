@@ -1,0 +1,8 @@
+#!/bin/bash
+
+./node_exporter \
+--web.listen-address=:{{ pne_port }} \
+{% if pne_security_enable|lower == "true" %}
+--web.config.file=web-config.yml
+{% endif %}
+--log.level="{{ pne_info_level }}"

@@ -1,0 +1,7 @@
+- name: Uninstall prometheus node exporter
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ pne_log_dir }}"
+  - "{{ pne_home }}"

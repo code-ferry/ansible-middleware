@@ -1,0 +1,45 @@
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: Unarchive prometheus node exporter package
+  unarchive:
+    src: "{{ software_home }}/{{ pne_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ pne_home }}"
+
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ pne_log_dir }}"
+
+- name: Delete unnecessary files
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ pne_home }}/NOTICE"
+    - "{{ pne_home }}/LICENSE"
+
+- name: Create prometheus node exporter configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'bin/startup.sh.j2', dest: '{{ pne_home }}/startup.sh', mode: "0744" }
+
+- name: Create prometheus node exporter security configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: 'conf/web-config.yml.j2', dest: '{{ pne_home }}/web-config.yml', mode: "0644" }
+  when: pne_security_enable|lower == "true"
