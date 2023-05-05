@@ -1,0 +1,6 @@
+{# 计算中node exporter的服务地址,用字符串拼接 #}
+{% set nodes = [] -%}
+{% for host in groups['prometheus_node_exporter'] -%}
+{{ nodes.append("'%s:%s'" % (host, pne_port)) -}}
+{% endfor -%}
+{{ nodes|join(", ") -}}

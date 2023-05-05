@@ -28,14 +28,22 @@
     - "{{ pgw_home }}/NOTICE"
     - "{{ pgw_home }}/LICENSE"
 
-- name: Create prometheus configuration
+- name: Create prometheus pushgateway configuration
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: "{{ item.mode }}"
   with_items:
   - { src: 'bin/startup.sh.j2', dest: '{{ pgw_home }}/startup.sh', mode: "0744" }
-#  - { src: 'conf/prometheus.yml.j2', dest: '{{ prom_home }}/prometheus.yml', mode: "0644" }
+
+- name: Create prometheus pushgateway security configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: 'conf/web-config.yml.j2', dest: '{{ pgw_home }}/web-config.yml', mode: "0644" }
+  when: pgw_security_enable|lower == "true"
 
 - name: Write the environment variable $PROMETHEUS_HOME, and so on
   lineinfile:
@@ -44,4 +52,4 @@
     line: "{{ item }}"
   with_items:
   - 'export PGW_HOME={{ pgw_home }}'
-  - 'export PATH=$PATH:PGW_HOME'
+  - 'export PATH=$PATH:$PGW_HOME'

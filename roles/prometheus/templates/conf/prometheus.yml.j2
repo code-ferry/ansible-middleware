@@ -9,16 +9,46 @@ scrape_configs:
   - job_name: "prometheus"
     metrics_path: /metrics
     scheme: http
+    scrape_interval: 1m
+    scrape_timeout: 10s
+{% if prom_security_enable|lower == "true" %}
+    basic_auth:
+      username: {{ prom_security_username }}
+      password: {{ prom_security_password }}
+{% endif %}
     static_configs:
-      - targets: [ "localhost:{{ prom_port }}" ]
+    - targets: [ "localhost:{{ prom_port }}" ]
 
   - job_name: "prometheus gateway"
     honor_labels: true
     honor_timestamps: true
-    scrape_interval: 15s
+    scrape_interval: 30s
+    scrape_timeout: 10s
+{% if pgw_security_enable|lower == "true" %}
+    basic_auth:
+      username: {{ pgw_security_username }}
+      password: {{ pgw_security_password }}
+{% endif %}
+    static_configs:
+    - targets: [ {{ pushgateway_hosts_string }} ]
+
+  - job_name: "node-exporter"
+    scrape_interval: 30s
+    scrape_timeout: 10s
+{% if pne_security_enable|lower == "true" %}
+    basic_auth:
+      username: {{ pne_security_username }}
+      password: {{ pne_security_password }}
+{% endif %}
+    static_configs:
+    - targets: [ {{ pne_hosts_string }} ]
+
+  - job_name: 'http-simulator'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 1m
     scrape_timeout: 10s
     static_configs:
-      - targets: [ "localhost:{{ pgw_port }}" ]
+    - targets: [ "192.168.128.1:8080" ]
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:

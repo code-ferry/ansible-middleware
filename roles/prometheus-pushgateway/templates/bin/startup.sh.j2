@@ -5,6 +5,9 @@
 --web.listen-address=:{{ pgw_port }} \
 --web.enable-lifecycle \
 --web.enable-admin-api \
+{% if pgw_security_enable|lower == "true" %}
+--web.config.file=web-config.yml \
+{% endif %}
 --persistence.file={{ pgw_persistence_file }} \
 --persistence.interval={{ pgw_persistence_interval }} \
 --log.level="{{ pgw_info_level }}"

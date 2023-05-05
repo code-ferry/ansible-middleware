@@ -1,11 +1,11 @@
-- name: Clean environment $PROMETHEUS_HOME and so on
+- name: Clean environment $PGW_HOME and so on
   lineinfile:
     dest: ~/.bash_profile
     state: absent
     line: "{{ item }}"
   with_items:
   - 'export PGW_HOME={{ pgw_home }}'
-  - 'export PATH=$PATH:PGW_HOME'
+  - 'export PATH=$PATH:$PGW_HOME'
 
 - name: Uninstall prometheus pushgateway
   file:

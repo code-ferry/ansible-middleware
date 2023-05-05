@@ -35,11 +35,18 @@ prom_query_timeout = 2m
 # scrape_configs
 pgw_port = 9091
 
+# security
+prom_security_enable = true
+prom_security_username = newland
+prom_security_password = newland123!
+prom_security_encode_password = $2a$10$AtfofocvOK8sYt.YthyMyeiwJuLhDXzhmXJs3OhUVYzMF76Dw96dS
+
 ###############################
 ##########Pushgateway##########
 ###############################
 [prometheus_pushgateway]
 192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+192.168.128.202 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [prometheus_pushgateway:vars]
 pgw_version = 1.5.1
@@ -51,17 +58,40 @@ pgw_data_dir = "{{ pgw_home }}/data"
 
 [prometheus_pushgateway:vars]
 # 启动脚本参数
-pgw_port = 9091
 pgw_info_level = info
 pgw_persistence_file = {{ pgw_data_dir }}/pgw_persist_file
 pgw_persistence_interval = 5m
 
+[all:vars]
+pgw_port = 9091
+
+pgw_security_enable = true
+pgw_security_username = newland
+pgw_security_password = newland123!
+pgw_security_encode_password = $2a$10$AtfofocvOK8sYt.YthyMyeiwJuLhDXzhmXJs3OhUVYzMF76Dw96dS
+
 ###############################
 ##########Exporter#############
 ###############################
-[prometheus_exporter]
+[prometheus_node_exporter]
 192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+192.168.128.202 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
-[prometheus_exporter:vars]
+[prometheus_node_exporter:vars]
+## 通常不需要变更的变量
+pne_version = 1.5.0
+pne_file = "node_exporter-{{ pne_version }}.linux-amd64.tar.gz"
+pne_folder = "node_exporter-{{ pne_version }}.linux-amd64"
+pne_home = "{{ install_home }}/{{ pne_folder }}"
+pne_log_dir = "{{ pne_home }}/logs"
 
-[prometheus_exporter:vars]
+[prometheus_node_exporter:vars]
+pne_info_level = info
+
+[all:vars]
+pne_port = 9099
+
+pne_security_enable = true
+pne_security_username = newland
+pne_security_password = newland123!
+pne_security_encode_password = $2a$10$AtfofocvOK8sYt.YthyMyeiwJuLhDXzhmXJs3OhUVYzMF76Dw96dS

@@ -1,0 +1,5 @@
+- hosts: prometheus_node_exporter
+  become_user: root
+  gather_facts: no
+  roles:
+  - prometheus-node-exporter

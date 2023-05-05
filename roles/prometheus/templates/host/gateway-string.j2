@@ -1,0 +1,6 @@
+{# 计算中pushgateways的服务地址,用字符串拼接 #}
+{% set pushgateways = [] -%}
+{% for host in groups['prometheus_pushgateway'] -%}
+{{ pushgateways.append("'%s:%s'" % (host, pgw_port)) -}}
+{% endfor -%}
+{{ pushgateways|join(", ") -}}
