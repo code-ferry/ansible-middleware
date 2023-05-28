@@ -65,6 +65,10 @@ jobhistory_intermediate_done_dir = /var/history/tmp
 jobhistory_done_dir = /var/history/done
 jobhistory_cache_size = 2000
 
+# trash
+datanode_trash_enable=true
+datanode_trash_interval=1
+
 [hadoop:vars]
 ## 通常不需要变更的变量
 hadoop_version = 2.8.5

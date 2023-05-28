@@ -124,4 +124,15 @@
         <value>10000</value>
         <description>Indicates the number of milliseconds a client will wait for before retrying to establish a server connection.</description>
     </property>
+
+    {% if datanode_trash_enable|lower == "true" %}
+    <property>
+        <name>fs.trash.interval</name>
+        <value>{{ datanode_trash_interval }}</value>
+    </property>
+    <property>
+        <name>fs.trash.checkpoint.interval</name>
+        <value>{{ datanode_trash_interval }}</value>
+    </property>
+    {% endif %}
 </configuration>
