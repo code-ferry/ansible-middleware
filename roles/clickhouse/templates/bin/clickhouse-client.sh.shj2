@@ -1,0 +1,3 @@
+#!/bin/bash
+
+{{ clickhouse_home }}/bin/clickhouse-client -m --port {{ clickhouse_tcp_port }} -u clickhouse --password {{ clickhouse_password }}

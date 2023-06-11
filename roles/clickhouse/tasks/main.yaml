@@ -13,16 +13,20 @@
   tags: ['never','stop']
 
 # ---------------------------------------------
+- import_tasks: clean-log.yaml
+  tags: ['never','restart']
 - import_tasks: restart.yaml
   tags: ['never','restart']
 
 ## ---------------------------------------------
-#- import_tasks: stop.yaml
-#  tags: ['never','upgrade']
-#- import_tasks: install.yaml
-#  tags: ['never','upgrade']
-#- import_tasks: start.yaml
-#  tags: ['never','upgrade']
+- import_tasks: stop.yaml
+  tags: ['never','upgrade']
+- import_tasks: clean-log.yaml
+  tags: ['never','upgrade']
+- import_tasks: install.yaml
+  tags: ['never','upgrade']
+- import_tasks: start.yaml
+  tags: ['never','upgrade']
 
 ## ---------------------------------------------
 - import_tasks: stop.yaml
@@ -32,13 +36,6 @@
 - import_tasks: uninstall-root.yaml
   tags: ['never','uninstall-root']
 
-## ---------------------------------------------
-#- import_tasks: create-topic.yaml
-#  tags: ['never','create-topic']
-#
-#- import_tasks: delete-topic.yaml
-#  tags: ['never','delete-topic']
-#
 ## ---------------------------------------------
 - import_tasks: clean-log.yaml
   tags: ['never','clean-log']

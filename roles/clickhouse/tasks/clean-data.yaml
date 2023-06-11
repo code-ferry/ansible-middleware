@@ -1,6 +1,7 @@
 - name: Clean log directory
   file:
     path: "{{ item }}"
+    owner: "{{ install_user }}"
     state: absent
   with_items:
   - "{{ clickhouse_data_dir }}"
@@ -8,6 +9,7 @@
 - name: Create log directory
   file:
     name: "{{ item }}"
+    owner: "{{ install_user }}"
     state: directory
   with_items:
   - "{{ clickhouse_data_dir }}"

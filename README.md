@@ -372,7 +372,7 @@ ansible-playbook 03.elasticsearch.yaml -t start
 clickhouse的启停依赖于系统，所以启停要加上-b。
 ```
 ansible-playbook 03.clickhouse.yaml -t install-root -b  
-ansible-playbook 03.clickhouse.yaml -t install  
+ansible-playbook 03.clickhouse.yaml -t install -b
 ansible-playbook 03.clickhouse.yaml -t start -b  
 ansible-playbook 03.clickhouse.yaml -t stop -b  
 ```

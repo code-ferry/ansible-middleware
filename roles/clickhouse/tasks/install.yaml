@@ -1,7 +1,7 @@
 - name: Create install directory
   file: path={{ item }} state=directory
   with_items:
-  - "{{ install_home }}"
+    - "{{ install_home }}"
 
 # TODO: grep -q sse4_2 /proc/cpuinfo
 
@@ -9,12 +9,14 @@
   unarchive:
     src: "{{ software_home }}/{{ clickhouse_file }}"
     dest: "{{ install_home }}"
+    owner: "{{ install_user }}"
     copy: yes
     creates: "{{ clickhouse_home }}"
 
 - name: create data and log directory
   file:
     name: "{{ item }}"
+    owner: "{{ install_user }}"
     state: directory
   with_items:
   - "{{ clickhouse_log_dir }}"
@@ -28,9 +30,12 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
   with_items:
-  - { src: 'config/config-server.xmlj2', dest: '/etc/clickhouse-server/config.xml'}
-  - { src: 'config/config-client.xmlj2', dest: '/etc/clickhouse-client/config.xml'}
-  - { src: 'config/users.xmlj2', dest: '/etc/clickhouse-server/users.xml'}
-  - { src: 'config/metrika-{{ cluster_id }}.xmlj2', dest: '/etc/clickhouse-server/metrika.xml'}
-
+  - { src: 'config/config-server.xmlj2', dest: '/etc/clickhouse-server/config.xml', owner: "{{ install_user }}", mode: "0644" }
+  - { src: 'config/config-client.xmlj2', dest: '/etc/clickhouse-client/config.xml', owner: "{{ install_user }}", mode: "0644" }
+  - { src: 'config/users.xmlj2', dest: '/etc/clickhouse-server/users.xml', owner: "{{ install_user }}", mode: "0644" }
+  - { src: 'config/metrika-{{ cluster_id }}.xmlj2', dest: '/etc/clickhouse-server/metrika.xml', owner: "{{ install_user }}", mode: "0644" }
+  - { src: 'bin/clickhouse-client.sh.shj2', dest: '{{ clickhouse_home }}/bin/clickhouse-client.sh', owner: "{{ install_user }}", mode: "0744" }
+  - { src: 'bin/clean.sh.shj2', dest: '{{ clickhouse_home }}/bin/clean.sh', owner: "{{ install_user }}", mode: "0744" }
