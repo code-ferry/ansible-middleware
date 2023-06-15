@@ -10,6 +10,10 @@
 - import_tasks: stop.yaml
   tags: [ 'never', 'stop' ]
 
+# clean spark2.x
+- import_tasks: clean.yaml
+  tags: [ 'never', 'clean' ]
+
 # restart spark2.x
 - import_tasks: stop.yaml
   tags: [ 'never', 'restart' ]

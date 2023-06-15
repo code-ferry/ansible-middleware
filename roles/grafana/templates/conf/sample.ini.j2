@@ -738,25 +738,25 @@ admin_password = {{ grafana_admin_password }}
 
 #################################### SMTP / Emailing ##########################
 [smtp]
-;enabled = false
-;host = localhost:25
-;user =
+enabled = true
+host = smtp.189.cn:465
+user = hxwabc@189.cn
 # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
-;password =
-;cert_file =
-;key_file =
-;skip_verify = false
-;from_address = admin@grafana.localhost
-;from_name = Grafana
+password = lV@0vM*8Y)0aW@4w
+cert_file =
+key_file =
+skip_verify = false
+from_address = hxwabc@189.cn
+from_name = Grafana
 # EHLO identity in SMTP dialog (defaults to instance_name)
-;ehlo_identity = dashboard.example.com
+ehlo_identity = dashboard.example.com
 # SMTP startTLS policy (defaults to 'OpportunisticStartTLS')
-;startTLS_policy = NoStartTLS
+startTLS_policy = NoStartTLS
 
 [emails]
-;welcome_email_on_sign_up = false
-;templates_pattern = emails/*.html, emails/*.txt
-;content_types = text/html
+welcome_email_on_sign_up = false
+templates_pattern = emails/*.html, emails/*.txt
+content_types = text/html
 
 #################################### Logging ##########################
 [log]
@@ -932,18 +932,18 @@ admin_password = {{ grafana_admin_password }}
 ;ha_push_pull_interval = "60s"
 
 # Enable or disable alerting rule execution. The alerting UI remains visible. This option has a legacy version in the `[alerting]` section that takes precedence.
-;execute_alerts = true
+execute_alerts = true
 
 # Alert evaluation timeout when fetching data from the datasource. This option has a legacy version in the `[alerting]` section that takes precedence.
 # The timeout string is a possibly signed sequence of decimal numbers, followed by a unit suffix (ms, s, m, h, d), e.g. 30s or 1m.
-;evaluation_timeout = 30s
+evaluation_timeout = 30s
 
 # Number of times we'll attempt to evaluate an alert rule before giving up on that evaluation. This option has a legacy version in the `[alerting]` section that takes precedence.
-;max_attempts = 3
+max_attempts = 3
 
 # Minimum interval to enforce between rule evaluations. Rules will be adjusted if they are less than this value  or if they are not multiple of the scheduler interval (10s). Higher values can help with resource management as we'll schedule fewer evaluations over time. This option has a legacy version in the `[alerting]` section that takes precedence.
 # The interval string is a possibly signed sequence of decimal numbers, followed by a unit suffix (ms, s, m, h, d), e.g. 30s or 1m.
-;min_interval = 10s
+min_interval = 10s
 
 [unified_alerting.reserved_labels]
 # Comma-separated list of reserved labels added by the Grafana Alerting engine that should be disabled.

@@ -19,6 +19,7 @@ scrape_configs:
     static_configs:
     - targets: [ "localhost:{{ prom_port }}" ]
 
+{% if prom_scrape_pgw_enable|lower == "true" %}
   - job_name: "prometheus gateway"
     honor_labels: true
     honor_timestamps: true
@@ -31,7 +32,9 @@ scrape_configs:
 {% endif %}
     static_configs:
     - targets: [ {{ pushgateway_hosts_string }} ]
+{% endif %}
 
+{% if prom_scrape_pne_enable|lower == "true" %}
   - job_name: "node-exporter"
     scrape_interval: 30s
     scrape_timeout: 10s
@@ -42,7 +45,9 @@ scrape_configs:
 {% endif %}
     static_configs:
     - targets: [ {{ pne_hosts_string }} ]
+{% endif %}
 
+{% if prom_scrape_hgw_enable|lower == "true" %}
   - job_name: 'http-gateway'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 1m
@@ -54,6 +59,7 @@ scrape_configs:
 {% endif %}
     static_configs:
     - targets: [ {{ httpgateway_hosts_string }} ]
+{% endif %}
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:

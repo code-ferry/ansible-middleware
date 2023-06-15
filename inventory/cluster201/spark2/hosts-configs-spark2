@@ -2,7 +2,14 @@
 host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [spark2]
-host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' master='yes' slave='yes'
+host201.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method='sudo' master='yes' slave='yes'
+
+[all:vars]
+# 应用软件安装的普通用户，默认情况下是bduser。
+# 如果需要将spark2安装在hadoop3下，需要增加如下几项配置。
+install_user=hadoop3
+install_group=hadoop3
+install_home="/home/hadoop3/deploy"
 
 [spark2:vars]
 # default 7077
@@ -27,4 +34,5 @@ spark_working_memory = 512m
 
 # spark运行需要依赖hadoop
 [spark2:vars]
-hadoop_home = "/home/bduser/deploy/hadoop-2.8.5"
+# hadoop_home = "/home/bduser/deploy/hadoop-2.8.5"
+hadoop_home = "/home/hadoop3/deploy/hadoop-3.1.1"

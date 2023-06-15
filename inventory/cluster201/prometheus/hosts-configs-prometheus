@@ -41,6 +41,11 @@ prom_security_username = newland
 prom_security_password = newland123!
 prom_security_encode_password = $2a$10$AtfofocvOK8sYt.YthyMyeiwJuLhDXzhmXJs3OhUVYzMF76Dw96dS
 
+# scrape target
+prom_scrape_pgw_enable = true
+prom_scrape_pne_enable = true
+prom_scrape_hgw_enable = true
+
 ###############################
 ##########Pushgateway##########
 ###############################

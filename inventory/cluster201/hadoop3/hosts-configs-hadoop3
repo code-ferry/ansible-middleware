@@ -27,7 +27,7 @@ journal_server="{{ journal_hosts_string }}"
 [hadoop:vars]
 # namenode
 # hadoop1.x时默认是9000, hadoop2.x默认是8020
-namenode_port = 9020
+namenode_port = 9820
 # hadoop2.x时默认是50070
 namenode_http_port = 9870
 # hadoop2.x时默认是50470
