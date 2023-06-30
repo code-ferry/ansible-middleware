@@ -26,7 +26,8 @@ clickhouse_log_level = "trace"
 clickhouse_log_size = "100M"
 clickhouse_log_count = 5
 
-clickhouse_tcp_port = 9005
+# default 9000
+clickhouse_tcp_port = 9000
 clickhouse_http_port = 8123
 clickhouse_mysql_port = 9004
 # default 9009
@@ -37,7 +38,7 @@ clickhouse_interserver_http_port = 9009
 ##########################
 [clickhouse:vars]
 # password(sha256): ck123456
-clickhouse_password = "ck123456"
+clickhouse_password = ""
 # clickhouse_password = "5f509343b86641e585fd6eb396046699ece3ba3939d354974a22fa3cd8fb7134"
 clickhouse_max_memory_usage = 4000000000
 

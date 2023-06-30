@@ -17,7 +17,7 @@ scrape_configs:
       password: {{ prom_security_password }}
 {% endif %}
     static_configs:
-    - targets: [ "localhost:{{ prom_port }}" ]
+    - targets: [ "{{ vhostipv4 }}:{{ prom_port }}" ]
 
 {% if prom_scrape_pgw_enable|lower == "true" %}
   - job_name: "prometheus gateway"

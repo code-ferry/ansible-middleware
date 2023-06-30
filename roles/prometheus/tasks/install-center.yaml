@@ -7,4 +7,4 @@
     dest: "{{ item.dest }}"
     mode: "{{ item.mode }}"
   with_items:
-  - { src: 'conf/prometheus.yml.j2', dest: '{{ prom_home }}/prometheus.yml', mode: "0644" }
+  - { src: 'conf/prometheus-center.yml.j2', dest: '{{ prom_home }}/prometheus.yml', mode: "0644" }

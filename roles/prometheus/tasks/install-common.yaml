@@ -1,0 +1,57 @@
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: Unarchive prometheus package
+  unarchive:
+    src: "{{ software_home }}/{{ prom_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ prom_home }}"
+
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ prom_log_dir }}"
+  - "{{ prom_data_dir }}"
+
+- name: Delete unnecessary files
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ prom_home }}/NOTICE"
+    - "{{ prom_home }}/LICENSE"
+
+- name: Create prometheus shell
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'bin/startup.sh.j2', dest: '{{ prom_home }}/startup.sh', mode: "0744" }
+  - { src: 'bin/reload.sh.j2', dest: '{{ prom_home }}/reload.sh', mode: "0744" }
+  - { src: 'bin/delete-metric.sh.j2', dest: '{{ prom_home }}/delete-metric.sh', mode: "0744" }
+
+- name: Create prometheus security configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'conf/web-config.yml.j2', dest: '{{ prom_home }}/web-config.yml', mode: "0644" }
+  when: prom_security_enable|lower == "true"
+
+- name: Write the environment variable $PROMETHEUS_HOME, and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'export PROMETHEUS_HOME={{ prom_home }}'
+  - 'export PATH=$PATH:$PROMETHEUS_HOME'

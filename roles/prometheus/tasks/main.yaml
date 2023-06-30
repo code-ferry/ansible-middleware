@@ -1,6 +1,8 @@
 # install prometheus
 - import_tasks: install.yaml
   tags: [ 'never', 'install' ]
+- import_tasks: install-center.yaml
+  tags: [ 'never', 'install-center' ]
 
 # uninstall prometheus
 - import_tasks: stop.yaml
@@ -25,6 +27,12 @@
   tags: [ 'never', 'upgrade' ]
 - import_tasks: restart.yaml
   tags: [ 'never', 'upgrade' ]
+
+# upgrade prometheus centre
+- import_tasks: install-center.yaml
+  tags: [ 'never', 'upgrade-center' ]
+- import_tasks: restart.yaml
+  tags: [ 'never', 'upgrade-center' ]
 
 # clean prometheus log
 - import_tasks: clean.yaml

@@ -4,7 +4,7 @@ host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 [kafka]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
-host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# host203.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
 
 [zookeeper]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
@@ -64,8 +64,8 @@ ssl_client_key_password = newland
 
 # kafka是否开启sasl的开关, 分别对应PLAIN与GSSAPI
 [kafka:vars]
-kafka_sasl_plain_enable = true
-kafka_sasl_gssapi_enable = true
+kafka_sasl_plain_enable = false
+kafka_sasl_gssapi_enable = false
 
 # Sasl GSSAPI配置
 [kafka:vars]
@@ -77,5 +77,3 @@ kafka_kerberos_principal = {{ kafka_kerberos_service }}/{{ vhostfqdn }}@EXAMPLE.
 # acl配置
 [kafka:vars]
 kafka_acl_allow_all = false
-
-

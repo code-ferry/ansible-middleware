@@ -1,2 +1,4 @@
+vhostipv4: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
 pushgateway_hosts_string: "{{ lookup('template', 'host/pushgateway-string.j2')|trim }}"
 pne_hosts_string: "{{ lookup('template', 'host/node-exporter-string.j2')|trim }}"

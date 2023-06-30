@@ -1,0 +1,23 @@
+# my global config
+global:
+  scrape_interval: 1m
+  scrape_timeout: 10s
+  evaluation_interval: 1m
+
+# A scrape configuration containing exactly one endpoint to scrape:
+scrape_configs:
+  - job_name: 'federate'
+    honor_labels: true
+    honor_timestamps: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{job="prometheus"}'
+        - '{job="http-gateway"}'
+        - '{__name__=~"job:.*"}'
+        - '{__name__=~"node.*"}'
+    basic_auth:
+      username: {{ prom_security_username }}
+      password: {{ prom_security_password }}
+    static_configs:
+      - targets: {{ prom_upstream_servers }}
