@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="grid.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+        <!-- 日志配置 -->
+        <property name="gridLogger">
+            <bean class="org.apache.ignite.logger.log4j2.Log4J2Logger">
+                <constructor-arg type="java.lang.String" value="{{ ignite_conf_dir }}/ignite-log4j2.xml"/>
+            </bean>
+        </property>
+
+        <property name="peerClassLoadingEnabled" value="true"/>
+        <property name="deploymentMode" value="SHARED"/>
+        <property name="metricsLogFrequency" value="0"/>
+        <!-- 网络配置 -->
+        <property name="SystemWorkerBlockedTimeout" value="#{60 * 1000L}"/> <!-- 服务worker之间交互timeout时间，默认10s，网络条件不佳或负载过重时修改 -->
+        <property name="FailureDetectionTimeout" value="#{10 * 1000L}"/>    <!-- 服务端节点之间的基本网络操作超时，默认10s，网络条件不佳或负载过重时修改 -->
+        <property name="clientFailureDetectionTimeout" value="#{20 * 1000L}"/>  <!-- 客户端节点之间的基本网络操作超时，默认30s，网络条件不佳或负载过重时修改 -->
+        <property name="localHost" value="{{ vhostipv4 }}"/>
+        <!-- 安全配置 -->
+        <property name="authenticationEnabled" value="false"/>
+
+        <!-- 数据区配置 -->
+        <property name="dataStorageConfiguration">
+            <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+                <property name="pageSize" value="#{4 * 1024}"/>
+                <property name="writeThrottlingEnabled" value="true"/>
+                <property name="storagePath" value="{{ ignite_db_dir }}"/>
+                <property name="walPath" value="{{ ignite_wal_dir }}"/>
+                <property name="walArchivePath" value="{{ ignite_wal_dir }}"/>  <!-- 降低写盘压力walPath与walArchivePath同目录 -->
+                <property name="walSegmentSize" value="{{ ignite_wal_size }}"/>
+                <property name="walSegments" value="{{ ignite_wal_count }}"/>
+                <property name="maxWalArchiveSize" value="#{4 * 1024 * 1024 * 1024L}"/>
+                <property name="walMode" value="{{ ignite_wal_mode }}"/>
+
+                <property name="defaultDataRegionConfiguration">
+                    <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                        <property name="name" value="Default_Region"/>
+                        <property name="persistenceEnabled" value="false"/>
+                    </bean>
+                </property>
+                <property name="dataRegionConfigurations">
+                    <list>
+                        <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                            <property name="name" value="Storage_Region"/>
+                            <property name="persistenceEnabled" value="true"/>
+                            <property name="initialSize" value="#{20 * 1024 * 1024}"/>
+                            <property name="maxSize" value="#{1000 * 1024 * 1024}"/>
+                            <property name="pageEvictionMode" value="RANDOM_2_LRU"/>
+                            <property name="checkpointPageBufferSize" value="{{ ignite_ck_page_buffer_size }}"/>
+                        </bean>
+                    </list>
+                </property>
+            </bean>
+        </property>
+
+        <!-- 缓存配置 -->
+        <property name="cacheConfiguration">
+            <list>
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="myCache"/>
+                    <property name="atomicityMode" value="TRANSACTIONAL"/>
+                    <property name="rebalanceMode" value="ASYNC"/>
+                    <property name="cacheMode" value="PARTITIONED"/>
+                    <property name="backups" value="1"/>
+                    <!-- 副本同步模式：FULL_SYNC, PRIMARY_SYNC, FULL_ASYNC -->
+                    <property name="writeSynchronizationMode" value="FULL_SYNC"/>
+                    <!-- 分区丢失处理：IGNORE, READ_WRITE_ALL, READ_WRITE_SAFE, READ_ONLY_ALL, READ_ONLY_SAFE -->
+                    <property name="partitionLossPolicy" value="READ_WRITE_ALL"/>
+                    <property name="dataRegionName" value="Default_Region"/>
+                </bean>
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="myStorageCache"/>
+                    <property name="atomicityMode" value="TRANSACTIONAL"/>
+                    <property name="rebalanceMode" value="ASYNC"/>
+                    <property name="cacheMode" value="PARTITIONED"/>
+                    <property name="backups" value="1"/>
+                    <property name="writeSynchronizationMode" value="FULL_SYNC"/>
+                    <property name="partitionLossPolicy" value="READ_WRITE_ALL"/>
+                    <property name="dataRegionName" value="Storage_Region"/>
+                </bean>
+            </list>
+        </property>
+
+        <!-- 服务发现配置 -->
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="localPort" value="47500"/>
+                <property name="localAddress" value="{{ vhostipv4 }}"/>
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+                        <property name="addresses">
+                            <list>
+                                <value>192.168.128.201:47500</value>
+                                <value>192.168.128.202:47500</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <property name="communicationSpi">
+            <bean class="org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi">
+                <property name="usePairedConnections" value="true"/>    <!-- Kubernetes环境中该设置不能使用 -->
+                <property name="connectionsPerNode" value="1"/>
+                <property name="slowClientQueueLimit" value="2000"/>
+            </bean>
+        </property>
+    </bean>
+</beans>

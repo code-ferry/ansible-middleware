@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export IGNITE_HOME={{ ignite_home }}
+export IGNITE_WORK_DIR={{ ignite_work_dir }}
+
+{{ ignite_home }}/bin/ignite.sh -v

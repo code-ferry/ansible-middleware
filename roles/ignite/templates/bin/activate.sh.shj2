@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export IGNITE_HOME={{ ignite_home }}
+export IGNITE_WORK_DIR={{ ignite_work_dir }}
+
+# ./control.sh --host host201 --port 11211 --set-state ACTIVE --force --yes
+./control.sh --host {{ vhostipv4 }} --port {{ ignite_tcp_port }} --set-state ACTIVE --force --yes

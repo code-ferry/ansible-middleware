@@ -1,0 +1,10 @@
+- name: "Wait port opened"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ item }}"
+    state: started
+    timeout: 30
+  with_items:
+  - "{{ ignite_jdbc_port }}"
+  - "{{ ignite_tcp_port }}"
+  - "{{ ignite_listener_port }}"

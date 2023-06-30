@@ -1,0 +1,26 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+###############################
+##########Grafana##############
+###############################
+[ignite]
+192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+192.168.128.202 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# 192.168.128.203 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+
+[ignite:vars]
+## 通常不需要变更的变量
+ignite_version = 2.3.0
+ignite_file = "apache-ignite-fabric-{{ ignite_version }}-bin.zip"
+ignite_folder = "apache-ignite-fabric-{{ ignite_version }}-bin"
+ignite_home = "{{ install_home }}/{{ ignite_folder }}"
+ignite_log_dir = "{{ ignite_home }}/logs"
+ignite_conf_dir = "{{ ignite_home }}/config"
+ignite_work_dir = "{{ ignite_home }}/work"
+ignite_db_dir = "{{ ignite_work_dir }}/db"
+
+[ignite:vars]
+ignite_jdbc_port = 10800
+ignite_tcp_port = 11211
+ignite_listener_port = 47100

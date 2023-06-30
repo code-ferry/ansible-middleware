@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="grid.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+<!--        <property name="gridLogger">-->
+<!--            <bean class="org.apache.ignite.logger.log4j2.Log4J2Logger">-->
+<!--                <constructor-arg type="java.lang.String" value="/home/bduser/deploy/apache-ignite-fabric-2.3.0-bin/config/ignite-log4j2.xml"/>-->
+<!--            </bean>-->
+<!--        </property>-->
+
+        <property name="peerClassLoadingEnabled" value="true"/>
+        <!-- <property name="deploymentMode" value="CONTINUOUS"/> -->
+        <property name="metricsLogFrequency" value="0"/>
+        <property name="localHost" value="{{ vhostipv4 }}"/>
+
+        <property name="cacheConfiguration">
+            <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                <!-- Set a cache name. -->
+                <property name="name" value="myCache"/>
+                <property name="atomicityMode" value="TRANSACTIONAL"/>
+
+                <!-- Set asynchronous rebalancing. -->
+                <property name="rebalanceMode" value="ASYNC"/>
+
+                <!-- Set cache mode. 分区模式，副本为1 -->
+                <property name="cacheMode" value="PARTITIONED"/>
+                <property name="backups" value="1"/>
+                <!-- 副本同步模式： -->
+                <!-- PRIMARY_SYNC (默认模式，primary 写成功即可算成功,从backup节点读数据，有可能读到的任然是旧数据)  -->
+                <!-- FULL_SYNC (写cache的操作在primary节点和backup节点都成功写入后返回, 保证了写入成功后节点之间的数据都一样)  -->
+                <!-- FULL_ASYNC (写cache的操作不用等primary节点和backup节点成功写入即可返回, 读primary节点的数据都有可能读到旧数据)  -->
+                <property name="writeSynchronizationMode" value="FULL_SYNC"/>
+
+                <!-- 分区丢失处理： -->
+                <!-- IGNORE (默认模式，即使出现了partition loss的情况，Ignite会自动忽略并且会清空和partion loss相关的状态不会触发EVT_CACHE_REBALANCE_PART_DATA_LOST 事件)  -->
+                <!-- READ_WRITE_ALL  (Ignite允许所有的读写操作，就好像partition loss没发生过)  -->
+                <!-- READ_WRITE_SAFE (允许对没有丢失的partition的读写操作，但是对已经丢失的partition的读写操作会失败并抛异常)  -->
+                <!-- READ_ONLY_ALL (允许对丢失的和正常的partition的读操作，但是写操作会失败并抛异常)  -->
+                <!-- READ_ONLY_SAFE (所有的写操作和对丢失partition的读操作都会失败并抛异常。允许对正常的partition的读操作)  -->
+                <property name="partitionLossPolicy" value="READ_WRITE_ALL"/>
+
+                <!-- enable disk page compression for this cache -->
+                <!-- <property name="diskPageCompression" value="SNAPPY"/> -->
+
+                <!-- optionally set the compression level -->
+                <!-- 2.3.0上不支持 -->
+                <!-- <property name="diskPageCompressionLevel" value="10"/> -->
+            </bean>
+        </property>
+
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+                        <property name="addresses">
+                            <list>
+                                <value>192.168.128.201:47500</value>
+                                <value>192.168.128.202:47500</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+</beans>

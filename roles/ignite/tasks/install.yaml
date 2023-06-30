@@ -1,0 +1,56 @@
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ install_home }}"
+
+- name: Unarchive ignite package
+  unarchive:
+    src: "{{ software_home }}/{{ ignite_file }}"
+    dest: "{{ install_home }}"
+    copy: yes
+    creates: "{{ ignite_home }}"
+
+- name: Create the installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ ignite_work_dir }}"
+  - "{{ ignite_log_dir }}"
+  - "{{ ignite_db_dir }}"
+
+- name: Delete unnecessary files
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ ignite_home }}/NOTICE"
+    - "{{ ignite_home }}/LICENSE"
+    - "{{ ignite_home }}/README.txt"
+    - "{{ ignite_home }}/RELEASE_NOTES.txt"
+
+- name: Create ignite configuration
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'bin/startup.sh.shj2', dest: '{{ ignite_home }}/bin/startup.sh', mode: "0744" }
+  - { src: 'bin/stop.sh.shj2', dest: '{{ ignite_home }}/bin/stop.sh', mode: "0744" }
+  - { src: 'bin/sqlclient.sh.shj2', dest: '{{ ignite_home }}/bin/sqlclient.sh', mode: "0744" }
+  - { src: 'bin/visor.sh.shj2', dest: '{{ ignite_home }}/bin/visor.sh', mode: "0744" }
+  - { src: 'bin/activate.sh.shj2', dest: '{{ ignite_home }}/bin/activate.sh', mode: "0744" }
+  - { src: 'bin/clean-log.sh.shj2', dest: '{{ ignite_home }}/bin/clean-log.sh', mode: "0744" }
+  - { src: 'bin/clean-work.sh.shj2', dest: '{{ ignite_home }}/bin/clean-work.sh', mode: "0744" }
+  - { src: 'conf/default-config-{{ ignite_version }}.xml.xmlj2', dest: '{{ ignite_conf_dir }}/default-config.xml', mode: "0644" }
+
+#- name: Write the environment variable $IGNITE_HOME, and so on
+#  lineinfile:
+#    dest: ~/.bash_profile
+#    state: present
+#    line: "{{ item }}"
+#  with_items:
+#  - 'export IGNITE_HOME={{ ignite_home }}'
+#  - 'export PATH=$PATH:$IGNITE_HOME'

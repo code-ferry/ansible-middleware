@@ -1,0 +1,9 @@
+#!/bin/bash
+
+export IGNITE_HOME={{ ignite_home }}
+export IGNITE_WORK_DIR={{ ignite_work_dir }}
+
+pid=`ps -ef | grep ignite | grep java | grep {{ ignite_version }} | grep {{ ignite_home }} | grep -v grep | grep -v VisorConsole | grep -v IgniteJdbcThinDriver | awk '{print $2}'`
+echo "ignite pid: $pid"
+
+[[ $pid != "" ]] && kill -15 $pid && echo "kill success" && exit

@@ -1,0 +1,56 @@
+- name: Get ignite pid
+  shell: "ps -ef | grep ignite | grep java | grep {{ ignite_version }} | grep {{ ignite_home }} | grep -v grep | grep -v VisorConsole | grep -v IgniteJdbcThinDriver | awk '{print $2}'"
+  args:
+    executable: /bin/bash
+  register: v_pid
+  ignore_errors: true
+
+- name: Run ignite
+  shell: '. ~/.bash_profile; nohup ./startup.sh >{{ ignite_log_dir }}/ignite.log 2>&1 &'
+  async: 30
+  poll: 5
+  args:
+    executable: /bin/bash
+    chdir: "{{ ignite_home }}/bin"
+  when: v_pid.stdout == ""
+
+- name: Get ignite pid
+  shell: "ps -ef | grep ignite | grep java | grep {{ ignite_version }} | grep {{ ignite_home }} | grep -v grep | grep -v VisorConsole | grep -v IgniteJdbcThinDriver | awk '{print $2}'"
+  args:
+    executable: /bin/bash
+  register: v_pid
+  ignore_errors: true
+
+- name: Print kafka pid
+  debug:
+    msg: "ignite pid: '{{ v_pid.stdout }}', ignite home: {{ ignite_home }}"
+
+- name: Get ignite port
+  shell: "netstat -anp | grep {{ v_pid.stdout }} | grep LISTEN | awk '{print $4}' | awk -F: '{print $NF}' | sort -n"
+  args:
+    executable: /bin/bash
+  register: v_port
+  ignore_errors: true
+
+- name: Print ignite ports
+  debug:
+    msg: "ignite ports: {{ v_port.stdout_lines }}"
+
+- name: "Wait port opened"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ item }}"
+    state: started
+    timeout: 60
+  with_items:
+  - "{{ ignite_jdbc_port }}"
+  - "{{ ignite_tcp_port }}"
+  - "{{ ignite_listener_port }}"
+
+- name: Activate
+  shell: ". ~/.bash_profile; ./activate.sh"
+  async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  poll: 2           # 设置为0时, 任务会立即返回
+  args:
+    executable: /bin/bash
+    chdir: "{{ ignite_home }}/bin"

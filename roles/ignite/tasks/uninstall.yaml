@@ -1,0 +1,17 @@
+- name: Clean environment $IGNITE_HOME and so on
+  lineinfile:
+    dest: ~/.bash_profile
+    state: absent
+    line: "{{ item }}"
+  with_items:
+  - 'export IGNITE_HOME={{ ignite_home }}'
+  - 'export PATH=$PATH:IGNITE_HOME'
+
+- name: Uninstall ignite
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ ignite_work_dir }}"
+  - "{{ ignite_log_dir }}"
+  - "{{ ignite_home }}"

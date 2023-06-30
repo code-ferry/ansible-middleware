@@ -1,0 +1,2 @@
+#!/bin/bash
+rm -fr {{ ignite_log_dir }}/*

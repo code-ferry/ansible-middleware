@@ -1,0 +1,10 @@
+#!/bin/bash
+
+export IGNITE_HOME={{ ignite_home }}
+export IGNITE_WORK_DIR={{ ignite_work_dir }}
+
+./sqlline.sh \
+--verbose=true \
+-u "jdbc:ignite:thin://127.0.0.1:10800" \
+-n ignite \
+-p ignite

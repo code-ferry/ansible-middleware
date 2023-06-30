@@ -1,0 +1,43 @@
+# install ignite
+- import_tasks: install.yaml
+  tags: [ 'never', 'install' ]
+
+# uninstall ignite
+- import_tasks: stop.yaml
+  tags: [ 'never', 'uninstall' ]
+- import_tasks: uninstall.yaml
+  tags: [ 'never', 'uninstall' ]
+
+# start ignite
+- import_tasks: start.yaml
+  tags: [ 'never', 'start' ]
+
+# stop ignite
+- import_tasks: stop.yaml
+  tags: [ 'never', 'stop' ]
+
+# restart ignite
+- import_tasks: restart.yaml
+  tags: [ 'never', 'restart' ]
+
+# upgrade ignite
+- import_tasks: install.yaml
+  tags: [ 'never', 'upgrade' ]
+- import_tasks: restart.yaml
+  tags: [ 'never', 'upgrade' ]
+
+# clean ignite log
+- import_tasks: stop.yaml
+  tags: [ 'never', 'clean-log' ]
+- import_tasks: clean-log.yaml
+  tags: [ 'never', 'clean-log' ]
+
+# clean ignite work directory
+- import_tasks: stop.yaml
+  tags: [ 'never', 'clean-work' ]
+- import_tasks: clean-work.yaml
+  tags: [ 'never', 'clean-work' ]
+
+# clean ignite status
+- import_tasks: status.yaml
+  tags: [ 'never', 'status' ]
