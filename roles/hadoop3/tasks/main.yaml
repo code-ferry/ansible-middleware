@@ -15,7 +15,14 @@
 # 启动job journal
 - import_tasks: start-jn.yaml
   tags: [ 'never', 'start-jn' ]
+
 # 启动hdfs, yarn
+- import_tasks: start-jn.yaml
+  tags: [ 'never', 'start' ]
+  when: namenode_ha_enable|lower == "true"
+- import_tasks: start-zkfc.yaml
+  tags: [ 'never', 'start' ]
+  when: namenode_ha_enable|lower == "true"
 - import_tasks: start-dfs.yaml
   tags: [ 'never', 'start' ]
 - import_tasks: start-yarn.yaml
@@ -39,6 +46,12 @@
   tags: [ 'never', 'stop' ]
 - import_tasks: stop-yarn.yaml
   tags: [ 'never', 'stop' ]
+- import_tasks: stop-jn.yaml
+  tags: [ 'never', 'stop' ]
+  when: namenode_ha_enable|lower == "true"
+- import_tasks: stop-zkfc.yaml
+  tags: [ 'never', 'stop' ]
+  when: namenode_ha_enable|lower == "true"
 
 # ----------------------------------
 # 卸载hadoop
