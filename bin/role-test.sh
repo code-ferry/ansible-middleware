@@ -1,6 +1,8 @@
 #!/bin/bash
 
 FWDIR="$(cd `dirname $0`/..; pwd)"
+cd ${FWDIR}
+
 [ X"$*" == X"" ] && echo "Please write the parameters!" && exit 1
 
 IVPATH=$(cat ansible.cfg | grep "inventory = " | cut -d"=" -f2 | sed -e 's/^[ ]*//g' | sed -e 's/[ ]*$//g')

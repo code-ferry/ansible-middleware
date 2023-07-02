@@ -1,16 +1,12 @@
 #!/bin/bash
 
-# change to ansible home directory
 FWDIR="$(cd `dirname $0`/..; pwd)"
 cd ${FWDIR}
 
-# load shared function
-. ${FWDIR}/bin/ansible-common.sh
+[ X"$*" == X"" ] && echo "Please write the parameters!" && exit 1
 
-# Get inventory path
-getInventoryPath
+IVPATH=$(cat ansible.cfg | grep "inventory = " | cut -d"=" -f2 | sed -e 's/^[ ]*//g' | sed -e 's/[ ]*$//g')
+C_IVPATH="${IVPATH}/os"
+echo "INVENTORY_PATH =" $C_IVPATH
 
-# Define inventory subdir
-IV_SUBDIR=os
-
-ansible-playbook 01.os.yaml -i "${IV_PATH}/${IV_SUBDIR}" $*
+ansible-playbook 01.os.yaml -i "${C_IVPATH}" $*

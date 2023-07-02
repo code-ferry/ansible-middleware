@@ -1,4 +1,4 @@
-- hosts: test
+- hosts: os
   become: true
   become_user: root
   roles:
