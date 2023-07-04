@@ -4,4 +4,4 @@ redis_major_version: "{{ redis_version.split('.')[0] }}"
 redis_client: "{{ hostvars[inventory_hostname].ansible_hostname }}:{{ redis_ports | first }}"
 
 # template
-redis_hosts: "{{ lookup('template', 'host/cluster.j2') }}"
+redis_hosts: "{{ lookup('template', 'host/cluster.j2')|trim }}"
