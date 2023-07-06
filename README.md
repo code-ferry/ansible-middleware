@@ -299,6 +299,15 @@ ansible-playbook 02.kafka.yaml -t uninstall
 如果两个kafka同时使用一个zookeeper的情况，还要修改如下zk根路径配置，让两个kafka集群的配置不会相互干扰：
 * kafka_zk_root
 
+## kafka3安装
+大部分安装部分重kafka2的步骤，就是在install后，需要增加一步format的操作
+### 安装步骤
+```
+ansible-playbook 02.kafka3.yaml -t install
+ansible-playbook 02.kafka3.yaml -t format
+ansible-playbook 02.kafka3.yaml -t start 
+```
+
 ## etcd安装
 etcd常用的几个命令
 ```
