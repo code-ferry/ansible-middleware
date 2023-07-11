@@ -26,10 +26,10 @@
     name: "{{ item }}"
     state: absent
   with_items:
-    - "{{ ignite_home }}/NOTICE"
-    - "{{ ignite_home }}/LICENSE"
-    - "{{ ignite_home }}/README.txt"
-    - "{{ ignite_home }}/RELEASE_NOTES.txt"
+  - "{{ ignite_home }}/NOTICE"
+  - "{{ ignite_home }}/LICENSE"
+  - "{{ ignite_home }}/README.txt"
+  - "{{ ignite_home }}/RELEASE_NOTES.txt"
 
 - name: Create ignite configuration
   template:
@@ -45,6 +45,25 @@
   - { src: 'bin/clean-log.sh.shj2', dest: '{{ ignite_home }}/bin/clean-log.sh', mode: "0744" }
   - { src: 'bin/clean-work.sh.shj2', dest: '{{ ignite_home }}/bin/clean-work.sh', mode: "0744" }
   - { src: 'conf/default-config-{{ ignite_version }}.xml.xmlj2', dest: '{{ ignite_conf_dir }}/default-config.xml', mode: "0644" }
+
+- name: Copy optional lib
+  copy:
+    src: "{{ ignite_home }}/libs/optional/{{ item }}"
+    dest: "{{ ignite_home }}/libs"
+    force: yes
+    remote_src: yes
+  with_items:
+  - "ignite-log4j2"
+  - "ignite-control-utility"
+  when: ignite_version == "2.15.0"
+
+- name: Copy log configuration
+  copy:
+    src: "{{ ignite_home }}/config/ignite-log4j.xml"
+    dest: "{{ ignite_home }}/config/ignite-log4j2.xml"
+    force: yes
+    remote_src: yes
+  when: ignite_version == "2.15.0"
 
 #- name: Write the environment variable $IGNITE_HOME, and so on
 #  lineinfile:

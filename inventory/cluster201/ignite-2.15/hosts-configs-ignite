@@ -2,7 +2,7 @@
 host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 ###############################
-##########Grafana##############
+##########Ignite###############
 ###############################
 [ignite]
 192.168.128.201 ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
@@ -24,7 +24,8 @@ ignite_wal_dir = "{{ ignite_work_dir }}/wal"
 [ignite:vars]
 ignite_jdbc_port = 10800
 ignite_tcp_port = 11211
-ignite_listener_port = 47100
+ignite_comm_port = 47100
+ignite_discovery_port = 47500
 
 [ignite:vars]
 # 生产至少调到64M

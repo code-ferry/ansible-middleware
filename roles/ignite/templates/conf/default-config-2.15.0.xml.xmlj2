@@ -22,6 +22,11 @@
         <property name="localHost" value="{{ vhostipv4 }}"/>
         <!-- 安全配置 -->
         <property name="authenticationEnabled" value="false"/>
+        <property name="connectorConfiguration">
+            <bean class="org.apache.ignite.configuration.ConnectorConfiguration">
+                <property name="port" value="{{ ignite_tcp_port }}"/>
+            </bean>
+        </property>
 
         <!-- 数据区配置 -->
         <property name="dataStorageConfiguration">
@@ -86,16 +91,17 @@
         </property>
 
         <!-- 服务发现配置 -->
+        <!-- 示例：<value>192.168.128.201:57500</value><value>192.168.128.202:57500</value> -->
         <property name="discoverySpi">
             <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
-                <property name="localPort" value="47500"/>
+                <property name="localPort" value="{{ ignite_discovery_port }}"/>
+                <property name="localPortRange" value="0"/>
                 <property name="localAddress" value="{{ vhostipv4 }}"/>
                 <property name="ipFinder">
                     <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
                         <property name="addresses">
                             <list>
-                                <value>192.168.128.201:47500</value>
-                                <value>192.168.128.202:47500</value>
+                                {{ servers }}
                             </list>
                         </property>
                     </bean>
@@ -105,9 +111,19 @@
 
         <property name="communicationSpi">
             <bean class="org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi">
+                <property name="localPort" value="{{ ignite_comm_port }}"/>
+                <property name="localPortRange" value="0"/>
                 <property name="usePairedConnections" value="true"/>    <!-- Kubernetes环境中该设置不能使用 -->
                 <property name="connectionsPerNode" value="1"/>
                 <property name="slowClientQueueLimit" value="2000"/>
+            </bean>
+        </property>
+
+        <!-- jdbc端口范围配置 -->
+        <property name="clientConnectorConfiguration">
+            <bean class="org.apache.ignite.configuration.ClientConnectorConfiguration">
+                <property name="port" value="{{ ignite_jdbc_port }}"/>
+                <property name="portRange" value="0"/>
             </bean>
         </property>
     </bean>

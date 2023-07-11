@@ -20,4 +20,5 @@
   with_items:
   - "{{ ignite_jdbc_port }}"
   - "{{ ignite_tcp_port }}"
-  - "{{ ignite_listener_port }}"
+  - "{{ ignite_comm_port }}"
+  - "{{ ignite_discovery_port }}"

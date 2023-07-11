@@ -1,0 +1,6 @@
+{# 计算中discovery servers的服务地址 #}
+{% set servers = [] %}
+{% for host in groups['ignite'] %}
+{{ servers.append("<value>%s:%s</value>" % (host, ignite_discovery_port)) -}}
+{% endfor %}
+{{ servers|join("") }}

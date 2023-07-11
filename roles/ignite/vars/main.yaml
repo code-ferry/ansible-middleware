@@ -1,1 +1,3 @@
 vhostipv4: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+servers: "{{ lookup('template', 'host/servers-string.j2') }}"

@@ -21,7 +21,7 @@
   register: v_pid
   ignore_errors: true
 
-- name: Print kafka pid
+- name: Print ignite pid
   debug:
     msg: "ignite pid: '{{ v_pid.stdout }}', ignite home: {{ ignite_home }}"
 
@@ -45,7 +45,8 @@
   with_items:
   - "{{ ignite_jdbc_port }}"
   - "{{ ignite_tcp_port }}"
-  - "{{ ignite_listener_port }}"
+  - "{{ ignite_comm_port }}"
+  - "{{ ignite_discovery_port }}"
 
 - name: Activate
   shell: ". ~/.bash_profile; ./activate.sh"

@@ -23,4 +23,5 @@ ignite_db_dir = "{{ ignite_work_dir }}/db"
 [ignite:vars]
 ignite_jdbc_port = 10800
 ignite_tcp_port = 11211
-ignite_listener_port = 47100
+ignite_comm_port = 47100
+ignite_discovery_port = 47500
