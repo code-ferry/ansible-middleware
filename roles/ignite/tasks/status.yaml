@@ -3,8 +3,9 @@
     host: "{{ inventory_hostname }}"
     port: "{{ item }}"
     state: started
-    timeout: 30
+    timeout: 10
   with_items:
   - "{{ ignite_jdbc_port }}"
   - "{{ ignite_tcp_port }}"
   - "{{ ignite_comm_port }}"
+  - "{{ ignite_discovery_port }}"
