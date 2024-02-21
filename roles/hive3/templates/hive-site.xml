@@ -1,0 +1,49 @@
+<configuration>
+  <property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:mysql://node1:3306/hive?createDatabaseIfNotExist=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8</value>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>com.mysql.jdbc.Driver</value>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>root</value>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>123456</value>
+  </property>
+
+  <property>
+    <name>hive.server2.thrift.bind.host</name>
+    <value>node1</value>
+  </property>
+
+  <property>
+    <name>hive.metastore.uris</name>
+    <value>thrift://node1:9083</value>
+  </property>
+
+  <property>
+    <name>hive.metastore.event.db.notification.api.auth</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>hive.server2.logging.operation.level</name>
+    <value>execution</value> 
+    <description>
+      Expects one of [none, execution, performance, verbose].
+      HS2 operation logging mode available to clients to be set at session level.
+      For this to work, hive.server2.logging.operation.enabled should be set to true.
+        NONE: Ignore any logging
+        EXECUTION: Log completion of tasks
+        PERFORMANCE: Execution + Performance logs 
+        VERBOSE: All logs
+    </description>
+  </property>
+</configuration>

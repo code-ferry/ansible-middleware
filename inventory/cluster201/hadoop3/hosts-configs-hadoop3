@@ -3,7 +3,7 @@ host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [hadoop]
 host201.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle' namenode="yes" yarn="yes" datanode="yes"
-host202.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle' datanode="yes"
+# host202.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle' datanode="yes"
 # host203.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle' datanode="yes"
 
 [all:vars]

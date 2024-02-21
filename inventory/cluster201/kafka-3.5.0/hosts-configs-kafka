@@ -1,0 +1,73 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[kafka3]
+host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' controller='yes'
+host202.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo' controller='yes'
+
+[kafka3:vars]
+kafka_port = 59091
+kafka_sasl_port = 59092
+kafka_ssl_port = 59093
+kafka_controller_port = 59099
+
+[kafka3:vars]
+## 通常不需要变更的变量
+kafka_version = 3.5.2
+kafka_scala_version = 2.12
+kafka_file = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}.tgz"
+kafka_folder = "kafka_{{ kafka_scala_version }}-{{ kafka_version }}"
+kafka_home = "{{ install_home }}/{{ kafka_folder }}"
+kafka_log_dir = "{{ kafka_home }}/logs"
+kafka_data_dir = "{{ kafka_home }}/data"
+
+[kafka3:vars]
+replication_size = 2
+# kafka topics, replications, partitions separated by ','. Each size should be equal.
+kafka_topic = ['bigdata','test','mytest']
+kafka_replication = [1,1,1]
+kafka_partition = [1,1,1]
+
+[kafka3:vars]
+# 日志片段文件的检查周期，查看它们是否达到了删除策略的设置（log.retention.hours或log.retention.bytes）
+kafka_log_retention_check_ms = 300000
+# 日志保存时间 (hours|minutes)，默认为7天（168小时）。超过这个时间会根据policy处理数据。bytes和minutes无论哪个先达到都会触发。
+kafka_log_retention_hours = 120
+# 日志数据存储的最大字节数。超过这个时间会根据policy处理数据。
+kafka_log_retention_bytes = 1073741824
+# 控制日志segment文件的大小，超出该大小则追加到一个新的日志segment文件中
+kafka_log_segment_bytes = 1073741824
+
+[kafka3:vars]
+# kafka是否开启ssl的开关
+kafka_ssl_enable = false
+ssl_path = /etc/newland/ssl/kafka3
+
+ssl_server_ts = kafka-server.jts
+ssl_server_ts_password = newland
+ssl_client_ts = kafka-client.jts
+ssl_client_ts_password = newland
+
+ssl_server_ks = kafka-server.jks
+ssl_server_ks_password = newland
+ssl_server_key_password = newland
+
+ssl_client_ks = kafka-client.jks
+ssl_client_ks_password = newland
+ssl_client_key_password = newland
+
+# kafka是否开启sasl的开关, 分别对应PLAIN与GSSAPI
+[kafka3:vars]
+kafka_sasl_plain_enable = false
+kafka_sasl_gssapi_enable = false
+
+# Sasl GSSAPI配置
+[kafka3:vars]
+kafka_kerberos_path = /etc/newland/kerberos
+kafka_kerberos_file = hadoop3.keytab
+kafka_kerberos_service = udapdev
+kafka_kerberos_principal = {{ kafka_kerberos_service }}/{{ vhostfqdn }}@NEWLAND.COM
+
+# acl配置
+[kafka3:vars]
+kafka_acl_allow_all = false

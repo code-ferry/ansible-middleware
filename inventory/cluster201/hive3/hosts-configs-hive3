@@ -3,6 +3,7 @@ host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
 
 [hive3]
 host201.example.com ansible_ssh_user='bduser' ansible_ssh_pass='bduser' ansible_become_method='sudo'
+# host201.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle'
 
 [hive3:vars]
 # default 10000
@@ -21,7 +22,7 @@ hive3_home = "{{ install_home }}/{{ hive3_folder }}"
 hive3_conf_dir = "{{ hive3_home }}/conf"
 hive3_local_scratchdir = "{{ hive3_home }}/scratchdir"
 hive3_local_tmp_dir = "{{ hive3_home }}/tmp"
-hive3_execution_engine = tez
+hive3_execution_engine = mr
 
 # hive 3的版本中目录区分下
 hive3_warehouse_dir = "/user/hive3/warehouse"
@@ -48,7 +49,7 @@ hive3_jdbc_password = hive3
 
 [hive3:vars]
 # NONE, KERBEROS, LDAP
-hive3_server2_authentication = KERBEROS
+hive3_server2_authentication = NONE
 hive3_server2_kerberos_fqdn = /_HOST
 hive3_server2_kerberos_principal = {{ install_user }}{{ hive3_server2_kerberos_fqdn }}@NEWLAND.COM
 hive3_server2_kerberos_keytab = /etc/newland/kerberos/hadoop3.keytab

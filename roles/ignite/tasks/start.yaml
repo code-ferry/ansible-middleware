@@ -48,7 +48,7 @@
   - "{{ ignite_comm_port }}"
   - "{{ ignite_discovery_port }}"
 
-- name: Activate
+- name: "Activate"
   shell: ". ~/.bash_profile; ./activate.sh"
   async: 20         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回

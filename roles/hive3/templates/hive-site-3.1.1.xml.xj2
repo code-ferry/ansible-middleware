@@ -3904,7 +3904,7 @@
   </property>
   <property>
     <name>hive.async.log.enabled</name>
-    <value>true</value>
+    <value>false</value>
     <description>
       Whether to enable Log4j2's asynchronous logging. Asynchronous logging can give
        significant performance improvement as logging will be handled in separate thread
@@ -4431,11 +4431,13 @@
   </property>
   <property>
     <name>hive.server2.logging.operation.log.location</name>
-    <value>${system:java.io.tmpdir}/${system:user.name}/operation_logs</value>
+    <!-- <value>${system:java.io.tmpdir}/${system:user.name}/operation_logs</value> -->
+    <value>{{ hive3_home }}/logs/operation_logs</value>
     <description>Top level directory where operation logs are stored if logging functionality is enabled</description>
   </property>
   <property>
     <name>hive.server2.logging.operation.level</name>
+<!--    <value>EXECUTION</value>-->
     <value>EXECUTION</value>
     <description>
       Expects one of [none, execution, performance, verbose].

@@ -21,5 +21,3 @@ elif [ $2 == "uninstall" ]; then
 else
   ansible-playbook 03.clickhouse.yaml -i "${C_IVPATH}" $*
 fi
-
-

@@ -28,16 +28,16 @@
   - { src: 'conf/server-{{ kafka_major_version }}.properties.j2', dest: '{{ kafka_home }}/config/kraft/server.properties'}
   - { src: 'conf/tools-log4j.properties', dest: '{{ kafka_home }}/config/tools-log4j.properties'}
 
-- name: Create customer shell
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: 0755
-  with_items:
-  - { src: 'bin/sproducer.sh.shj2', dest: '{{ kafka_home }}/bin/sproducer.sh'}
-  - { src: 'bin/sconsumer.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer.sh'}
-  - { src: 'bin/stopics.sh.shj2', dest: '{{ kafka_home }}/bin/stopics.sh'}
-  - { src: 'bin/kafka-server-stop.sh.shj2', dest: '{{ kafka_home }}/bin/kafka-server-stop.sh' }
+#- name: Create customer shell
+#  template:
+#    src: "{{ item.src }}"
+#    dest: "{{ item.dest }}"
+#    mode: 0755
+#  with_items:
+#  - { src: 'bin/sproducer.sh.shj2', dest: '{{ kafka_home }}/bin/sproducer.sh'}
+#  - { src: 'bin/sconsumer.sh.shj2', dest: '{{ kafka_home }}/bin/sconsumer.sh'}
+#  - { src: 'bin/stopics.sh.shj2', dest: '{{ kafka_home }}/bin/stopics.sh'}
+#  - { src: 'bin/kafka-server-stop.sh.shj2', dest: '{{ kafka_home }}/bin/kafka-server-stop.sh' }
 
 ## 当需要鉴权时，需要安装ssl客户端的配置文件
 #- import_tasks: install-ssl-client.yaml
