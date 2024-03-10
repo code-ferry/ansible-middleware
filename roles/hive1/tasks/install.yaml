@@ -21,9 +21,13 @@
 
 - name: copy mysql-connector-java-5.1.x.jar
   copy:
-    src: "mysql-connector-java-5.1.47.jar"
+    src: "{{ item }}"
     dest: "{{ hive1_home }}/lib/mysql-connector-java.jar"
     force: yes
+  with_items:
+  - "mysql-connector-java-5.1.47.jar"
+  - "{{ software_home }}/lib/hive1/hive-exec-1.2.2.jar"
+  - "{{ software_home }}/lib/hive1/hive-shims-common-1.2.2.jar"
 
 - name: create hive configuration
   template:
