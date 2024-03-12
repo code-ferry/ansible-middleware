@@ -7,6 +7,13 @@
     chdir: "{{ redis_home }}"
   register: v_info
   run_once: true
+  ignore_errors: true
+  when: redis_security_enable|lower == "true"
+
+- name: Print redis cluster info
+  debug:
+    msg: "{{ v_info.stdout_lines }}"
+  run_once: true
   when: redis_security_enable|lower == "true"
 
 - name: Get cluster info
@@ -23,3 +30,6 @@
 - name: Print redis cluster info
   debug:
     msg: "{{ v_info.stdout_lines }}"
+  run_once: true
+  when: redis_security_enable|lower == "false"
+
