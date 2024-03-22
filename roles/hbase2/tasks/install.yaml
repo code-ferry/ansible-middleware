@@ -57,6 +57,15 @@
     dest: "{{ hbase_home }}/lib"
     force: yes
     remote_src: true
+  when: hbase_version == "2.1.2"
+
+- name: Copy htrace-core4-4.2.0-incubating.jar
+  copy:
+    src: "{{ hbase_home }}/lib/client-facing-thirdparty/htrace-core4-4.2.0-incubating.jar"
+    dest: "{{ hbase_home }}/lib"
+    force: yes
+    remote_src: true
+  when: hbase_version == "2.2.3"
 
 #- name: Write the environment variable $HADOOP_HOME, and so on
 #  lineinfile:

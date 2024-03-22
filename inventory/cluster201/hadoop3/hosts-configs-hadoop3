@@ -19,7 +19,7 @@ namenode_ha_enable=false
 yarn_ha_enable=false
 
 # ha相关配置
-namenode_zk_quorum=10.1.8.1:2181,10.1.8.2:2181,10.1.8.3:2181
+namenode_zk_quorum=host201.example.com:2181,host202.example.com:2181,host203.example.com:2181
 journal_port=8485
 journal_https_port=8481
 journal_server="{{ journal_hosts_string }}"
