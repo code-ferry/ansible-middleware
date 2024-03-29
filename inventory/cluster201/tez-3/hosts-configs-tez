@@ -1,0 +1,41 @@
+[deploy]
+host201.example.com ansible_ssh_user='test' ansible_ssh_pass='test'
+
+[tez]
+host201.example.com ansible_ssh_user='hadoop3' ansible_ssh_pass='hadoop3' ansible_become_method=su ansible_become_user=root ansible_become_pass='oracle'
+
+[all:vars]
+# 应用软件安装的普通用户，默认情况下是bduser。
+# 因为udapdev用户下已经安装hadoop2，这里安装hadoop3，需要用hadoop3用户覆盖下。
+install_user=hadoop3
+install_group=hadoop3
+
+# 应用软件在部署服务器的目录，在例子中是test
+software_home="/home/test/software"
+
+# 应用软件在应用服务器的安装家目录，在例子中是bduser
+install_home="/home/hadoop3/deploy"
+
+# java家目录
+java_home=/usr/local/java/jdk1.8.0_201
+# jdk_install_home=/usr/local/java
+jdk_file=jdk-8u201-linux-x64.tar.gz
+scala_home=/usr/local/scala/scala-2.13.7
+
+[tez:vars]
+## 通常不需要变更的变量
+tez_version = 0.10.1
+tez_file = "tez-{{ tez_version }}-minimal.tar.gz"
+tez_full_file = "tez-{{ tez_version }}.tar.gz"
+tez_folder = "tez-{{ tez_version }}"
+tez_home = "{{ install_home }}/{{ tez_folder }}"
+
+[tez:vars]
+hadoop_home = /home/hadoop3/deploy/hadoop-3.1.1
+kb_enable = false
+# 如果上传tez.tar.gz需要kb让证的话，则需要配置如下参数：
+keytab = /etc/newland/kerberos/hadoop3.keytab
+pricipal = hadoop3/edc03.com@NEWLAND.COM
+
+# 需要手动新建这个目录（脚本可能没有权限），脚本将支持share/tez.tar.gz上传到该目录
+tez_hdfs_path = /opt/tez

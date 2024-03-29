@@ -4437,8 +4437,7 @@
   </property>
   <property>
     <name>hive.server2.logging.operation.level</name>
-<!--    <value>EXECUTION</value>-->
-    <value>EXECUTION</value>
+    <value>{{ hive3_logging_operation_level }}</value>
     <description>
       Expects one of [none, execution, performance, verbose].
       HS2 operation logging mode available to clients to be set at session level.

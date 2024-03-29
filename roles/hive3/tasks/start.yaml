@@ -16,11 +16,11 @@
     host: "{{ inventory_hostname }}"
     port: "{{ hive3_metastore_port }}"
     state: started
-    timeout: 25
+    timeout: 120
 
 - name: 再确认hiveserver2的端口
   wait_for:
     host: "{{ inventory_hostname }}"
     port: "{{ hive3_server2_port }}"
     state: started
-    timeout: 60
+    timeout: 120

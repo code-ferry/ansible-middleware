@@ -31,10 +31,11 @@
     dest: "{{ item.dest }}"
     mode: "{{ item.mode }}"
   with_items:
-  - { src: 'hive-env-{{ hive3_version }}.sh.shj2', dest: '{{ hive3_conf_dir }}/hive-env.sh', mode: "0644" }
+  - { src: 'hive-{{ hive3_version }}.shj2', dest: '{{ hive3_home }}/bin/hive', mode: "0744" }
+  - { src: 'hive-env-{{ hive3_version }}.shj2', dest: '{{ hive3_conf_dir }}/hive-env.sh', mode: "0644" }
   - { src: 'hive-site-{{ hive3_version }}.xml.xj2', dest: '{{ hive3_conf_dir }}/hive-site.xml', mode: "0644"}
   - { src: 'hive-log4j2.properties.j2', dest: '{{ hive3_conf_dir }}/hive-log4j2.properties', mode: "0644"}
-  - { src: 'clean.sh.shj2', dest: '{{ hive3_home }}/bin/clean.sh', mode: "0744" }
+  - { src: 'clean.shj2', dest: '{{ hive3_home }}/bin/clean.sh', mode: "0744" }
 
 #- name: Write the environment variable $HADOOP_HOME, and so on
 #  lineinfile:
