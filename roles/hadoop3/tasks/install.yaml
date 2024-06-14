@@ -52,6 +52,17 @@
   - { src: 'site/capacity-scheduler.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/capacity-scheduler.xml' }
   - { src: 'web/dfs-dust.js', dest: '{{ hadoop_home }}/share/hadoop/hdfs/webapps/static/dfs-dust.js' }
 
+- name: 复制认证密码等
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    force: yes
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: "hadoop-http-auth-signature-secret", dest: "{{ hadoop_home }}", owner: "{{ install_user }}", group: "{{ install_group }}", mode: 644 }
+
 - name: 创建hadoop配置文件(ssl相关)
   template:
     src: "{{ item.src }}"

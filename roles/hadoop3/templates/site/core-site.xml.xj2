@@ -135,4 +135,33 @@
         <value>{{ datanode_trash_interval }}</value>
     </property>
     {% endif %}
+
+    {% if webui_enable|lower == "true" %}
+    <property>
+        <name>hadoop.http.filter.initializers</name>
+        <value>org.apache.hadoop.security.AuthenticationFilterInitializer</value>
+    </property>
+
+    <!-- 定义用于HTTP web控制台的身份验证。支持的值是:simple | kerberos | #AUTHENTICATION_HANDLER_CLASSNAME# -->
+    <property>
+        <name>hadoop.http.authentication.type</name>
+        <value>simple</value>
+    </property>
+
+    <!--
+    签名秘密文件，用于对身份验证令牌进行签名。
+    对于集群中的每个服务，ResourceManager, NameNode, DataNode和NodeManager，应该使用不同的secret。
+    这个文件应该只有运行守护进程的Unix用户可以读。
+    -->
+    <property>
+        <name>hadoop.http.authentication.signature.secret.file</name>
+        <value>{{ hadoop_home }}/hadoop-http-auth-signature-secret</value>
+    </property>
+
+    <!-- 指示在使用“简单”身份验证时是否允许匿名请求。 -->
+    <property>
+        <name>hadoop.http.authentication.simple.anonymous.allowed</name>
+        <value>false</value>
+    </property>
+    {% endif %}
 </configuration>

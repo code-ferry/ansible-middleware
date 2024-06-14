@@ -366,5 +366,3 @@ else
   set -- "${SERVICE_ARGS[@]}"
   $TORUN "$@"
 fi
-
-

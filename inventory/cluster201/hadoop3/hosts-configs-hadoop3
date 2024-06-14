@@ -179,3 +179,6 @@ yarn_cgroup_mount = false
 yarn_cgroup_mount_path = /sys/fs/cgroup
 yarn_cgroup_cpu_limit = 100
 yarn_cgroup_strict_resource = false
+
+# webui
+webui_enable = true
