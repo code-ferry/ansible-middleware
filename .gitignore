@@ -1,9 +1,8 @@
 # folder
 .idea/
 .git/
-inventory/cluster100
 inventory/cluster131
-inventory/cluster-hw
+inventory-single
 
 # hidden file
 .ftpconfig

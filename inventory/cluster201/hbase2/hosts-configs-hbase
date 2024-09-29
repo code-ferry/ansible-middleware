@@ -40,6 +40,7 @@ hbase_zookeeper_znode_parent = /hbase2
 ## hbase security
 ####################################
 [hbase:vars]
+hbase_ssl_enabled = false
 hbase_security_authentication = kerberos
 hbase_security_authorization = true
 hbase_superuser = hbase,root,administrator

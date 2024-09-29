@@ -20,6 +20,10 @@
 
     <!-- hbase master and regionserver -->
     <property>
+        <name>hbase.ssl.enabled</name>
+        <value>{{ hbase_ssl_enabled }}</value>
+    </property>
+    <property>
         <name>hbase.master.port</name>
         <value>{{ hbase_master_port }}</value>
     </property>
