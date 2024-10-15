@@ -239,4 +239,20 @@
 <!--        <name>yarn.node-labels.configuration-type</name>-->
 <!--        <value>distributed</value>-->
 <!--    </property>-->
+
+
+    <property>
+        <name>yarn.application.classpath</name>
+        <value>
+            {{ hadoop_home }}/etc/hadoop,
+            {{ hadoop_home }}/share/hadoop/common/*,
+            {{ hadoop_home }}/share/hadoop/common/lib/*,
+            {{ hadoop_home }}/share/hadoop/hdfs/*,
+            {{ hadoop_home }}/share/hadoop/hdfs/lib/*,
+            {{ hadoop_home }}/share/hadoop/mapreduce/*,
+            {{ hadoop_home }}/share/hadoop/mapreduce/lib/*,
+            {{ hadoop_home }}/share/hadoop/yarn/*,
+            {{ hadoop_home }}/share/hadoop/yarn/lib/*
+        </value>
+    </property>
 </configuration>

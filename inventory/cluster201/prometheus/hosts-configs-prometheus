@@ -42,9 +42,10 @@ prom_security_password = newland123!
 prom_security_encode_password = $2a$10$AtfofocvOK8sYt.YthyMyeiwJuLhDXzhmXJs3OhUVYzMF76Dw96dS
 
 # scrape target
-prom_scrape_pgw_enable = true
-prom_scrape_pne_enable = true
-prom_scrape_hgw_enable = true
+prom_scrape_pgw_enable = false
+prom_scrape_pne_enable = false
+prom_scrape_hgw_enable = false
+prom_scrape_ms_enable = true
 
 ###############################
 ##########Pushgateway##########
@@ -106,8 +107,19 @@ pne_security_encode_password = $2a$10$AtfofocvOK8sYt.YthyMyeiwJuLhDXzhmXJs3OhUVY
 ###############################
 [all:vars]
 # 多个用逗号分隔
-httpgateway_hosts_string = '10.1.8.1:15912'
+httpgateway_hosts_string = '192.168.128.1:15912'
 
 hgw_security_enable = true
 hgw_security_username = admin
 hgw_security_password = admin123
+
+###############################
+##########HttpMs###############
+###############################
+[all:vars]
+# 多个用逗号分隔
+ms_hosts_string = '192.168.128.1:36003'
+
+ms_security_enable = true
+ms_security_username = admin
+ms_security_password = admin
