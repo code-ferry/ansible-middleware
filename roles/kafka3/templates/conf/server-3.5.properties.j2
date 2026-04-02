@@ -160,6 +160,9 @@ log.retention.check.interval.ms={{ kafka_log_retention_check_ms }}
 delete.topic.enable=true
 auto.create.topics.enable=false
 
+# Increased from 40000
+request.timeout.ms=60000
+
 ############################# SASL #############################
 {% if kafka_sasl_plain_enable|lower == "true" and kafka_sasl_gssapi_enable|lower == "true" %}
 sasl.enabled.mechanisms=PLAIN,GSSAPI
