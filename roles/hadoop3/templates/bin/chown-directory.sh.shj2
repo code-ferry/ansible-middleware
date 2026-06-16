@@ -1,0 +1,4 @@
+#!/bin/bash
+
+kinit -kt {{ hadoop_keytab_file }} {{ hadoop_kerberos_principal_nn }}
+hdfs dfs -chown {{ install_user }}:{{ install_group }} /

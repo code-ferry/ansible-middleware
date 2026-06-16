@@ -148,3 +148,13 @@
     chdir: "{{ hadoop_home }}/sbin"
   register: result
 
+#################################
+##### chown directory ###########
+#################################
+- name: Copy chown-directory.sh to hadoop home directory.
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0744"
+  with_items:
+    - { src: 'bin/chown-directory.sh.shj2', dest: '{{ hadoop_home }}/sbin/chown-directory.sh' }

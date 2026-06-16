@@ -226,6 +226,28 @@ flink_run_historyserver = true
 # 启动hadoop
 ./bin/role-hadoop2.sh -t start
 ```
+hadoop3
+```
+# 完全卸载
+./bin/role-hadoop3.sh -t uninstall
+./bin/role-hadoop3.sh -t uninstall-root -b
+
+# hadoop3 ha基本安装
+./bin/role-hadoop3.sh -t install
+# 需要提权到root用户下的一些安装步骤，需要通过参数-b进行提权。操作container-executor.cfg生成等内容。
+./bin/role-hadoop3.sh -t install-root -b
+# 如果开启SSL，还需要运行下面的语句生成ca证书与密钥，以及密钥库等
+./bin/role-hadoop3.sh -t install-ssl -b
+# 格式化datanode
+./bin/role-hadoop3.sh -t format
+# 生成yarn的cgroup，用于资源控制，需要通过参数-b进行提权
+./bin/role-hadoop3.sh -t install-cgroup -b
+# 初始化ha相关服务
+./bin/role-hadoop3.sh -t init-ha
+
+# 重启hadoop3
+./bin/role-hadoop3.sh -t restart
+```
 
 ## hive安装
 ### 安装与初始化
