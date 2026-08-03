@@ -26,7 +26,6 @@
 - name: Kill jobhistory processes
   shell: ". ~/.bash_profile; kill -9 {{ item }}"
   with_items: "{{ presult.stdout_lines }}"
-  delegate_to: "{{ jobhistory_host }}"
   when: result.rc == 1
   delegate_to: "{{ jobhistory_host }}"
 

@@ -49,6 +49,7 @@
   - { src: 'host/yarns-output.j2', dest: '{{ hadoop_home }}/etc/hadoop/yarns.tmp' }
   - { src: 'bin/hadoop-env-{{ hadoop_version }}.shj2', dest: '{{ hadoop_home }}/etc/hadoop/hadoop-env.sh' }
   - { src: 'bin/yarn-env-{{ hadoop_version }}.shj2', dest: '{{ hadoop_home }}/etc/hadoop/yarn-env.sh' }
+  - { src: 'bin/chown-directory.shj2', dest: '{{ hadoop_home }}/bin/chown-directory.sh', mode: "0744"}
   - { src: 'site/capacity-scheduler.xml.xj2', dest: '{{ hadoop_home }}/etc/hadoop/capacity-scheduler.xml' }
   - { src: 'web/dfs-dust.js', dest: '{{ hadoop_home }}/share/hadoop/hdfs/webapps/static/dfs-dust.js' }
 

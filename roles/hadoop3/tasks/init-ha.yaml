@@ -157,4 +157,4 @@
     dest: "{{ item.dest }}"
     mode: "0744"
   with_items:
-    - { src: 'bin/chown-directory.sh.shj2', dest: '{{ hadoop_home }}/sbin/chown-directory.sh' }
+    - { src: 'bin/chown-directory.shj2', dest: '{{ hadoop_home }}/sbin/chown-directory.sh' }
