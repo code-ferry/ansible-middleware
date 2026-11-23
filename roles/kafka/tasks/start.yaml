@@ -13,7 +13,7 @@
   shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-server-start.sh -daemon {{ kafka_home }}/config/server.properties"
   environment:
     KAFKA_HOME: "{{ kafka_home }}"
-  async: 30         # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
+  async: 240        # 最大超时时间以及轮询其状态的频率, 如果你没有为poll指定值, 那么默认的轮询频率是15秒钟
   poll: 2           # 设置为0时, 任务会立即返回
   args:
     executable: /bin/bash

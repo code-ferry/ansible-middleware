@@ -26,7 +26,7 @@
     port: "{{ kafka_port }}"
     delay: 5
     state: started
-    timeout: 120
+    timeout: 240
 
 - name: Print kafka status
   shell: ". ~/.bash_profile; {{ kafka_home }}/bin/kafka-topics.sh --list --bootstrap-server {{ broker_hosts_string }}"
